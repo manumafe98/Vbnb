@@ -10,3 +10,7 @@
 - Secondary Text: ``#666666``
 - Borders and Lines: ``#E0E0E0``
 - Links or Secondary Buttons: ``#007BFF``
+
+## UML
+
+![vbnb_uml](https://github.com/manumafe98/Vbnb/assets/95315128/50ddc253-4a5b-4433-9c57-b9a2697605bc)
