@@ -1,5 +1,6 @@
 package com.manumafe.vbnb.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,18 +16,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "favorites")
-public class Favorite {
+@Table(name = "characteristics")
+public class Characteristic {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "listing_id")
     private Listing listing;
-    
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

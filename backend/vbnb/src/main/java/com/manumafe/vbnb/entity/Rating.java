@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rating")
+@Table(name = "ratings")
 public class Rating {
     
     @Id
@@ -23,7 +23,9 @@ public class Rating {
     private Long id;
 
     private Integer totalRating;
+
     private Double averageRating;
+    
     private Integer timesRated;
 
     @OneToOne

@@ -32,7 +32,7 @@ public class Reserve {
     private LocalDate checkOuDate;
 
     @ManyToOne
-    @JoinColumn(name = "listing_id", referencedColumnName = "id")
+    @JoinColumn(name = "listing_id")
     private Listing listing;
 
     @ManyToOne
