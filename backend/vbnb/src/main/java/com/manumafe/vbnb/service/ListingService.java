@@ -2,11 +2,11 @@ package com.manumafe.vbnb.service;
 
 import java.util.List;
 
-import com.manumafe.vbnb.entity.Listing;
+import com.manumafe.vbnb.dto.ListingDto;
 
 public interface ListingService {
     
-    public Listing saveListing(Listing listing);
+    public ListingDto saveListing(ListingDto listing);
 
-    public List<Listing> findAllListings();
+    public List<ListingDto> findAllListings();
 }

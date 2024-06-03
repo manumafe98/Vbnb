@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-VbnbApplication<vbnb>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.manumafe.vbnb.VbnbApplication",
+            "projectName": "vbnb",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
