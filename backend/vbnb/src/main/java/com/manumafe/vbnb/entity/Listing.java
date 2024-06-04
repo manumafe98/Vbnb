@@ -1,7 +1,7 @@
 package com.manumafe.vbnb.entity;
 
-import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -46,16 +46,16 @@ public class Listing {
     private Category category;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL)
-    private List<Image> images;
+    private Set<Image> images = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL)
-    private List<Reserve> reserves;
+    private Set<Reserve> reserves = new HashSet<>();
+
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Favorite> favorites = new HashSet<>();
 
     @OneToOne(mappedBy = "listing", cascade = CascadeType.ALL)
     private Rating rating;
-
-    @ManyToMany(mappedBy = "favorites")
-    private Set<User> favoritedByUsers;
 
     @ManyToMany
     @JoinTable(

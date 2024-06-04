@@ -1,7 +1,7 @@
 package com.manumafe.vbnb.entity;
 
-import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,9 +11,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -47,14 +44,9 @@ public class User {
     @Column(name = "role")
     private UserRole userRole;
 
-    @ManyToMany
-    @JoinTable(
-        name = "favorites",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "listing_id")
-    )
-    private Set<Listing> favorites;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Favorite> favorites = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Reserve> reserves;
+    private Set<Reserve> reserves = new HashSet<>();
 }

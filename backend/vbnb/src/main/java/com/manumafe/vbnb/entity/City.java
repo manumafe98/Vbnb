@@ -1,6 +1,7 @@
 package com.manumafe.vbnb.entity;
 
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,5 +32,5 @@ public class City {
     private String country;
 
     @OneToMany(mappedBy = "city")
-    private List<Listing> listings;
+    private Set<Listing> listings = new HashSet<>();
 }

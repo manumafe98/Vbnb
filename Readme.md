@@ -13,4 +13,4 @@
 
 ## UML
 
-![vbnb_uml](https://github.com/manumafe98/BookRepository/assets/95315128/e6bf63b3-e7ad-403d-bc7b-bb94605f4a88)
+![vbnb_uml](https://github.com/manumafe98/BookRepository/assets/95315128/1f2ac6f5-8078-4eb5-bc8b-8abb05d7ab32)

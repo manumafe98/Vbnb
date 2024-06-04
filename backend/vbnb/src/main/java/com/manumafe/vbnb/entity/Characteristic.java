@@ -1,6 +1,7 @@
 package com.manumafe.vbnb.entity;
 
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,5 +29,5 @@ public class Characteristic {
     private String name;
     
     @ManyToMany(mappedBy = "characteristics")
-    private Set<Listing> listings;
+    private List<Listing> listings = new ArrayList<>();
 }
