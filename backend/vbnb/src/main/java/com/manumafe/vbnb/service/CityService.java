@@ -1,19 +1,17 @@
 package com.manumafe.vbnb.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.manumafe.vbnb.entity.City;
+import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 
 public interface CityService {
     
     City saveCity(City city);
 
-    City updateCityById(Long id);
+    void deleteCityById(Long id) throws ResourceNotFoundException;
 
-    void deleteCityById(City city, Long id);
-
-    Optional<City> findCityById(Long id);
+    City findCityById(Long id) throws ResourceNotFoundException;
 
     List<City> findAllCities();
 }

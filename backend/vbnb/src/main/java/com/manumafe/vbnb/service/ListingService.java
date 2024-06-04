@@ -6,7 +6,11 @@ import com.manumafe.vbnb.dto.ListingDto;
 
 public interface ListingService {
     
-    public ListingDto saveListing(ListingDto listing);
+    ListingDto saveListing(ListingDto listing);
 
-    public List<ListingDto> findAllListings();
+    void deleteListingById(Long id);
+
+    ListingDto findListingById(Long id);
+
+    List<ListingDto> findAllListings();
 }

@@ -1,15 +1,16 @@
 package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.entity.City;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CityRepository;
 import com.manumafe.vbnb.service.CityService;
 
+@Service
 public class CityServiceImpl implements CityService {
 
     @Autowired
@@ -21,26 +22,18 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City updateCityById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCityById'");
+    public void deleteCityById(Long id) throws ResourceNotFoundException {
+        cityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
+
+        cityRepository.deleteById(id);
     }
 
     @Override
-    public void deleteCityById(City city, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteCityById'");
-    }
-
-    @Override
-    public Optional<City> findCityById(Long id) {
-        Optional<City> cityOptional = cityRepository.findById(id);
-
-        if (cityOptional.isPresent()) {
-            return cityOptional;
-        }
-
-        throw new ResourceNotFoundException("City with ID: " + id + " not found");
+    public City findCityById(Long id) throws ResourceNotFoundException {
+        City city = cityRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
+        
+        return city;
     }
 
     @Override

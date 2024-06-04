@@ -1,6 +1,7 @@
 package com.manumafe.vbnb.entity;
 
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +28,9 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
+
     @OneToMany(mappedBy = "category")
-    private List<Listing> listings;
+    private Set<Listing> listings = new HashSet<>();
 }
