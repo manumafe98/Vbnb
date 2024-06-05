@@ -22,7 +22,7 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer totalRating;
+    private Double totalRating;
 
     private Double averageRating;
     

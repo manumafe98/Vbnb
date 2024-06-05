@@ -8,7 +8,7 @@ public interface ListingService {
     
     ListingDto saveListing(ListingDto listing);
 
-    void deleteListingById(Long id);
+    void deleteListing(Long id);
 
     ListingDto findListingById(Long id);
 

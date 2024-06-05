@@ -8,9 +8,7 @@ import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 public interface CategoryService {
     Category saveCategory(Category category);
 
-    void deleteCategoryById(Long id) throws ResourceNotFoundException;
-
-    Category findCategoryById(Long id) throws ResourceNotFoundException;
+    void deleteCategory(Long id) throws ResourceNotFoundException;
 
     List<Category> findAllCategories();
 }
