@@ -9,7 +9,7 @@ public interface CityService {
     
     City saveCity(City city);
 
-    void deleteCityById(Long id) throws ResourceNotFoundException;
+    void deleteCity(Long id) throws ResourceNotFoundException;
 
     City findCityById(Long id) throws ResourceNotFoundException;
 

@@ -13,6 +13,8 @@ public class ListingDtoMapper {
                 listing.getTitle(),
                 listing.getDescription(),
                 listing.getCity().getId(),
-                listing.getCategory().getId());
+                listing.getCategory().getId(),
+                listing.getImages(),
+                listing.getCharacteristics());
     }
 }

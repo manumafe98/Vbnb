@@ -22,7 +22,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void deleteCityById(Long id) throws ResourceNotFoundException {
+    public void deleteCity(Long id) throws ResourceNotFoundException {
         cityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
 
         cityRepository.deleteById(id);

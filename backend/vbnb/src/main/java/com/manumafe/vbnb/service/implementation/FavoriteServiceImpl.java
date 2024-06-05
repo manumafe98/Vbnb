@@ -46,7 +46,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public void deleteFavoriteById(Long userId, Long listingId) throws ResourceNotFoundException {
+    public void deleteFavorite(Long userId, Long listingId) throws ResourceNotFoundException {
         FavoriteId favoriteId = new FavoriteId(userId, listingId);
         favoriteRepository.findById(favoriteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Favorite with id: " + favoriteId + " not found"));

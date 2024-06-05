@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +27,10 @@ public class Characteristic {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
     
-    @ManyToMany(mappedBy = "characteristics")
-    private List<Listing> listings = new ArrayList<>();
+    @OneToMany(mappedBy = "characteristic")
+    private List<ListingCharacteristic> listings = new ArrayList<>();
 }

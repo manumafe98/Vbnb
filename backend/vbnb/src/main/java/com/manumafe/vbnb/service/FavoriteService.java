@@ -9,7 +9,7 @@ public interface FavoriteService {
     
     Favorite saveFavorite(Long userId, Long listingId) throws ResourceNotFoundException;
 
-    void deleteFavoriteById(Long userId, Long listingId) throws ResourceNotFoundException;
+    void deleteFavorite(Long userId, Long listingId) throws ResourceNotFoundException;
 
     List<Favorite> findFavoritesByUserId(Long userId) throws ResourceNotFoundException;
 }
