@@ -10,7 +10,7 @@ public interface ReserveService {
 
     void deleteReserve(Long userId, Long listingId) throws ResourceNotFoundException;
 
-    ReserveDto updateReserve(ReserveDto reserveDto) throws ResourceNotFoundException;
+    ReserveDto updateReserve(Long userId, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException;
 
     List<ReserveDto> findReservesByUserId(Long userId) throws ResourceNotFoundException;
 }

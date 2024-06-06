@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "listing_characteristics")
-public class ListingCharacteristic implements Serializable{
-    
+public class ListingCharacteristic implements Serializable {
+
     @EmbeddedId
-    private ListingCharacteristicsId id;
+    private ListingCharacteristicId id;
 
     @ManyToOne
     @MapsId("listingId")

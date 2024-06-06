@@ -2,16 +2,16 @@ package com.manumafe.vbnb.service;
 
 import java.util.List;
 
-import com.manumafe.vbnb.entity.Characteristic;
+import com.manumafe.vbnb.dto.CharacteristicDto;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 
 public interface CharacteristicService {
 
-    Characteristic saveCharacteristic(Characteristic characteristic);
+    CharacteristicDto saveCharacteristic(CharacteristicDto characteristicDto);
 
     void deleteCharacteristic(Long id) throws ResourceNotFoundException;
 
-    Characteristic updateCharacteristic(Long id, Characteristic characteristic) throws ResourceNotFoundException;
+    CharacteristicDto updateCharacteristic(Long id, CharacteristicDto characteristicDto) throws ResourceNotFoundException;
 
-    List<Characteristic> findAllCharacteristics();
+    List<CharacteristicDto> findAllCharacteristics();
 }

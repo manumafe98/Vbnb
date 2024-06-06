@@ -31,6 +31,6 @@ public class Characteristic {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
     
-    @OneToMany(mappedBy = "characteristic")
+    @OneToMany(mappedBy = "characteristic", orphanRemoval = true)
     private List<ListingCharacteristic> listings = new ArrayList<>();
 }

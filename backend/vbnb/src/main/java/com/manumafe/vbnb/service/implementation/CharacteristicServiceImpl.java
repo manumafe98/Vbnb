@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.manumafe.vbnb.dto.CharacteristicDto;
+import com.manumafe.vbnb.dto.mapper.CharacteristicDtoMapper;
 import com.manumafe.vbnb.entity.Characteristic;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CharacteristicRepository;
@@ -17,9 +19,19 @@ public class CharacteristicServiceImpl implements CharacteristicService {
     @Autowired
     private CharacteristicRepository characteristicRepository;
 
+    @Autowired
+    private CharacteristicDtoMapper characteristicDtoMapper;
+
     @Override
-    public Characteristic saveCharacteristic(Characteristic characteristic) {
-        return characteristicRepository.save(characteristic);
+    public CharacteristicDto saveCharacteristic(CharacteristicDto characteristicDto) {
+        Characteristic characteristic = new Characteristic();
+
+        characteristic.setName(characteristicDto.name());
+        characteristic.setImageUrl(characteristicDto.imageUrl());
+
+        characteristicRepository.save(characteristic);
+
+        return characteristicDtoMapper.toDto(characteristic);
     }
 
     @Override
@@ -32,21 +44,22 @@ public class CharacteristicServiceImpl implements CharacteristicService {
 
     @Override
     @Transactional
-    public Characteristic updateCharacteristic(Long id, Characteristic characteristic)
+    public CharacteristicDto updateCharacteristic(Long id, CharacteristicDto characteristicDto)
             throws ResourceNotFoundException {
-        
+
         Characteristic characteristicToUpdate = characteristicRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Characteristic with id: " + id + " not found"));
 
-        characteristicToUpdate.setImageUrl(characteristic.getImageUrl());
-        characteristicToUpdate.setName(characteristic.getName());
-        characteristicToUpdate.setListings(characteristic.getListings());
+        characteristicToUpdate.setImageUrl(characteristicDto.imageUrl());
+        characteristicToUpdate.setName(characteristicDto.name());
 
-        return characteristicRepository.save(characteristicToUpdate);
+        characteristicRepository.save(characteristicToUpdate);
+
+        return characteristicDtoMapper.toDto(characteristicToUpdate);
     }
 
     @Override
-    public List<Characteristic> findAllCharacteristics() {
-        return characteristicRepository.findAll();
+    public List<CharacteristicDto> findAllCharacteristics() {
+        return characteristicRepository.findAll().stream().map(characteristicDtoMapper::toDto).toList();
     }
 }
