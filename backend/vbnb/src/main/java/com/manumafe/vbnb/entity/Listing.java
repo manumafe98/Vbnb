@@ -43,16 +43,16 @@ public class Listing {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Image> images = new HashSet<>();
 
-    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserve> reserves = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Favorite> favorites = new HashSet<>();
 
-    @OneToMany(mappedBy = "listing")
+    @OneToMany(mappedBy = "listing", orphanRemoval = true)
     private Set<ListingCharacteristic> characteristics = new HashSet<>();
 
     @OneToOne(mappedBy = "listing", cascade = CascadeType.ALL)

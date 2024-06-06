@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.RatingDto;
-import com.manumafe.vbnb.dto.RatingDtoMapper;
+import com.manumafe.vbnb.dto.mapper.RatingDtoMapper;
 import com.manumafe.vbnb.entity.Rating;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.ListingRepository;

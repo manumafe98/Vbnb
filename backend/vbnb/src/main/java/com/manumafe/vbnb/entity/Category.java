@@ -31,6 +31,6 @@ public class Category {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
     private Set<Listing> listings = new HashSet<>();
 }

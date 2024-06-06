@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.ReserveDto;
-import com.manumafe.vbnb.dto.ReserveDtoMapper;
+import com.manumafe.vbnb.dto.mapper.ReserveDtoMapper;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Reserve;
 import com.manumafe.vbnb.entity.ReserveId;
@@ -62,9 +62,11 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public ReserveDto updateReserve(ReserveDto reserveDto) throws ResourceNotFoundException {
-        Reserve reserveToUpdate = reserveRepository.findById(reserveDto.id())
-                .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveDto.id() + " not found"));
+    public ReserveDto updateReserve(Long userId, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
+        ReserveId reserveId = new ReserveId(userId, listingId);
+
+        Reserve reserveToUpdate = reserveRepository.findById(reserveId)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " not found"));
 
         reserveToUpdate.setCheckInDate(reserveDto.checkInDate());
         reserveToUpdate.setCheckOuDate(reserveDto.checkOutDate());

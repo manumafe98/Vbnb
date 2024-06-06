@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListingCharacteristicsId implements Serializable {
+public class ListingCharacteristicId implements Serializable {
     
     private Long listingId;
     private Long characteristicId;

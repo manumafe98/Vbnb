@@ -31,6 +31,6 @@ public class City {
     @Column(nullable = false, unique = true)
     private String country;
 
-    @OneToMany(mappedBy = "city")
+    @OneToMany(mappedBy = "city", orphanRemoval = true)
     private Set<Listing> listings = new HashSet<>();
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.manumafe.vbnb.dto.CityDto;
+import com.manumafe.vbnb.dto.mapper.CityDtoMapper;
 import com.manumafe.vbnb.entity.City;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CityRepository;
@@ -16,9 +18,19 @@ public class CityServiceImpl implements CityService {
     @Autowired
     private CityRepository cityRepository;
 
+    @Autowired
+    private CityDtoMapper cityDtoMapper;
+
     @Override
-    public City saveCity(City city) {
-        return cityRepository.save(city);
+    public CityDto saveCity(CityDto cityDto) {
+        City city = new City();
+
+        city.setName(cityDto.name());
+        city.setCountry(cityDto.country());
+
+        cityRepository.save(city);
+
+        return cityDtoMapper.toDto(city);
     }
 
     @Override
@@ -29,15 +41,15 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City findCityById(Long id) throws ResourceNotFoundException {
+    public CityDto findCityById(Long id) throws ResourceNotFoundException {
         City city = cityRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
         
-        return city;
+        return cityDtoMapper.toDto(city);
     }
 
     @Override
-    public List<City> findAllCities() {
-        return cityRepository.findAll();
+    public List<CityDto> findAllCities() {
+        return cityRepository.findAll().stream().map(cityDtoMapper::toDto).toList();
     }
 }
