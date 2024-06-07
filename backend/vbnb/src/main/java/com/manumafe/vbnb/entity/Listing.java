@@ -2,6 +2,8 @@ package com.manumafe.vbnb.entity;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,23 +42,29 @@ public class Listing {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Image> images;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserve> reserves;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Favorite> favorites;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
         name = "listing_characteristic",

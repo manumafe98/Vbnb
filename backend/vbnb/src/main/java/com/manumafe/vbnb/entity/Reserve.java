@@ -3,6 +3,8 @@ package com.manumafe.vbnb.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -30,11 +32,13 @@ public class Reserve implements Serializable {
     @Column(name = "check_out")
     private LocalDate checkOuDate;
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
-        
+    
+    @JsonIgnore
     @ManyToOne
     @MapsId("listingId")
     @JoinColumn(name = "listing_id")

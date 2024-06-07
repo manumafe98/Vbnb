@@ -1,5 +1,7 @@
 package com.manumafe.vbnb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,7 @@ public class Image {
     @Column(nullable = false, unique = true)
     private String imageUrl;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "listing_id")
     private Listing listing;

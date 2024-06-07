@@ -2,6 +2,8 @@ package com.manumafe.vbnb.entity;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +32,7 @@ public class Category {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category", orphanRemoval = true)
     private Set<Listing> listings;
 }
