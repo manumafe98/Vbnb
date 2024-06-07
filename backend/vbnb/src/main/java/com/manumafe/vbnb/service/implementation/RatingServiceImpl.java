@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.RatingDto;
 import com.manumafe.vbnb.dto.mapper.RatingDtoMapper;
+import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.ListingRepository;
@@ -27,10 +28,10 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public RatingDto saveRating(Long listingId, RatingDto ratingDto) throws ResourceNotFoundException {
-        listingRepository.findById(listingId)
+        Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
-        Optional<Rating> optinalRating = ratingRepository.findByListingId(listingId);
+        Optional<Rating> optinalRating = ratingRepository.findByListing(listing);
         Rating rating;
 
         if (optinalRating.isPresent()) {

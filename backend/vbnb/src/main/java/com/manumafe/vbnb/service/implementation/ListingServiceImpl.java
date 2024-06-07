@@ -1,8 +1,8 @@
 package com.manumafe.vbnb.service.implementation;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,15 @@ import com.manumafe.vbnb.entity.Characteristic;
 import com.manumafe.vbnb.entity.City;
 import com.manumafe.vbnb.entity.Image;
 import com.manumafe.vbnb.entity.Listing;
-import com.manumafe.vbnb.entity.ListingCharacteristic;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CategoryRepository;
 import com.manumafe.vbnb.repository.CharacteristicRepository;
 import com.manumafe.vbnb.repository.CityRepository;
 import com.manumafe.vbnb.repository.ImageRepository;
-import com.manumafe.vbnb.repository.ListingCharacteristicRepository;
 import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.service.ListingService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ListingServiceImpl implements ListingService {
@@ -45,12 +45,10 @@ public class ListingServiceImpl implements ListingService {
 	private ImageRepository imageRepository;
 
 	@Autowired
-	private ListingCharacteristicRepository listingCharacteristicRepository;
-
-	@Autowired
 	private ListingDtoMapper listingDtoMapper;
 
 	@Override
+	@Transactional
 	public ListingResponseDto saveListing(ListingCreateDto listingDto) {
 		City city = cityRepository.findById(listingDto.cityId())
 				.orElseThrow(
@@ -67,13 +65,10 @@ public class ListingServiceImpl implements ListingService {
 		listing.setCategory(category);
 		listing.setCity(city);
 
-		Set<ListingCharacteristic> listingCharacteristics = getListingCharacteristics(listingDto.characteristicIds(),
-				listing);
-		listingCharacteristicRepository.saveAll(listingCharacteristics);
-		listing.setCharacteristics(listingCharacteristics);
+		Set<Characteristic> characteristics = getCharacteristics(listingDto.characteristicIds(), listing);
+		listing.setCharacteristics(characteristics);
 
 		Set<Image> images = getImages(listingDto.images(), listing);
-		imageRepository.saveAll(images);
 		listing.setImages(images);
 
 		listingRepository.save(listing);
@@ -89,6 +84,7 @@ public class ListingServiceImpl implements ListingService {
 	}
 
 	@Override
+	@Transactional
 	public ListingResponseDto updateListing(Long id, ListingCreateDto listingDto) {
 		Listing listing = listingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + id + " not found"));
@@ -106,17 +102,12 @@ public class ListingServiceImpl implements ListingService {
 		listing.setCategory(category);
 		listing.setCity(city);
 
-		listingCharacteristicRepository.deleteAllByListingId(id);
+		Set<Characteristic> characteristics = getCharacteristics(listingDto.characteristicIds(), listing);
+		listing.setCharacteristics(characteristics);
 
-		Set<ListingCharacteristic> listingCharacteristics = getListingCharacteristics(listingDto.characteristicIds(),
-				listing);
-		listingCharacteristicRepository.saveAll(listingCharacteristics);
-		listing.setCharacteristics(listingCharacteristics);
-
-		imageRepository.deleteAllByListingId(id);
+		imageRepository.deleteAllByListing(listing);
 
 		Set<Image> images = getImages(listingDto.images(), listing);
-		imageRepository.saveAll(images);
 		listing.setImages(images);
 
 		listingRepository.save(listing);
@@ -137,34 +128,26 @@ public class ListingServiceImpl implements ListingService {
 		return listingRepository.findAll().stream().map(listingDtoMapper::toResponseDto).toList();
 	}
 
-	private Set<ListingCharacteristic> getListingCharacteristics(Set<Long> characteristicsIds, Listing listing) {
-		Set<ListingCharacteristic> listingCharacteristics = new HashSet<>();
-
-		for (Long characteristicId : characteristicsIds) {
+	private Set<Characteristic> getCharacteristics(Set<Long> characteristicIds, Listing listing) {
+		return characteristicIds.stream().map(characteristicId -> {
 			Characteristic characteristic = characteristicRepository.findById(characteristicId)
 					.orElseThrow(() -> new ResourceNotFoundException(
 							"Characteristic with id: " + characteristicId + " not found"));
 
-			ListingCharacteristic listingCharacteristic = new ListingCharacteristic();
-			listingCharacteristic.setListing(listing);
-			listingCharacteristic.setCharacteristic(characteristic);
-			listingCharacteristics.add(listingCharacteristic);
-		}
-
-		return listingCharacteristics;
+			return characteristic;
+		}).collect(Collectors.toSet());
 	}
 
 	private Set<Image> getImages(Set<ImageDto> imageDtos, Listing listing) {
-		Set<Image> images = new HashSet<>();
+		return imageDtos.stream().map(imageDto -> {
 
-		for (ImageDto imageDto : imageDtos) {
-			
 			Image image = new Image();
-			image.setImage_url(imageDto.imageUrl());
+			image.setImageUrl(imageDto.imageUrl());
 			image.setListing(listing);
-			images.add(image);
-		}
 
-		return images;
+			imageRepository.save(image);
+
+			return image;
+		}).collect(Collectors.toSet());
 	}
 }

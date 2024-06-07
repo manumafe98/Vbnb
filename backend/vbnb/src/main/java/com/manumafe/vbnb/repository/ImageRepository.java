@@ -7,14 +7,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.manumafe.vbnb.entity.Image;
+import com.manumafe.vbnb.entity.Listing;
 
 import jakarta.transaction.Transactional;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
-    List<Image> findByListingId(Long listingId);
+    List<Image> findByListing(Listing listing);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Image i WHERE i.listingId = :listingId")
-    void deleteAllByListingId(Long listingId);
+    @Query("DELETE FROM Image i WHERE i.listing = :listing")
+    void deleteAllByListing(Listing listing);
 }

@@ -8,5 +8,6 @@ public record ListingCreateDto(
         Long cityId,
         Long categoryId,
         Set<ImageDto> images,
-        Set<Long> characteristicIds) {
+        Set<Long> characteristicIds
+        ) {
 }

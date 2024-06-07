@@ -1,7 +1,6 @@
 package com.manumafe.vbnb.entity;
 
 import java.util.Set;
-import java.util.HashSet;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -45,8 +44,8 @@ public class User {
     private UserRole userRole;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Favorite> favorites = new HashSet<>();
+    private Set<Favorite> favorites;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reserve> reserves = new HashSet<>();
+    private Set<Reserve> reserves;
 }

@@ -56,9 +56,9 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public List<Favorite> findFavoritesByUserId(Long userId) {
-        userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
 
-        return favoriteRepository.findByUserId(userId);
+        return favoriteRepository.findByUser(user);
     }
 }

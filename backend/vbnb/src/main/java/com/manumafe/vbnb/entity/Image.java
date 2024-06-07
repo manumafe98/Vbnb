@@ -24,7 +24,7 @@ public class Image {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String image_url;
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "listing_id")

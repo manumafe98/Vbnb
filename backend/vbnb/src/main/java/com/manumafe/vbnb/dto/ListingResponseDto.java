@@ -13,5 +13,6 @@ public record ListingResponseDto(
         City city,
         Category category,
         Set<Image> images,
-        Set<CharacteristicDto> characteristics) {
+        Set<CharacteristicDto> characteristics
+        ) {
 }

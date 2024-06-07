@@ -1,7 +1,6 @@
 package com.manumafe.vbnb.entity;
 
 import java.util.Set;
-import java.util.HashSet;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -10,12 +9,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -23,16 +26,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "listings")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Listing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne
@@ -44,16 +49,21 @@ public class Listing {
     private Category category;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Image> images = new HashSet<>();
+    private Set<Image> images;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reserve> reserves = new HashSet<>();
+    private Set<Reserve> reserves;
 
-    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Favorite> favorites = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Favorite> favorites;
 
-    @OneToMany(mappedBy = "listing", orphanRemoval = true)
-    private Set<ListingCharacteristic> characteristics = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+        name = "listing_characteristic",
+        joinColumns = @JoinColumn(name = "listing_id"),
+        inverseJoinColumns = @JoinColumn(name = "characteristic_id")
+    )
+    private Set<Characteristic> characteristics;
 
     @OneToOne(mappedBy = "listing", cascade = CascadeType.ALL)
     private Rating rating;

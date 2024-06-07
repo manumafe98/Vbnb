@@ -1,7 +1,6 @@
 package com.manumafe.vbnb.entity;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,6 +30,6 @@ public class Characteristic {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
     
-    @OneToMany(mappedBy = "characteristic", orphanRemoval = true)
-    private List<ListingCharacteristic> listings = new ArrayList<>();
+    @OneToMany(mappedBy = "characteristics", orphanRemoval = true)
+    private List<Listing> listings;
 }

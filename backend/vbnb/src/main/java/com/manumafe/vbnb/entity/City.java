@@ -1,7 +1,6 @@
 package com.manumafe.vbnb.entity;
 
 import java.util.Set;
-import java.util.HashSet;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,9 +27,9 @@ public class City {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String country;
 
     @OneToMany(mappedBy = "city", orphanRemoval = true)
-    private Set<Listing> listings = new HashSet<>();
+    private Set<Listing> listings;
 }

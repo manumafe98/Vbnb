@@ -62,7 +62,8 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public ReserveDto updateReserve(Long userId, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
+    public ReserveDto updateReserve(Long userId, Long listingId, ReserveDto reserveDto)
+            throws ResourceNotFoundException {
         ReserveId reserveId = new ReserveId(userId, listingId);
 
         Reserve reserveToUpdate = reserveRepository.findById(reserveId)
@@ -78,10 +79,10 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public List<ReserveDto> findReservesByUserId(Long userId) throws ResourceNotFoundException {
-        userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
 
-        return reserveRepository.findByUserId(userId)
+        return reserveRepository.findByUser(user)
                 .stream()
                 .map(reserveDtoMapper::toDto)
                 .toList();
