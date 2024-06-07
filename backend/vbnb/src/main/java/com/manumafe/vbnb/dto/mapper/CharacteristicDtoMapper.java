@@ -10,6 +10,7 @@ public class CharacteristicDtoMapper {
 
     public CharacteristicDto toDto(Characteristic characteristic) {
         return new CharacteristicDto(
+                characteristic.getId(),
                 characteristic.getName(),
                 characteristic.getImageUrl());
     }

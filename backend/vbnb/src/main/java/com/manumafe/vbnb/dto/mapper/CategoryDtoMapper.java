@@ -10,6 +10,7 @@ public class CategoryDtoMapper {
 
     public CategoryDto toDto(Category category) {
         return new CategoryDto(
+                category.getId(),
                 category.getName(),
                 category.getImageUrl());
     }

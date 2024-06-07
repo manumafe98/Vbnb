@@ -102,13 +102,16 @@ public class ListingServiceImpl implements ListingService {
 		listing.setCategory(category);
 		listing.setCity(city);
 
+		listing.getCharacteristics().clear();
+
 		Set<Characteristic> characteristics = getCharacteristics(listingDto.characteristicIds(), listing);
 		listing.setCharacteristics(characteristics);
 
 		imageRepository.deleteAllByListing(listing);
+		listing.getImages().clear();
 
 		Set<Image> images = getImages(listingDto.images(), listing);
-		listing.setImages(images);
+		listing.getImages().addAll(images);
 
 		listingRepository.save(listing);
 
