@@ -2,7 +2,6 @@ package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.entity.Favorite;
@@ -15,17 +14,15 @@ import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.repository.UserRepository;
 import com.manumafe.vbnb.service.FavoriteService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class FavoriteServiceImpl implements FavoriteService {
 
-    @Autowired
-    private FavoriteRepository favoriteRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ListingRepository listingRepository;
+    private final FavoriteRepository favoriteRepository;
+    private final UserRepository userRepository;
+    private final ListingRepository listingRepository;
 
     @Override
     public Favorite saveFavorite(Long userId, Long listingId) throws ResourceNotFoundException {

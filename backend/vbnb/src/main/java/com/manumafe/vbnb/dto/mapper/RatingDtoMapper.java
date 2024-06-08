@@ -9,6 +9,8 @@ import com.manumafe.vbnb.entity.Rating;
 public class RatingDtoMapper {
 
     public RatingDto toDto(Rating rating) {
-        return new RatingDto(rating.getAverageRating());
+        return new RatingDto(
+                rating.getId(),
+                rating.getRating());
     }
 }

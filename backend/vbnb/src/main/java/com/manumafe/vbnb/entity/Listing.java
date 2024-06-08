@@ -16,7 +16,6 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -73,6 +72,7 @@ public class Listing {
     )
     private Set<Characteristic> characteristics;
 
-    @OneToOne(mappedBy = "listing", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL)
     private Rating rating;
 }

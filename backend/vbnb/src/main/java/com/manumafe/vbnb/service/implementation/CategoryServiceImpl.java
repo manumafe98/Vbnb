@@ -2,7 +2,6 @@ package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.CategoryDto;
@@ -12,14 +11,14 @@ import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CategoryRepository;
 import com.manumafe.vbnb.service.CategoryService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private CategoryDtoMapper categoryDtoMapper;
+    private final CategoryRepository categoryRepository;
+    private final CategoryDtoMapper categoryDtoMapper;
 
     @Override
     public CategoryDto saveCategory(CategoryDto categoryDto) {
