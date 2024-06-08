@@ -2,7 +2,6 @@ package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.CityDto;
@@ -12,14 +11,14 @@ import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CityRepository;
 import com.manumafe.vbnb.service.CityService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CityServiceImpl implements CityService {
 
-    @Autowired
-    private CityRepository cityRepository;
-
-    @Autowired
-    private CityDtoMapper cityDtoMapper;
+    private final CityRepository cityRepository;
+    private final CityDtoMapper cityDtoMapper;
 
     @Override
     public CityDto saveCity(CityDto cityDto) {

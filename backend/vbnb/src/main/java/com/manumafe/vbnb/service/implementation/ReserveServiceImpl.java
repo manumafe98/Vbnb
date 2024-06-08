@@ -2,7 +2,6 @@ package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.ReserveDto;
@@ -17,20 +16,16 @@ import com.manumafe.vbnb.repository.ReserveRepository;
 import com.manumafe.vbnb.repository.UserRepository;
 import com.manumafe.vbnb.service.ReserveService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ReserveServiceImpl implements ReserveService {
 
-    @Autowired
-    private ReserveRepository reserveRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ListingRepository listingRepository;
-
-    @Autowired
-    private ReserveDtoMapper reserveDtoMapper;
+    private final ReserveRepository reserveRepository;
+    private final UserRepository userRepository;
+    private final ListingRepository listingRepository;
+    private final ReserveDtoMapper reserveDtoMapper;
 
     @Override
     public ReserveDto saveReserve(Long userId, Long listingId) throws ResourceNotFoundException {

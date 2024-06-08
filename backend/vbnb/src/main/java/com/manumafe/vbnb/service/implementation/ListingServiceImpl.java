@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.ImageDto;
@@ -25,27 +24,18 @@ import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.service.ListingService;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ListingServiceImpl implements ListingService {
 
-	@Autowired
-	private ListingRepository listingRepository;
-
-	@Autowired
-	private CityRepository cityRepository;
-
-	@Autowired
-	private CategoryRepository categoryRepository;
-
-	@Autowired
-	private CharacteristicRepository characteristicRepository;
-
-	@Autowired
-	private ImageRepository imageRepository;
-
-	@Autowired
-	private ListingDtoMapper listingDtoMapper;
+	private final ListingRepository listingRepository;
+	private final CityRepository cityRepository;
+	private final CategoryRepository categoryRepository;
+	private final CharacteristicRepository characteristicRepository;
+	private final ImageRepository imageRepository;
+	private final ListingDtoMapper listingDtoMapper;
 
 	@Override
 	@Transactional

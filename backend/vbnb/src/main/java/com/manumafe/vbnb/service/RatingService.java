@@ -5,5 +5,7 @@ import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 
 public interface RatingService {
     
-    RatingDto saveRating(Long listingId, RatingDto ratingDto) throws ResourceNotFoundException;
+    RatingDto saveOrUpdateRating(Long listingId, Long userId, RatingDto ratingDto) throws ResourceNotFoundException;
+
+    Double calculateListingAverageRating(Long listingId) throws ResourceNotFoundException;
 }

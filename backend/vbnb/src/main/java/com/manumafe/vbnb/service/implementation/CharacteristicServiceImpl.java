@@ -2,7 +2,6 @@ package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,14 +12,14 @@ import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CharacteristicRepository;
 import com.manumafe.vbnb.service.CharacteristicService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CharacteristicServiceImpl implements CharacteristicService {
 
-    @Autowired
-    private CharacteristicRepository characteristicRepository;
-
-    @Autowired
-    private CharacteristicDtoMapper characteristicDtoMapper;
+    private final CharacteristicRepository characteristicRepository;
+    private final CharacteristicDtoMapper characteristicDtoMapper;
 
     @Override
     public CharacteristicDto saveCharacteristic(CharacteristicDto characteristicDto) {

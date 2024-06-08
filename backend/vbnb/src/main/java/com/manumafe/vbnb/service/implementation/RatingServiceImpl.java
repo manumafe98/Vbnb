@@ -1,56 +1,67 @@
 package com.manumafe.vbnb.service.implementation;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.RatingDto;
 import com.manumafe.vbnb.dto.mapper.RatingDtoMapper;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
+import com.manumafe.vbnb.entity.User;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.repository.RatingRepository;
+import com.manumafe.vbnb.repository.UserRepository;
 import com.manumafe.vbnb.service.RatingService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RatingServiceImpl implements RatingService {
 
-    @Autowired
-    private RatingRepository ratingRepository;
+    private final RatingRepository ratingRepository;
+    private final UserRepository userRepository;
+    private final ListingRepository listingRepository;
+    private final RatingDtoMapper ratingDtoMapper;
 
-    @Autowired
-    private ListingRepository listingRepository;
-
-    @Autowired
-    private RatingDtoMapper ratingDtoMapper;
 
     @Override
-    public RatingDto saveRating(Long listingId, RatingDto ratingDto) throws ResourceNotFoundException {
+    public RatingDto saveOrUpdateRating(Long listingId, Long userId, RatingDto ratingDto) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
+        
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
-
-        Optional<Rating> optinalRating = ratingRepository.findByListing(listing);
+        
+        Optional<Rating> optionalRating = ratingRepository.findByUserAndListing(user, listing);
         Rating rating;
 
-        if (optinalRating.isPresent()) {
-
-            rating = optinalRating.get();
-            rating.setTotalRating(rating.getTotalRating() + ratingDto.rating());
-            rating.setTimesRated(rating.getTimesRated() + 1);
-            rating.setAverageRating((double) rating.getTotalRating() / rating.getTimesRated());
-
+        if (optionalRating.isPresent()) {
+            rating = optionalRating.get();
+            rating.setRating(ratingDto.rating());
+            
         } else {
             rating = new Rating();
-            rating.setId(ratingRepository.count() + 1);
-            rating.setTimesRated(1);
-            rating.setTotalRating(ratingDto.rating());
-            rating.setAverageRating(ratingDto.rating());
+            rating.setRating(ratingDto.rating());
+            rating.setListing(listing);
+            rating.setUser(user);
         }
 
         ratingRepository.save(rating);
 
         return ratingDtoMapper.toDto(rating);
+    }
+
+    @Override
+    public Double calculateListingAverageRating(Long listingId) throws ResourceNotFoundException {
+        Listing listing = listingRepository.findById(listingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
+
+        List<Rating> ratings = ratingRepository.findByListing(listing);
+
+        return ratings.stream().mapToDouble(Rating::getRating).average().orElse(0.0);
     }
 }
