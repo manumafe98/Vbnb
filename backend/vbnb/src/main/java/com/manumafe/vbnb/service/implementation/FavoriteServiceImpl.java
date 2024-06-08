@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.manumafe.vbnb.dto.FavoriteDto;
+import com.manumafe.vbnb.dto.mapper.FavoriteDtoMapper;
 import com.manumafe.vbnb.entity.Favorite;
 import com.manumafe.vbnb.entity.FavoriteId;
 import com.manumafe.vbnb.entity.Listing;
@@ -23,9 +25,10 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final UserRepository userRepository;
     private final ListingRepository listingRepository;
+    private final FavoriteDtoMapper favoriteDtoMapper;
 
     @Override
-    public Favorite saveFavorite(Long userId, Long listingId) throws ResourceNotFoundException {
+    public FavoriteDto saveFavorite(Long userId, Long listingId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + "not found"));
 
@@ -39,7 +42,9 @@ public class FavoriteServiceImpl implements FavoriteService {
         favorite.setUser(user);
         favorite.setListing(listing);
 
-        return favoriteRepository.save(favorite);
+        favoriteRepository.save(favorite);
+
+        return favoriteDtoMapper.toDto(favorite);
     }
 
     @Override
@@ -52,10 +57,10 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public List<Favorite> findFavoritesByUserId(Long userId) {
+    public List<FavoriteDto> findFavoritesByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
 
-        return favoriteRepository.findByUser(user);
+        return favoriteRepository.findByUser(user).stream().map(favoriteDtoMapper::toDto).toList();
     }
 }

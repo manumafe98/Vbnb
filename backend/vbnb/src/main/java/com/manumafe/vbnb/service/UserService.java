@@ -6,7 +6,9 @@ import com.manumafe.vbnb.dto.UserDto;
 
 public interface UserService {
     
-    UserDto updateUser(Long id, UserDto userDto);
+    UserDto updateUser(UserDto userDto);
 
     List<UserDto> findAllUsers();
+
+    UserDto getUser();
 }

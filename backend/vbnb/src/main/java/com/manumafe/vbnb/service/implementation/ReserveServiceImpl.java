@@ -28,7 +28,7 @@ public class ReserveServiceImpl implements ReserveService {
     private final ReserveDtoMapper reserveDtoMapper;
 
     @Override
-    public ReserveDto saveReserve(Long userId, Long listingId) throws ResourceNotFoundException {
+    public ReserveDto saveReserve(Long userId, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
 
@@ -38,7 +38,10 @@ public class ReserveServiceImpl implements ReserveService {
         ReserveId reserveId = new ReserveId(userId, listingId);
 
         Reserve reserve = new Reserve();
+        
         reserve.setId(reserveId);
+        reserve.setCheckInDate(reserveDto.checkInDate());
+        reserve.setCheckOuDate(reserveDto.checkOutDate());
         reserve.setUser(user);
         reserve.setListing(listing);
 
