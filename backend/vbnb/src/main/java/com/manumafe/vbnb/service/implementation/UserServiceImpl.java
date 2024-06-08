@@ -2,6 +2,7 @@ package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.UserDto;
@@ -21,9 +22,9 @@ public class UserServiceImpl implements UserService {
     private final UserDtoMapper userDtoMapper;
 
     @Override
-    public UserDto updateUser(Long id, UserDto userDto) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found"));
+    public UserDto updateUser(UserDto userDto) {
+        User user = userRepository.findById(userDto.id())
+                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userDto.id() + " not found"));
         
         user.setName(userDto.name());
         user.setLastName(userDto.lastName());
@@ -38,5 +39,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAllUsers() {
         return userRepository.findAll().stream().map(userDtoMapper::toDto).toList();
+    }
+
+    @Override
+    public UserDto getUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return userDtoMapper.toDto(user);
     }
 }
