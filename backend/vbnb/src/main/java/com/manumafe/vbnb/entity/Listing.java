@@ -1,6 +1,7 @@
 package com.manumafe.vbnb.entity;
 
 import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -74,5 +75,5 @@ public class Listing {
 
     @JsonIgnore
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL)
-    private Rating rating;
+    private List<Rating> rating;
 }
