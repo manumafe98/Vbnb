@@ -19,8 +19,10 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST_URL = {
             "/api/v1/auth/**",
             "/api-docs/**",
-            "/docs",
-            "/swagger-ui/**" };
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html"
+    };
     private static final String[] ADMIN_ACCESS_URL = {
             "/api/v1/category/**",
             "/api/v1/city/**",
@@ -32,7 +34,7 @@ public class SecurityConfig {
             "/api/v1/listing/delete/**"
     };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authenticationProvider;    
+    private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
