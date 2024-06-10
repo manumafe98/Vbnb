@@ -117,7 +117,7 @@ public class ListingControllerTest {
                 city,
                 characteristic);
 
-        mockMvc.perform(post("/api/v1/listing")
+        mockMvc.perform(post("/api/v1/listing/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(listingJson))
                 .andExpectAll(
@@ -155,7 +155,7 @@ public class ListingControllerTest {
                 city,
                 characteristic);
 
-        mockMvc.perform(put("/api/v1/listing/1")
+        mockMvc.perform(put("/api/v1/listing/update/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(listingJson))
                 .andExpectAll(
@@ -202,7 +202,7 @@ public class ListingControllerTest {
     @Test
     @Order(5)
     public void testDeleteListingById() throws Exception {
-        mockMvc.perform(delete("/api/v1/listing/1"))
+        mockMvc.perform(delete("/api/v1/listing/delete/1"))
                 .andExpect(status().isNoContent());
     }
 
