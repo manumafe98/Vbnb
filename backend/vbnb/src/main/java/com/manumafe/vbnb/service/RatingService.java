@@ -7,5 +7,5 @@ public interface RatingService {
     
     RatingDto saveOrUpdateRating(Long listingId, Long userId, RatingDto ratingDto) throws ResourceNotFoundException;
 
-    Double calculateListingAverageRating(Long listingId) throws ResourceNotFoundException;
+    RatingDto calculateListingAverageRating(Long listingId) throws ResourceNotFoundException;
 }

@@ -9,6 +9,9 @@ import com.manumafe.vbnb.entity.Reserve;
 import com.manumafe.vbnb.entity.ReserveId;
 import com.manumafe.vbnb.entity.User;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 @Repository
 public interface ReserveRepository extends JpaRepository<Reserve, ReserveId> {
     List<Reserve> findByUser(User user);

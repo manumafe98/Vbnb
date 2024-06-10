@@ -56,12 +56,14 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public Double calculateListingAverageRating(Long listingId) throws ResourceNotFoundException {
+    public RatingDto calculateListingAverageRating(Long listingId) throws ResourceNotFoundException {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
         List<Rating> ratings = ratingRepository.findByListing(listing);
 
-        return ratings.stream().mapToDouble(Rating::getRating).average().orElse(0.0);
+        Double average = ratings.stream().mapToDouble(Rating::getRating).average().orElse(0.0);
+
+        return new RatingDto(average);
     }
 }
