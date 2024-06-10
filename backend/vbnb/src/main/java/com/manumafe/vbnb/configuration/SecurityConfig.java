@@ -17,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private static final String[] WHITE_LIST_URL = {
-        "/api/v1/auth/**",
-        "/api-docs/**",
-        "/swagger-ui/**",
-        "/v3/api-docs/**",
-        "/swagger-ui.html"
+            "/api/v1/auth/**",
+            "/api-docs/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html"
     };
     private static final String[] ADMIN_ACCESS_URL = {
             "/api/v1/category/**",
@@ -34,7 +34,7 @@ public class SecurityConfig {
             "/api/v1/listing/delete/**"
     };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authenticationProvider;    
+    private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
