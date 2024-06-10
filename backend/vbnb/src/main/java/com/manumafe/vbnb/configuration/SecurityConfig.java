@@ -17,10 +17,12 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private static final String[] WHITE_LIST_URL = {
-            "/api/v1/auth/**",
-            "/api-docs/**",
-            "/docs",
-            "/swagger-ui/**" };
+        "/api/v1/auth/**",
+        "/api-docs/**",
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/swagger-ui.html"
+    };
     private static final String[] ADMIN_ACCESS_URL = {
             "/api/v1/category/**",
             "/api/v1/city/**",
