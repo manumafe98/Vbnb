@@ -25,7 +25,7 @@ public class ListingController {
     @Autowired
     private ListingService listingService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ListingResponseDto> createListing(@RequestBody ListingCreateDto listingCreateDto) {
         ListingResponseDto listingResponseDto = listingService.saveListing(listingCreateDto);
 
@@ -39,7 +39,7 @@ public class ListingController {
         return ResponseEntity.status(HttpStatus.OK).body(listings);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ListingResponseDto> updateListing(@RequestBody ListingCreateDto listingCreateDto,
             @PathVariable Long id) {
         ListingResponseDto listing = listingService.updateListing(id, listingCreateDto);
@@ -54,7 +54,7 @@ public class ListingController {
         return ResponseEntity.status(HttpStatus.OK).body(listing);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteListingById(@PathVariable Long id) {
         listingService.deleteListing(id);
 

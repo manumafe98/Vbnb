@@ -21,7 +21,16 @@ public class SecurityConfig {
             "/api-docs/**",
             "/docs",
             "/swagger-ui/**" };
-    private static final String[] ADMIN_ACCESS_URL = {};
+    private static final String[] ADMIN_ACCESS_URL = {
+            "/api/v1/category/**",
+            "/api/v1/city/**",
+            "/api/v1/characteristic/**",
+            "/api/v1/user/all",
+            "/api/v1/user/update/**",
+            "/api/v1/listing/create",
+            "/api/v1/listing/update/**",
+            "/api/v1/listing/delete/**"
+    };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;    
 
@@ -31,7 +40,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(WHITE_LIST_URL).permitAll()
-                        .requestMatchers(ADMIN_ACCESS_URL).hasRole("ADMIN")
+                        .requestMatchers(ADMIN_ACCESS_URL).hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
