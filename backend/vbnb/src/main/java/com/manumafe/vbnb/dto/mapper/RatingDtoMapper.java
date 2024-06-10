@@ -10,7 +10,6 @@ public class RatingDtoMapper {
 
     public RatingDto toDto(Rating rating) {
         return new RatingDto(
-                rating.getId(),
                 rating.getRating());
     }
 }

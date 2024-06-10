@@ -25,7 +25,7 @@ public class RatingController {
     @PostMapping
     @PutMapping
     public ResponseEntity<RatingDto> creteRating(
-            @RequestParam("listignId") Long listingId,
+            @RequestParam("listingId") Long listingId,
             @RequestParam("userId") Long userId,
             @RequestBody RatingDto ratingDto) {
 
@@ -35,8 +35,8 @@ public class RatingController {
     }
 
     @GetMapping("/{listingId}")
-    public ResponseEntity<Double> getAverageRating(@PathVariable Long listingId){
-        Double averageRating = ratingService.calculateListingAverageRating(listingId);
+    public ResponseEntity<RatingDto> getAverageRating(@PathVariable Long listingId){
+        RatingDto averageRating = ratingService.calculateListingAverageRating(listingId);
 
         return ResponseEntity.status(HttpStatus.OK).body(averageRating);
     }

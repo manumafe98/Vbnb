@@ -10,6 +10,9 @@ import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
 import com.manumafe.vbnb.entity.User;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     Optional<Rating> findByUserAndListing(User user, Listing listing);
