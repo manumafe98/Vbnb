@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.manumafe.vbnb.dto.UserDto;
 import com.manumafe.vbnb.dto.mapper.UserDtoMapper;
 import com.manumafe.vbnb.entity.User;
+import com.manumafe.vbnb.entity.UserRole;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.UserRepository;
 import com.manumafe.vbnb.service.UserService;
@@ -22,14 +23,11 @@ public class UserServiceImpl implements UserService {
     private final UserDtoMapper userDtoMapper;
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
-        User user = userRepository.findById(userDto.id())
-                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userDto.id() + " not found"));
+    public UserDto updateUserRole(Long userId, UserRole role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
         
-        user.setName(userDto.name());
-        user.setLastName(userDto.lastName());
-        user.setEmail(userDto.email());
-        user.setUserRole(userDto.role());
+        user.setUserRole(role);
 
         userRepository.save(user);
 

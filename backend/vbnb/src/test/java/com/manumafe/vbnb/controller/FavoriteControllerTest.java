@@ -92,7 +92,6 @@ public class FavoriteControllerTest {
         mockMvc.perform(delete("/api/v1/favorite")
                 .param("userId", "1")
                 .param("listingId", "1"))
-                .andExpectAll(
-                    status().isNoContent());
+                .andExpect(status().isNoContent());
     }
 }

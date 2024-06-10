@@ -19,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manumafe.vbnb.entity.User;
 import com.manumafe.vbnb.entity.UserRole;
 import com.manumafe.vbnb.repository.UserRepository;
@@ -60,28 +59,18 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),
-                    content().string("[]"));
+                    content().string("[{\"id\":1,\"name\":\"Lionel\",\"lastName\":\"Messi\",\"email\":\"lionel.messi10@gmail.com\",\"role\":\"USER\"}]"));
     }
 
     @Test
     @Order(2)
-    public void updateUser() throws Exception {
-        var user = User.builder()
-            .name("Lionel")
-            .lastName("Messi")
-            .email("lionel.messi10@gmail.com")
-            .password(passwordEncoder.encode("1234"))
-            .userRole(UserRole.ADMIN)
-            .build();
-            
-        String userJson = new ObjectMapper().writeValueAsString(user);
-
+    public void updateUserRole() throws Exception {
         mockMvc.perform(put("/api/v1/user/update")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(userJson))
+                .param("userId", "1")
+                .param("userRole", "ADMIN"))
                 .andExpectAll(
                     status().isOk(),
                     content().contentType(MediaType.APPLICATION_JSON),
-                    jsonPath("$.userRole").value("ADMIN"));
+                    jsonPath("$.role").value("ADMIN"));
     }
 }
