@@ -22,8 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.manumafe.vbnb.dto.RatingDto;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
+import com.manumafe.vbnb.entity.RatingId;
 import com.manumafe.vbnb.entity.User;
 import com.manumafe.vbnb.entity.UserRole;
 import com.manumafe.vbnb.repository.ListingRepository;
@@ -51,7 +53,7 @@ public class RatingControllerTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private String setUp() throws JsonProcessingException{
+    private void setUp(){
         
         var user1 = User.builder()
                 .name("Roberto")
@@ -87,12 +89,17 @@ public class RatingControllerTest {
         
         listingRepository.save(listing);
 
+        RatingId ratingId1 = new RatingId(user1.getId(), listing.getId());
+        RatingId ratingId2 = new RatingId(user2.getId(), listing.getId());
+
         Rating rating1 = new Rating();
+        rating1.setId(ratingId1);
         rating1.setListing(listing);
         rating1.setUser(user1);
         rating1.setRating(5.0);
 
         Rating rating2 = new Rating();
+        rating2.setId(ratingId2);
         rating2.setListing(listing);
         rating2.setUser(user2);
         rating2.setRating(4.5);
@@ -100,17 +107,20 @@ public class RatingControllerTest {
         List<Rating> ratings = List.of(rating1, rating2);
 
         ratingRepository.saveAll(ratings);
+    }
 
-        Rating rating3 = new Rating();
-        rating3.setRating(4.0);
-
-        return new ObjectMapper().writeValueAsString(rating3);
+    private String getRatingJson(RatingDto rating) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(rating);
     }
 
     @Test
     @Order(1)
     public void createRating() throws Exception {
-        String ratingJson = setUp();
+        setUp();
+
+        RatingDto rating = new RatingDto(4.0);
+
+        String ratingJson = getRatingJson(rating);
 
         mockMvc.perform(post("/api/v1/rating")
                 .param("userId", "3")

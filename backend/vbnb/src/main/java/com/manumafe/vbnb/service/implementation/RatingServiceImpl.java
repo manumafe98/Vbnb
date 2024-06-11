@@ -9,6 +9,7 @@ import com.manumafe.vbnb.dto.RatingDto;
 import com.manumafe.vbnb.dto.mapper.RatingDtoMapper;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
+import com.manumafe.vbnb.entity.RatingId;
 import com.manumafe.vbnb.entity.User;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.ListingRepository;
@@ -44,7 +45,10 @@ public class RatingServiceImpl implements RatingService {
             rating.setRating(ratingDto.rating());
             
         } else {
+            RatingId ratingId = new RatingId(userId, listingId);
+
             rating = new Rating();
+            rating.setId(ratingId);
             rating.setRating(ratingDto.rating());
             rating.setListing(listing);
             rating.setUser(user);
