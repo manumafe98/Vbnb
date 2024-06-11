@@ -61,4 +61,17 @@ public class ListingController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ListingResponseDto>> getListingsByCategory(@PathVariable String category) {
+        List<ListingResponseDto> listings = listingService.findListingByCategoryName(category);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listings);
+    }
+
+    @GetMapping("/city/{city}")
+    public ResponseEntity<List<ListingResponseDto>> getListingsByCity(@PathVariable String city) {
+        List<ListingResponseDto> listings = listingService.findListingByCityName(city);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listings);
+    }
 }

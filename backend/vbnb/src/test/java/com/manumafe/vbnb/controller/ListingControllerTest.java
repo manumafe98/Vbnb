@@ -29,9 +29,11 @@ import com.manumafe.vbnb.dto.ListingCreateDto;
 import com.manumafe.vbnb.entity.Category;
 import com.manumafe.vbnb.entity.Characteristic;
 import com.manumafe.vbnb.entity.City;
+import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.repository.CategoryRepository;
 import com.manumafe.vbnb.repository.CharacteristicRepository;
 import com.manumafe.vbnb.repository.CityRepository;
+import com.manumafe.vbnb.repository.ListingRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -50,6 +52,9 @@ public class ListingControllerTest {
 
     @Autowired
     private CharacteristicRepository characteristicRepository;
+
+    @Autowired
+    private ListingRepository listingRepository;
 
     private Category createCategory(String name, String url) {
         Category category = new Category();
@@ -75,22 +80,42 @@ public class ListingControllerTest {
         return characteristic;
     }
 
-    private String getListingJson(
+    private void createListing() {
+        Characteristic characteristic = createCharacteristic("Chimney", "http://image.chimney.example");
+        Category category = createCategory("Cabins", "http://image.cabin.example");
+        City city = createCity("Argentina", "Ushuaia");
+        
+        saveItemsToRepositories(category, city, characteristic);
+
+        Listing listing = new Listing();
+        listing.setTitle("Snow Cabin");
+        listing.setDescription("Warm cabin near the mountains to enjoy hiking and snowboarding");
+        listing.setCategory(category);
+        listing.setCity(city);
+        listing.setCharacteristics(Set.of(characteristic));
+
+        listingRepository.save(listing);
+    }
+
+    private ListingCreateDto createListingDto(
             String title,
             String description,
             Category category,
             City city,
-            Characteristic characteristic) throws JsonProcessingException {
-
+            Characteristic characteristic) {
+        
         ImageDto image = new ImageDto("http://image1");
 
-        ListingCreateDto listing = new ListingCreateDto(
+        return new ListingCreateDto(
                 title,
                 description,
                 city.getId(),
                 category.getId(),
                 Set.of(image),
                 Set.of(characteristic.getId()));
+    }
+
+    private String getListingJson(ListingCreateDto listing) throws JsonProcessingException {
 
         return new ObjectMapper().writeValueAsString(listing);
     }
@@ -104,18 +129,22 @@ public class ListingControllerTest {
     @Test
     @Order(1)
     public void testCreateListing() throws Exception {
+        createListing();
+
         Characteristic characteristic = createCharacteristic("Wifi", "http://image.wifi.example");
         Category category = createCategory("Houses", "http://image.house.example");
-        City city = createCity("Argentina", "Buenos Aires");
+        City city = createCity("Argentina", "Mar del Plata");
 
         saveItemsToRepositories(category, city, characteristic);
 
-        String listingJson = getListingJson(
+        ListingCreateDto listing = createListingDto(
                 "House in Mar del Plata",
                 "Beautiful house with wifi",
                 category,
                 city,
                 characteristic);
+
+        String listingJson = getListingJson(listing);
 
         mockMvc.perform(post("/api/v1/listing/create")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -127,7 +156,7 @@ public class ListingControllerTest {
                         jsonPath("$.title").value("House in Mar del Plata"),
                         jsonPath("$.description").value("Beautiful house with wifi"),
                         jsonPath("$.city.id").exists(),
-                        jsonPath("$.city.name").value("Buenos Aires"),
+                        jsonPath("$.city.name").value("Mar del Plata"),
                         jsonPath("$.city.country").value("Argentina"),
                         jsonPath("$.category.id").exists(),
                         jsonPath("$.category.name").value("Houses"),
@@ -148,14 +177,16 @@ public class ListingControllerTest {
 
         saveItemsToRepositories(category, city, characteristic);
 
-        String listingJson = getListingJson(
+        ListingCreateDto listing = createListingDto(
                 "Department in Cordoba",
                 "Beautiful department in front of the beach with kitchen",
                 category,
                 city,
                 characteristic);
 
-        mockMvc.perform(put("/api/v1/listing/update/1")
+        String listingJson = getListingJson(listing);
+
+        mockMvc.perform(put("/api/v1/listing/update/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(listingJson))
                 .andExpectAll(
@@ -180,7 +211,7 @@ public class ListingControllerTest {
     @Test
     @Order(3)
     public void testGetListingById() throws Exception {
-        mockMvc.perform(get("/api/v1/listing/1")
+        mockMvc.perform(get("/api/v1/listing/2")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
@@ -196,23 +227,46 @@ public class ListingControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         content().string(
-                                "[{\"id\":1,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":2,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":2,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":2,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
+                                "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}," +
+                                "{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
     }
 
     @Test
     @Order(5)
+    public void testGetListingByCityName() throws Exception {
+        mockMvc.perform(get("/api/v1/listing/city/Ushuaia"))
+                .andDo(print())
+                .andExpectAll(
+                    status().isOk(),
+                    content().string(
+                        "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}]"));
+    }
+
+    @Test
+    @Order(6)
+    public void testGetListingByCategoryName() throws Exception {
+        mockMvc.perform(get("/api/v1/listing/category/Departments"))
+                .andDo(print())
+                .andExpectAll(
+                    status().isOk(),
+                    content().string(
+                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
+    }
+
+    @Test
+    @Order(7)
     public void testDeleteListingById() throws Exception {
         mockMvc.perform(delete("/api/v1/listing/delete/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @Order(6)
+    @Order(8)
     public void testGetNonExistentListingException() throws Exception {
         mockMvc.perform(get("/api/v1/listing/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
-                    status().isNotFound(),
-                    jsonPath("$.message").value("Listing with id: 1 not found"));
+                        status().isNotFound(),
+                        jsonPath("$.message").value("Listing with id: 1 not found"));
     }
 }

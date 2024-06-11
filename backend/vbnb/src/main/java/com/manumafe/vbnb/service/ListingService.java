@@ -16,4 +16,8 @@ public interface ListingService {
     ListingResponseDto findListingById(Long id);
 
     List<ListingResponseDto> findAllListings();
+
+    List<ListingResponseDto> findListingByCategoryName(String categoryName);
+
+    List<ListingResponseDto> findListingByCityName(String cityName);
 }

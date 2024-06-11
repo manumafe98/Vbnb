@@ -143,4 +143,21 @@ public class ListingServiceImpl implements ListingService {
 			return image;
 		}).collect(Collectors.toSet());
 	}
+
+	@Override
+	public List<ListingResponseDto> findListingByCategoryName(String categoryName) {
+		Category category = categoryRepository.findByName(categoryName)
+				.orElseThrow(() -> new ResourceNotFoundException("Category with name: " + categoryName + " not found"));
+		
+		
+		return listingRepository.findByCategory(category).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findListingByCityName(String cityName) {
+		City city = cityRepository.findByName(cityName)
+				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " notfound"));
+		
+		return listingRepository.findByCity(city).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
 }
