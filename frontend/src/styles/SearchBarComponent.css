@@ -1,0 +1,18 @@
+.search {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.search-bar {
+    margin: 5px;
+    padding: 4px;
+    width: 45%;
+    border: 1px solid #e0e0e0;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.5fr;
+}

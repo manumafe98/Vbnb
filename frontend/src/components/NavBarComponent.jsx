@@ -1,6 +1,6 @@
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
 
-const NavigationBar = () => {
+export const NavBarComponent = () => {
   return (
     <Navbar>
       <NavbarBrand>
@@ -21,5 +21,3 @@ const NavigationBar = () => {
     </Navbar>
   );
 }
-
-export default NavigationBar
