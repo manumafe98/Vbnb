@@ -3,12 +3,3 @@
     justify-content: center;
     gap: 5%;
 }
-
-.form-input {
-    width: 65%;
-    margin-bottom: 10px;
-}
-
-.form-flex{
-    width: 30%;
-}

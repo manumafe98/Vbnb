@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manumafe.vbnb.dto.ImageDto;
 import com.manumafe.vbnb.dto.ListingCreateDto;
 import com.manumafe.vbnb.entity.Category;
 import com.manumafe.vbnb.entity.Characteristic;
@@ -103,15 +102,13 @@ public class ListingControllerTest {
             Category category,
             City city,
             Characteristic characteristic) {
-        
-        ImageDto image = new ImageDto("http://image1");
 
         return new ListingCreateDto(
                 title,
                 description,
                 city.getId(),
                 category.getId(),
-                Set.of(image),
+                Set.of("http://image1"),
                 Set.of(characteristic.getId()));
     }
 

@@ -24,3 +24,17 @@ body > #root > div {
     align-items: center;  
     justify-content: center;
 }
+
+.form-input {
+    width: 65%;
+    margin-bottom: 10px;
+}
+
+.form-flex{
+    width: 30%;
+}
+
+.form-element {
+    height: 70%;
+    width: 25%;
+}
