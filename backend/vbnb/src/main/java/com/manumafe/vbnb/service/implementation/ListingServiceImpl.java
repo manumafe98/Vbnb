@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.manumafe.vbnb.dto.ImageDto;
 import com.manumafe.vbnb.dto.ListingCreateDto;
 import com.manumafe.vbnb.dto.ListingResponseDto;
 import com.manumafe.vbnb.dto.mapper.ListingDtoMapper;
@@ -131,11 +130,11 @@ public class ListingServiceImpl implements ListingService {
 		}).collect(Collectors.toSet());
 	}
 
-	private Set<Image> getImages(Set<ImageDto> imageDtos, Listing listing) {
-		return imageDtos.stream().map(imageDto -> {
+	private Set<Image> getImages(Set<String> imageUrls, Listing listing) {
+		return imageUrls.stream().map(imageUrl -> {
 
 			Image image = new Image();
-			image.setImageUrl(imageDto.imageUrl());
+			image.setImageUrl(imageUrl);
 			image.setListing(listing);
 
 			imageRepository.save(image);

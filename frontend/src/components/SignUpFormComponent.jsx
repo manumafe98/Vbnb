@@ -1,7 +1,7 @@
 import { Input, Button } from "@nextui-org/react";
 import '../styles/SignUpFormComponent.css'
 
-export const SignUpComponent = () => {
+export const SignUpFormComponent = () => {
   return (
     <section className="form-container">
       <div className="form">

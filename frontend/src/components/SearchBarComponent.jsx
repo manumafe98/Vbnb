@@ -9,7 +9,7 @@ export const SearchBarComponent = () => {
             <div className="search-bar">
                 <Input radius="full" type="where" label="Where" placeholder="Search destinations"/>
                 <CheckInOutComponent/>
-                <Button radius="full" className="bg-[#ff6f00] text-white">
+                <Button radius="full" className="h-14 bg-[#ff6f00] text-white">
                     Search
                 </Button>
             </div>
