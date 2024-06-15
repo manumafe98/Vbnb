@@ -63,9 +63,6 @@ export const DragAndDropImageComponent = ({ multiple = false }) => {
 
   return (
     <div className="card">
-      <div className="top">
-        <p>Add Image</p>
-      </div>
       <div
         className={`drag-area ${isDragging ? 'dragging' : ''}`}
         onDragOver={onDragOver}
@@ -73,10 +70,10 @@ export const DragAndDropImageComponent = ({ multiple = false }) => {
         onDrop={onDrop}
       >
         {isDragging ? (
-          <span className="select">Drop images here</span>
+          <span className="select">Drop your image here</span>
         ) : (
           <>
-            Drag & Drop image here or{' '}
+            Drag & Drop an image here or{' '}
             <span className="select" role="button" onClick={selectFiles}>
               Browse
             </span>

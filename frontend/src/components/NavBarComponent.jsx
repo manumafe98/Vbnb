@@ -1,5 +1,5 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu } from "@nextui-org/react";
-import { ChevronDown } from "./Icons";
+import { ChevronDown } from "../constants/Icons";
 import { Link, useLocation } from "react-router-dom"
 
 export const NavBarComponent = () => {
