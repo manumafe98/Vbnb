@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import '../styles/DragAndDropImageComponent.css';
+import { DownloadCloud } from '../constants/Icons'
 
 export const DragAndDropImageComponent = ({ multiple = false }) => {
   const [images, setImages] = useState([])
@@ -70,7 +71,8 @@ export const DragAndDropImageComponent = ({ multiple = false }) => {
         onDrop={onDrop}
       >
         {isDragging ? (
-          <span className="select">Drop your image here</span>
+          // <span className="select">Drop your image here</span>
+          <DownloadCloud/>
         ) : (
           <>
             Drag & Drop an image here or{' '}

@@ -1,6 +1,7 @@
 import { CheckInOutComponent } from "./CheckInOutComponent";
 import { Input, Button} from "@nextui-org/react";
 import '../styles/SearchBarComponent.css'
+import { Search } from "../constants/Icons";
 
 export const SearchBarComponent = () => {
     
@@ -15,7 +16,7 @@ export const SearchBarComponent = () => {
                 />
                 <CheckInOutComponent/>
                 <Button radius="full" className="h-14 bg-[#ff6f00] text-white">
-                    Search
+                    <Search/> Search
                 </Button>
             </div>
         </section>

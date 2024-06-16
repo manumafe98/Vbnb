@@ -56,6 +56,10 @@ export const AuthFormComponent = ({ authenticationType }) => {
         }
       })
       // TODO: Try use catch with (error.response.status)
+      // TODO: call /api/v1/user to obtain the user data and role
+      // TODO: work with repo: https://github.com/gitdagray/react_protected_routes/tree/main to make a role based authentication
+      // TODO: implement AuthProvider, useAuth, RequireAuth
+      // TODO: migrate browserrouter to main, apply routes and authprovider
   }
 
   return (
