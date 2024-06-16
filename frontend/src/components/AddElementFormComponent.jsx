@@ -6,7 +6,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   return (
     <section className="form-container">
-      <div className="form form-element">
+      <div key={elementName} className="form form-element">
         {elementName !== "City" && (
           <DragAndDropImageComponent/>
         )}

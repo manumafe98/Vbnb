@@ -38,3 +38,8 @@ body > #root > div {
     height: 70%;
     width: 25%;
 }
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}

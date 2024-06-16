@@ -1,0 +1,5 @@
+.text-type-container{
+    display: flex;
+    justify-content: center;
+    gap: 5%;
+}

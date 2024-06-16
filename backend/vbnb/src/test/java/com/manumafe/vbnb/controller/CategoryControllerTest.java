@@ -64,13 +64,31 @@ public class CategoryControllerTest {
 
     @Test
     @Order(3)
+    public void testCreateAExistingCategory() throws Exception {
+
+        Category category = new Category();
+        category.setName("Houses");
+        category.setImageUrl("http://image.house.example");
+
+        String categoryJson = new ObjectMapper().writeValueAsString(category);
+
+        mockMvc.perform(post("/api/v1/category")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(categoryJson))
+                .andExpectAll(
+                    status().isConflict(),
+                    jsonPath("$.message").value("Category with name: Houses already exists"));
+    }
+
+    @Test
+    @Order(4)
     public void deleteCategoryById() throws Exception {
         mockMvc.perform(delete("/api/v1/category/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void testDeleteNonExistingCategory() throws Exception {
         mockMvc.perform(delete("/api/v1/category/1"))
                 .andExpectAll(

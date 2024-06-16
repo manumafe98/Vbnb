@@ -3,11 +3,12 @@ package com.manumafe.vbnb.service;
 import java.util.List;
 
 import com.manumafe.vbnb.dto.CityDto;
+import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 
 public interface CityService {
     
-    CityDto saveCity(CityDto cityDto);
+    CityDto saveCity(CityDto cityDto) throws ResourceAlreadyExistentException;
 
     void deleteCity(Long id) throws ResourceNotFoundException;
 

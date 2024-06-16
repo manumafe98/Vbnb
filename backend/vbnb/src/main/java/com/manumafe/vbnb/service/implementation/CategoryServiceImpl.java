@@ -1,12 +1,14 @@
 package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.CategoryDto;
 import com.manumafe.vbnb.dto.mapper.CategoryDtoMapper;
 import com.manumafe.vbnb.entity.Category;
+import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CategoryRepository;
 import com.manumafe.vbnb.service.CategoryService;
@@ -21,9 +23,14 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryDtoMapper categoryDtoMapper;
 
     @Override
-    public CategoryDto saveCategory(CategoryDto categoryDto) {
+    public CategoryDto saveCategory(CategoryDto categoryDto) throws ResourceAlreadyExistentException {
+        Optional<Category> optionalCategory = categoryRepository.findByName(categoryDto.name());
+
+        if (optionalCategory.isPresent()) {
+            throw new ResourceAlreadyExistentException("Category with name: " + categoryDto.name() + " already exists");
+        }
+
         Category category = new Category();
-        
         category.setName(categoryDto.name());
         category.setImageUrl(categoryDto.imageUrl());
 

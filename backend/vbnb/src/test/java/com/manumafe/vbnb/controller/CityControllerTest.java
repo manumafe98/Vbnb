@@ -64,14 +64,7 @@ public class CityControllerTest {
                     jsonPath("$.name").value("Cordoba"),
                     jsonPath("$.country").value("Argentina"));
     }
-
-    @Test
-    @Order(4)
-    public void deleteCityById() throws Exception {
-        mockMvc.perform(delete("/api/v1/city/1"))
-                .andExpect(status().isNoContent());
-    }
-
+    
     @Test
     @Order(3)
     public void testGetAllCities() throws Exception {
@@ -83,7 +76,32 @@ public class CityControllerTest {
     }
 
     @Test
+    @Order(4)
+    public void testCreateAExistingCity() throws Exception {
+
+        City city = new City();
+        city.setName("Cordoba");
+        city.setCountry("Argentina");
+
+        String cityJson = new ObjectMapper().writeValueAsString(city);
+
+        mockMvc.perform(post("/api/v1/city")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(cityJson))
+                .andExpectAll(
+                        status().isConflict(),
+                        jsonPath("$.message").value("City with name: Cordoba already exists"));
+    }
+
+    @Test
     @Order(5)
+    public void deleteCityById() throws Exception {
+        mockMvc.perform(delete("/api/v1/city/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @Order(6)
     public void testGetNonExistentCityException() throws Exception {
         mockMvc.perform(get("/api/v1/city/1")
                 .contentType(MediaType.APPLICATION_JSON))

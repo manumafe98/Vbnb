@@ -85,13 +85,31 @@ public class CharacteristicControllerTest {
 
     @Test
     @Order(4)
+    public void testCreateAExistentCharacteristic() throws Exception {
+
+        Characteristic characteristic = new Characteristic();
+        characteristic.setName("Wifi");
+        characteristic.setImageUrl("https://image.wifi.example");
+
+        String characteristicJson = new ObjectMapper().writeValueAsString(characteristic);
+
+        mockMvc.perform(post("/api/v1/characteristic")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(characteristicJson))
+                .andExpectAll(
+                    status().isConflict(),
+                    jsonPath("$.message").value("Characteristic with name: Wifi already exists"));
+    }
+
+    @Test
+    @Order(5)
     public void testDeleteCharacteristicById() throws Exception {
         mockMvc.perform(delete("/api/v1/characteristic/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void testDeleteNonExistingCharacteristic() throws Exception {
         mockMvc.perform(delete("/api/v1/characteristic/1"))
                 .andExpectAll(

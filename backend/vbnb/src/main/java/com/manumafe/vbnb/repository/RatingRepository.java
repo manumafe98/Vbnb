@@ -8,13 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
+import com.manumafe.vbnb.entity.RatingId;
 import com.manumafe.vbnb.entity.User;
 
 import jakarta.transaction.Transactional;
 
 @Transactional
 @Repository
-public interface RatingRepository extends JpaRepository<Rating, Long> {
+public interface RatingRepository extends JpaRepository<Rating, RatingId> {
     Optional<Rating> findByUserAndListing(User user, Listing listing);
 
     List<Rating> findByListing(Listing listing);

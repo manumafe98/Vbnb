@@ -1,6 +1,7 @@
 package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.manumafe.vbnb.dto.CharacteristicDto;
 import com.manumafe.vbnb.dto.mapper.CharacteristicDtoMapper;
 import com.manumafe.vbnb.entity.Characteristic;
+import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CharacteristicRepository;
 import com.manumafe.vbnb.service.CharacteristicService;
@@ -22,7 +24,13 @@ public class CharacteristicServiceImpl implements CharacteristicService {
     private final CharacteristicDtoMapper characteristicDtoMapper;
 
     @Override
-    public CharacteristicDto saveCharacteristic(CharacteristicDto characteristicDto) {
+    public CharacteristicDto saveCharacteristic(CharacteristicDto characteristicDto) throws ResourceAlreadyExistentException {
+        Optional<Characteristic> optionalCategory = characteristicRepository.findByName(characteristicDto.name());
+
+        if (optionalCategory.isPresent()) {
+            throw new ResourceAlreadyExistentException("Characteristic with name: " + characteristicDto.name() + " already exists");
+        }
+
         Characteristic characteristic = new Characteristic();
 
         characteristic.setName(characteristicDto.name());
