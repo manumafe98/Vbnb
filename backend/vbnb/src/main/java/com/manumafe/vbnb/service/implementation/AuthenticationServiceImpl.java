@@ -50,6 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(user.getUserRole())
                 .build();
     }
 
@@ -74,6 +75,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(user.get().getUserRole())
                 .build();
     }
 }

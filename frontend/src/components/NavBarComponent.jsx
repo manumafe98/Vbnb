@@ -72,6 +72,8 @@ export const NavBarComponent = () => {
             >
               <DropdownItem
                 key="add_listing"
+                as={Link}
+                to="/admin/add/listing"
               >
                 Listing
               </DropdownItem>

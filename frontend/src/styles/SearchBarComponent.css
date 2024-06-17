@@ -14,5 +14,5 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     align-items: center;
     display: grid;
-    grid-template-columns: 1fr 1fr 0.5fr;
+    grid-template-columns: 1fr 1fr 0.65fr;
 }

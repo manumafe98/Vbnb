@@ -61,7 +61,8 @@ public class AuthenticationControllerTest {
                 .andExpectAll(
                     status().isCreated(),
                     content().contentType(MediaType.APPLICATION_JSON),
-                    jsonPath("$.token").exists());
+                    jsonPath("$.token").exists(),
+                    jsonPath("$.role").value("USER"));
     }
 
     @Test
@@ -88,7 +89,8 @@ public class AuthenticationControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().contentType(MediaType.APPLICATION_JSON),
-                    jsonPath("$.token").exists());
+                    jsonPath("$.token").exists(),
+                    jsonPath("$.role").value("USER"));
     }
 
     @Test

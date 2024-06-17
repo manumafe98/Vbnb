@@ -3,9 +3,12 @@ import { useFetch } from "../hooks/useFetch"
 import { Input, Button } from "@nextui-org/react";
 import { inputWrapperClassNames } from '../constants/inputWrapperClassNames'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../context/AuthProvider";
 import "../styles/AuthFormComponent.css"
 
 export const AuthFormComponent = ({ authenticationType }) => {
+  const { setAuth } = useAuth()
+
   const[name, setName] = useState('')
   const[lastName, setLastName] = useState('')
   const[email, setEmail] = useState('')
@@ -15,8 +18,8 @@ export const AuthFormComponent = ({ authenticationType }) => {
   const[invalidPassword, setInvalidPassword] = useState(false)
   const navigate = useNavigate()
   
-  const url = authenticationType === "Sign Up" ? "/backend/api/v1/auth/register" : "/backend/api/v1/auth/authenticate"
-  const userData = authenticationType === "Sign Up" ? { name, lastName, email, password } : { email, password }
+  const authUrl = authenticationType === "Sign Up" ? "/backend/api/v1/auth/register" : "/backend/api/v1/auth/authenticate"
+  const userData = authenticationType === "Sign Up" ? { name, lastName, email, password } : { email, password }  
 
   useEffect(() => {
     clearFormData()
@@ -34,32 +37,36 @@ export const AuthFormComponent = ({ authenticationType }) => {
     setInvalidPassword(false)
   }
 
-  const authenticateUser = () => {
+  const authenticateUser = async (e) => {
+    e.preventDefault()
     clearErrorMessages()
 
-    useFetch(url, "POST", userData, true)
-      .then(response => response.json())
-      .then(data => {
-        if (data.message === "User not found") {
-          setInvalidUser(true)
-        } else if (data.message === "Incorrect password") {
-          setInvalidPassword(true)
-        } else if (data.message === "Email already registered") {
-          setInvalidRegistration(true)
-        } else {
-          if (authenticationType === "Sign Up") {
-            navigate("/auth/signin")
+      useFetch(authUrl, "POST", userData, true)
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === "User not found") {
+            setInvalidUser(true)
+          } else if (data.message === "Incorrect password") {
+            setInvalidPassword(true)
+          } else if (data.message === "Email already registered") {
+            setInvalidRegistration(true)
           } else {
-            sessionStorage.setItem("jwt_authorization", data.token)
-            navigate("/")
-          }
-        }
-      })
-      // TODO: Try use catch with (error.response.status)
-      // TODO: call /api/v1/user to obtain the user data and role
-      // TODO: work with repo: https://github.com/gitdagray/react_protected_routes/tree/main to make a role based authentication
-      // TODO: implement AuthProvider, useAuth, RequireAuth
-      // TODO: migrate browserrouter to main, apply routes and authprovider
+            if (authenticationType === "Sign Up") {
+              navigate("/auth/signin")
+            } else {
+              const userRole = data.role
+
+              const authData = { user: email, password, role: userRole, accessToken: data.token}
+              setAuth(authData)
+
+              if (userRole == "ADMIN") {
+                navigate("/admin")
+              } else {
+                navigate("/")
+              }
+            }
+          }          
+        }).catch(error => console.log(error))
   }
 
   return (

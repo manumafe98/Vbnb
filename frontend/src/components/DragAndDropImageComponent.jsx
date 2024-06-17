@@ -13,12 +13,13 @@ export const DragAndDropImageComponent = ({ multiple = false }) => {
 
   const handleFiles = (files) => {
     const newImages = []
+
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split('/')[0] !== 'image') continue
       if (!images.some((e) => e.name === files[i].name)) {
         newImages.push({
           name: files[i].name,
-          url: URL.createObjectURL(files[i]),
+          url: URL.createObjectURL(files[i])
         })
       }
 
@@ -31,6 +32,7 @@ export const DragAndDropImageComponent = ({ multiple = false }) => {
         setImages(newImages)
       }
     }
+    console.log(newImages)
   }
 
   const onFileSelect = (event) => {
@@ -71,7 +73,6 @@ export const DragAndDropImageComponent = ({ multiple = false }) => {
         onDrop={onDrop}
       >
         {isDragging ? (
-          // <span className="select">Drop your image here</span>
           <DownloadCloud/>
         ) : (
           <>

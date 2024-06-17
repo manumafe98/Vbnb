@@ -1,4 +1,4 @@
-export const useFetch = async (url, method, bodyData = null, authentication = false) => {
+export const useFetch = async (url, method, bodyData = null, authentication = false, token = null) => {
 
     if (!url) return
 
@@ -8,7 +8,7 @@ export const useFetch = async (url, method, bodyData = null, authentication = fa
             "Content-type": "application/json"
         } : {
             "Content-type": "application/json",
-            "Authorization": `Bearer ${sessionStorage.getItem("jwt_authorization")}`
+            "Authorization": `Bearer ${token}`
         },
         body: method == "GET" || method == "DELETE" ? null : JSON.stringify(bodyData)
     }

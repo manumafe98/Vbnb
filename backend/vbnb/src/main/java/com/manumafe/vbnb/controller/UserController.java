@@ -22,13 +22,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public ResponseEntity<UserDto> getAuthenticatedUser() {
-        UserDto user = userService.getUser();
-
-        return ResponseEntity.status(HttpStatus.OK).body(user);
-    }
-
     @GetMapping("/all")
     public ResponseEntity<List<UserDto>> getUsers() {
         List<UserDto> users = userService.findAllUsers();
