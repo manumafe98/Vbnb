@@ -1,38 +1,47 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import '../styles/DragAndDropImageComponent.css';
 import { DownloadCloud } from '../constants/Icons'
 
-export const DragAndDropImageComponent = ({ multiple = false }) => {
+export const DragAndDropImageComponent = ({ onImagesLoaded, multiple = false }) => {
   const [images, setImages] = useState([])
+  const [fileObjects, setFileObjects] = useState([])
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    onImagesLoaded(fileObjects)
+  }, [fileObjects])
 
   const selectFiles = () => {
     fileInputRef.current.click()
   }
 
   const handleFiles = (files) => {
+
     const newImages = []
+    const newFileObjects = []
 
     for (let i = 0; i < files.length; i++) {
-      if (files[i].type.split('/')[0] !== 'image') continue
+
       if (!images.some((e) => e.name === files[i].name)) {
         newImages.push({
           name: files[i].name,
           url: URL.createObjectURL(files[i])
         })
+
+        newFileObjects.push(files[i])
       }
 
       if (!multiple && newImages.length > 0) break
     }
+
     if (newImages.length > 0) {
-      if (multiple) {
-        setImages((prevImages) => [...prevImages, ...newImages])
-      } else {
-        setImages(newImages)
-      }
+      const updatedImages = multiple ? [...images, ...newImages] : newImages
+      const updatedFileObjects = multiple ? [...fileObjects, ...newFileObjects] : newFileObjects
+
+      setImages(updatedImages)
+      setFileObjects(updatedFileObjects)
     }
-    console.log(newImages)
   }
 
   const onFileSelect = (event) => {
@@ -43,6 +52,7 @@ export const DragAndDropImageComponent = ({ multiple = false }) => {
 
   const deleteImage = (index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index))
+    setFileObjects((prevFiles) => prevFiles.filter((_, i) => i !== index))
   }
 
   const onDragOver = (event) => {

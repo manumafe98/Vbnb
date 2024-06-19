@@ -1,6 +1,12 @@
-export const useFetch = async (url, method, bodyData = null, authentication = false, token = null) => {
+export const useFetch = async (url, method, bodyData = null, authentication = false) => {
+    let accessToken = ""
 
     if (!url) return
+
+    if (!authentication) {
+        const user = JSON.parse(sessionStorage.getItem("auth"))
+        accessToken = user.accessToken
+    }
 
     const options = {
         method: method,
@@ -8,7 +14,7 @@ export const useFetch = async (url, method, bodyData = null, authentication = fa
             "Content-type": "application/json"
         } : {
             "Content-type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${accessToken}`
         },
         body: method == "GET" || method == "DELETE" ? null : JSON.stringify(bodyData)
     }

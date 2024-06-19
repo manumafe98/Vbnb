@@ -19,7 +19,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
   const navigate = useNavigate()
   
   const authUrl = authenticationType === "Sign Up" ? "/backend/api/v1/auth/register" : "/backend/api/v1/auth/authenticate"
-  const userData = authenticationType === "Sign Up" ? { name, lastName, email, password } : { email, password }  
+  const userData = authenticationType === "Sign Up" ? { name, lastName, email, password } : { email, password }
 
   useEffect(() => {
     clearFormData()
@@ -41,7 +41,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
     e.preventDefault()
     clearErrorMessages()
 
-      useFetch(authUrl, "POST", userData, true)
+      await useFetch(authUrl, "POST", userData, true)
         .then(response => response.json())
         .then(data => {
           if (data.message === "User not found") {

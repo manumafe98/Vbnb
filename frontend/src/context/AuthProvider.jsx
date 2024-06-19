@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   })
 
   useEffect(() => {
-    sessionStorage.setItem("auth", JSON.stringify(auth));
+    sessionStorage.setItem("auth", JSON.stringify(auth))
   }, [auth])
 
   return (

@@ -6,7 +6,7 @@ body > #root > div {
     height: 100vh;
 }
 
-.form-container{
+.form-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,6 +23,7 @@ body > #root > div {
     flex-direction: column;
     align-items: center;  
     justify-content: center;
+    margin-top: 10px;
 }
 
 .form-input {
@@ -35,11 +36,17 @@ body > #root > div {
 }
 
 .form-element {
-    height: 70%;
-    width: 25%;
+    height: 100%;
+    width: 35%;
+    padding: 10px;
 }
 
 .error-message {
     color: red;
+    margin-top: 10px;
+}
+
+.sucessfull-message {
+    color: green;
     margin-top: 10px;
 }
