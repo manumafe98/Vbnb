@@ -6,6 +6,7 @@ import { AddElementPage } from "./pages/AddElementPage"
 import { MissingPage } from "./pages/MissingPage"
 import { UnauthorizedPage } from "./pages/UnauthorizedPage"
 import { RequireAuthComponent } from "./components/RequireAuthComponent"
+import { UserAdministrationPage } from "./pages/UserAdministrationPage"
 
 export const VbnbApp = () => {
 
@@ -22,6 +23,7 @@ export const VbnbApp = () => {
           <Route path="/admin/add/characteristic" element={<AddElementPage elementName="Characteristic" />}></Route>
           <Route path="/admin/add/city" element={<AddElementPage elementName="City" />}></Route>
           <Route path="/admin/add/listing" element={<AddElementPage elementName="Listing" />}></Route>
+          <Route path="/admin/administrate/users" element={<UserAdministrationPage/>}></Route>
         </Route>
         
         <Route path="*" element={<MissingPage />}></Route>

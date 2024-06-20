@@ -4,7 +4,6 @@ import { inputWrapperClassNames } from '../constants/inputWrapperClassNames'
 import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
 import { useFetch } from "../hooks/useFetch";
 import { useState, useEffect } from "react";
-import { data } from "autoprefixer";
 
 export const AddElementFormComponent = ({ elementName }) => {
   const[element, setElement] = useState('')
@@ -14,30 +13,33 @@ export const AddElementFormComponent = ({ elementName }) => {
   const[cities, setCities] = useState([])
   const[categories, setCategories] = useState([])
   const[characteristics, setCharacteristics] = useState([])
-  const[imageUrl, setImageUrl] = useState('')
   const[description, setDescription] = useState('')
   const[cityId, setCityId] = useState(1)
   const[categoryId, setCategoryId] = useState(1)
   const[characteristicIds, setcharacteristicIds] = useState([])
-  const[imagesUrls, setImagesUrls] = useState([])
   const[currentImages, setCurrentImages] = useState([])
   
   const url = elementName === "Listing" ? `/backend/api/v1/${elementName.toLowerCase()}/create` : `/backend/api/v1/${elementName.toLowerCase()}`
-  let elementData = {}
+  
+  const setElementData = (imageUrl = null, imagesUrls = null) => {
+    let elementData = {}
 
-  switch (elementName) {
-    case "City":
-      elementData = { name: element, country }
-      break
-    case "Category":
-      elementData = { name: element, imageUrl }
-      break
-    case "Characteristic":
-      elementData = { name: element, imageUrl }
-      break
-    case "Listing":
-      elementData = { title: element, description, cityId, categoryId, images: imagesUrls, characteristicIds }
-      break
+    switch (elementName) {
+      case "City":
+        elementData = { name: element, country }
+        break
+      case "Category":
+        elementData = { name: element, imageUrl }
+        break
+      case "Characteristic":
+        elementData = { name: element, imageUrl }
+        break
+      case "Listing":
+        elementData = { title: element, description, cityId, categoryId, images: imagesUrls, characteristicIds }
+        break
+    }
+
+    return elementData
   }
 
   const clearMessages = () => {
@@ -85,9 +87,19 @@ export const AddElementFormComponent = ({ elementName }) => {
   }
 
   const addElement = async () => {
-    uploadImagesToCloudinary()
+    let body = {}
+    
+    if (elementName !== "City") {
 
-    await useFetch(url, "POST", elementData)
+      const imageUrlsArray = await uploadImagesToCloudinary()
+      body = imageUrlsArray.length > 1 ? setElementData(null, imageUrlsArray) : setElementData(imageUrlsArray[0])
+
+    } else {
+      
+      body = setElementData()
+    }
+
+    await useFetch(url, "POST", body)
       .then(response => {
         if (response.ok) {
           setAddedSucessfully(true)
@@ -105,41 +117,26 @@ export const AddElementFormComponent = ({ elementName }) => {
   }
 
   const uploadImagesToCloudinary = async () => {
+    const cloudinaryImageUrls = []
+    
     const formData = new FormData()
-
     formData.append("upload_preset", "vbnb-react-upload-unsigned")
     formData.append("api_key", "312794646933875")
 
-    if (currentImages.length > 1 || elementName === "Listing") {
-      const cloudinaryImageUrls = []
-
-      const uploadPromises = currentImages.map(async (image) => {
-        formData.append("file", image)
-        
-        const response = await fetch("https://api.cloudinary.com/v1_1/manumafe/image/upload", {
-          method: "POST",
-          body: formData,
-        })
-        const data = await response.json()
-        cloudinaryImageUrls.push(data.url)
-      })
-    
-      await Promise.all(uploadPromises)
-    
-      setImagesUrls((prevImagesUrls) => [...prevImagesUrls, ...cloudinaryImageUrls])
-
-    } else {
-      formData.append("file", currentImages[0])
-
+    const uploadPromises = currentImages.map(async (image) => {
+      formData.append("file", image)
+      
       const response = await fetch("https://api.cloudinary.com/v1_1/manumafe/image/upload", {
         method: "POST",
-        body: formData
+        body: formData,
       })
-
       const data = await response.json()
+      cloudinaryImageUrls.push(data.url)
+    })
+  
+    await Promise.all(uploadPromises)
 
-      setImageUrl(data.url)
-    }
+    return cloudinaryImageUrls
   }
 
   return (
@@ -154,7 +151,11 @@ export const AddElementFormComponent = ({ elementName }) => {
           label={elementName == "Listing" ? "Title" : `${elementName}`}
           className="form-input"
           classNames={inputWrapperClassNames}
-          onChange={(e) => setElement(e.target.value)}
+          onChange={(e) => {
+            setElement(e.target.value)
+            setAddedSucessfully(false)
+            setDuplicatedElement(false)
+          }}
         />
         {elementName === "City" && (
           <Input
@@ -179,12 +180,12 @@ export const AddElementFormComponent = ({ elementName }) => {
             <Select
               label="Select a category"
               variant="bordered"
-              className="form-input"
+              className="select-input"
               onChange={(e) => setCategoryId(e.target.value)}
               classNames={selectTriggerClassNames}
             >
               {categories.map((category) => (
-                <SelectItem key={category.id}>
+                <SelectItem key={category.id} startContent={<img className="w-6 h-6" src={category.imageUrl}/>}>
                   {category.name}
                 </SelectItem>
               ))}
@@ -192,7 +193,7 @@ export const AddElementFormComponent = ({ elementName }) => {
             <Select
               label="Select a city"
               variant="bordered"
-              className="form-input"
+              className="select-input"
               onChange={(e) => setCityId(e.target.value)}
               classNames={selectTriggerClassNames}
             >
@@ -206,12 +207,12 @@ export const AddElementFormComponent = ({ elementName }) => {
               label="Select characteristics"
               variant="bordered"
               selectionMode="multiple"
-              className="form-input"
+              className="select-input"
               onChange={(e) => handleCharacteristicsSelectChange(e.target.value)}
               classNames={selectTriggerClassNames}
             >
               {characteristics.map((characteristic) => (
-                <SelectItem key={characteristic.id}>
+                <SelectItem key={characteristic.id} startContent={<img className="w-6 h-6" src={characteristic.imageUrl}/>}>
                   {characteristic.name}
                 </SelectItem>
               ))}                           

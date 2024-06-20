@@ -1,5 +1,6 @@
 package com.manumafe.vbnb.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,7 +53,7 @@ public class UserControllerTest {
 
     @Test
     @Order(1)
-    public void getAllUsers() throws Exception {
+    public void testGetAllUsers() throws Exception {
         setUpUser();
 
         mockMvc.perform(get("/api/v1/user/all"))
@@ -64,7 +65,7 @@ public class UserControllerTest {
 
     @Test
     @Order(2)
-    public void updateUserRole() throws Exception {
+    public void testUpdateUserRole() throws Exception {
         mockMvc.perform(put("/api/v1/user/update")
                 .param("userId", "1")
                 .param("userRole", "ADMIN"))
@@ -72,5 +73,12 @@ public class UserControllerTest {
                     status().isOk(),
                     content().contentType(MediaType.APPLICATION_JSON),
                     jsonPath("$.role").value("ADMIN"));
+    }
+
+    @Test
+    @Order(3)
+    public void testDeleteUserByID() throws Exception {
+        mockMvc.perform(delete("/api/v1/user/delete/1"))
+                .andExpect(status().isNoContent());
     }
 }

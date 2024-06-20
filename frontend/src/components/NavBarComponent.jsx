@@ -143,6 +143,8 @@ export const NavBarComponent = () => {
               </DropdownItem>
               <DropdownItem
                 key="administrate_users"
+                as={Link}
+                to="/admin/administrate/users"
               >
                 Users
               </DropdownItem>              

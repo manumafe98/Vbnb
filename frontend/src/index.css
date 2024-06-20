@@ -50,3 +50,21 @@ body > #root > div {
     color: green;
     margin-top: 10px;
 }
+
+.table-container {
+    display: flex;
+    justify-content: center;
+}
+
+.user-table {
+    width: 70%;
+}
+
+.select-input {
+    width: 65%;
+    margin-bottom: 10px;
+}
+
+.user-role-select {
+    width: 60%;
+}
