@@ -1,5 +1,5 @@
 import React from "react";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Tooltip, Select, SelectItem} from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Tooltip, Select, SelectItem } from "@nextui-org/react";
 import { EditIcon, DeleteIcon, CheckIcon } from "../constants/Icons";
 import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
@@ -9,11 +9,17 @@ export const UserTableComponent = () => {
   const[users, setUsers] = useState([])
   const[editState, setEditState] = useState({})
   const[tableKey, setTableKey] = useState(0)
+  const[newRole, setNewRole] = useState('')
 
   const columns = [
     {name: "NAME", uid: "name"},
     {name: "ROLE", uid: "role"},
     {name: "ACTIONS", uid: "actions"},
+  ]
+
+  const roles = [
+    {name: "admin", uid: "ADMIN"},
+    {name: "user", uid: "USER"},
   ]
 
   useEffect(() => {
@@ -44,9 +50,24 @@ export const UserTableComponent = () => {
     }))
   }
 
-  const updateUser = (id, user) => {
-    console.log(id)
-    console.log(user.role)
+  const handleChange = (event) => {
+    setNewRole(event.target.value.split(".")[1] === "0" ? "ADMIN" : "USER")
+  }
+
+  const updateUser = async (id, user) => {
+    setNewRole((currentRole) => {
+      user.role = currentRole
+      return currentRole
+    })
+
+    try {
+      await useFetch(`/backend/api/v1/user/update/${id}?userRole=${user.role}`, "PUT", user)
+      setEditState(false)
+      getUsers()
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
@@ -71,22 +92,22 @@ export const UserTableComponent = () => {
           <>
             {!editState[user.id] ? (
               <div className="flex flex-col">
-                <p className="text-bold text-sm capitalize">{cellValue}</p>
+                <p className="text-bold text-sm">{cellValue.toLowerCase()}</p>
               </div>
             ) : (
               <Select
-                label="Update Role"
+                label="Role"
                 variant="bordered"
                 className="user-role-select"
                 classNames={selectTriggerClassNames}
-                onChange={(e) => console.log(e.target.value)}
+                placeholder={cellValue.toLowerCase()}
+                onChange={handleChange}
               >
-                <SelectItem value="ADMIN">
-                  ADMIN
-                </SelectItem>
-                <SelectItem value="USER">
-                  USER
-                </SelectItem>
+                {roles.map(role => (
+                  <SelectItem key={role.id}>
+                    {role.name}
+                  </SelectItem>
+                ))}
               </Select>
             )}
           </>
@@ -97,11 +118,11 @@ export const UserTableComponent = () => {
             {editState[user.id] && (
               <Tooltip color="success" content="Update user">
                 <span className="text-lg text-success cursor-pointer active:opacity-50">
-                  <CheckIcon onClick={(e) => updateUser(user.id, user)}/>
+                  <CheckIcon onClick={() => updateUser(user.id, user)}/>
                 </span>
               </Tooltip>
             )}
-            <Tooltip content="Edit user">
+            <Tooltip content={editState[user.id] ? "Cancel edit" : "Edit user"}>
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon onClick={() => toggleEditState(user.id)}/>
               </span>
@@ -120,7 +141,7 @@ export const UserTableComponent = () => {
 
   return (
     <div className="table-container">
-      <Table key={tableKey} aria-label="User table" className="user-table">
+      <Table key={tableKey} aria-label="User table" className="table">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

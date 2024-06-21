@@ -128,16 +128,22 @@ export const NavBarComponent = () => {
               </DropdownItem>
               <DropdownItem
                 key="administrate_categories"
+                as={Link}
+                to="/admin/administrate/categories"
               >
                 Categories
               </DropdownItem>
               <DropdownItem
                 key="administrate_cities"
+                as={Link}
+                to="/admin/administrate/cities"
               >
                 Cities
               </DropdownItem>
               <DropdownItem
                 key="administrate_characteristics"
+                as={Link}
+                to="/admin/administrate/characteristics"
               >
                 Characteristics
               </DropdownItem>

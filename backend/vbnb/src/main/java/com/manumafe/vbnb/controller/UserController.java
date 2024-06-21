@@ -31,8 +31,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<UserDto> updateUserRole(@RequestParam("userId") Long userId, @RequestParam("userRole") UserRole role) {
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<UserDto> updateUserRole(@PathVariable Long userId, @RequestParam("userRole") UserRole role) {
         UserDto user = userService.updateUserRole(userId, role);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);

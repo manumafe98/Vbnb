@@ -66,8 +66,7 @@ public class UserControllerTest {
     @Test
     @Order(2)
     public void testUpdateUserRole() throws Exception {
-        mockMvc.perform(put("/api/v1/user/update")
-                .param("userId", "1")
+        mockMvc.perform(put("/api/v1/user/update/1")
                 .param("userRole", "ADMIN"))
                 .andExpectAll(
                     status().isOk(),

@@ -92,7 +92,8 @@ export const AddElementFormComponent = ({ elementName }) => {
     if (elementName !== "City") {
 
       const imageUrlsArray = await uploadImagesToCloudinary()
-      body = imageUrlsArray.length > 1 ? setElementData(null, imageUrlsArray) : setElementData(imageUrlsArray[0])
+
+      body = imageUrlsArray.length >= 1 && elementName === "Listing"  ? setElementData(null, imageUrlsArray) : setElementData(imageUrlsArray[0])
 
     } else {
       

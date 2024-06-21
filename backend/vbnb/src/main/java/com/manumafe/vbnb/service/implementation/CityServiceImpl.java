@@ -60,4 +60,17 @@ public class CityServiceImpl implements CityService {
     public List<CityDto> findAllCities() {
         return cityRepository.findAll().stream().map(cityDtoMapper::toDto).toList();
     }
+
+    @Override
+    public CityDto updateCity(Long id, CityDto cityDto) throws ResourceNotFoundException {
+        City city = cityRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
+        
+        city.setName(cityDto.name());
+        city.setCountry(cityDto.country());
+
+        cityRepository.save(city);
+
+        return cityDtoMapper.toDto(city);
+    }
 }

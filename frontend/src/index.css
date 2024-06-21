@@ -56,7 +56,7 @@ body > #root > div {
     justify-content: center;
 }
 
-.user-table {
+.table {
     width: 70%;
 }
 
@@ -67,4 +67,8 @@ body > #root > div {
 
 .user-role-select {
     width: 60%;
+}
+
+.table-input {
+    width: 20%;
 }

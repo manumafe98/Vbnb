@@ -3,6 +3,7 @@ package com.manumafe.vbnb.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -95,13 +96,31 @@ public class CityControllerTest {
 
     @Test
     @Order(5)
+    public void testUpdateCity() throws Exception {
+        City newCity = new City();
+        newCity.setName("Paris");
+        newCity.setCountry("France");
+
+        String newCityJson = new ObjectMapper().writeValueAsString(newCity);
+
+        mockMvc.perform(put("/api/v1/city/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newCityJson))
+                .andExpectAll(
+                    status().isOk(),
+                    jsonPath("$.name").value("Paris"),
+                    jsonPath("$.country").value("France"));
+    }
+
+    @Test
+    @Order(6)
     public void deleteCityById() throws Exception {
         mockMvc.perform(delete("/api/v1/city/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testGetNonExistentCityException() throws Exception {
         mockMvc.perform(get("/api/v1/city/1")
                 .contentType(MediaType.APPLICATION_JSON))

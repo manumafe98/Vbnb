@@ -12,6 +12,8 @@ public interface CityService {
 
     void deleteCity(Long id) throws ResourceNotFoundException;
 
+    CityDto updateCity(Long id, CityDto cityDto) throws ResourceNotFoundException;
+
     CityDto findCityById(Long id) throws ResourceNotFoundException;
 
     List<CityDto> findAllCities();
