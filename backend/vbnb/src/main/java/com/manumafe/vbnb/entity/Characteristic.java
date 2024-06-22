@@ -9,7 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +33,6 @@ public class Characteristic {
     private String imageUrl;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "characteristics", orphanRemoval = true)
+    @ManyToMany(mappedBy = "characteristics")
     private List<Listing> listings;
 }
