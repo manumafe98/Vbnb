@@ -2,15 +2,18 @@ import { useState, useRef, useEffect } from 'react';
 import '../styles/DragAndDropImageComponent.css';
 import { DownloadCloud } from '../constants/Icons'
 
-export const DragAndDropImageComponent = ({ onImagesLoaded, multiple = false }) => {
-  const [images, setImages] = useState([])
-  const [fileObjects, setFileObjects] = useState([])
-  const [isDragging, setIsDragging] = useState(false)
+export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple = false, incomingImages = [] }) => {
+  const[images, setImages] = useState(incomingImages)
+  const[fileObjects, setFileObjects] = useState([])
+  const[updateIncomingImages, setUpdateIncomingImages] = useState(incomingImages)
+  const[isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef(null)
 
   useEffect(() => {
     onImagesLoaded(fileObjects)
-  }, [fileObjects])
+    onImages(updateIncomingImages)
+
+  }, [fileObjects, images])
 
   const selectFiles = () => {
     fileInputRef.current.click()
@@ -53,6 +56,7 @@ export const DragAndDropImageComponent = ({ onImagesLoaded, multiple = false }) 
   const deleteImage = (index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index))
     setFileObjects((prevFiles) => prevFiles.filter((_, i) => i !== index))
+    updateIncomingImages.length === 0 ? null : setUpdateIncomingImages((prevFiles) => prevFiles.filter((_, i) => i !== index))
   }
 
   const onDragOver = (event) => {

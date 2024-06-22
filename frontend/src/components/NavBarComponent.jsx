@@ -3,7 +3,7 @@ import { ChevronDown } from "../constants/Icons";
 import { Link, useLocation } from "react-router-dom"
 
 export const NavBarComponent = () => {
-  const location = useLocation();
+  const location = useLocation()
 
   const icons = {
     chevron: <ChevronDown fill="currentColor" size={16} />
@@ -123,6 +123,8 @@ export const NavBarComponent = () => {
             >
               <DropdownItem
                 key="administrate_listings"
+                as={Link}
+                to="/admin/administrate/listings"
               >
                 Listings
               </DropdownItem>

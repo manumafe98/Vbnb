@@ -1,8 +1,9 @@
-import { DragAndDropImageComponent } from "./DragAndDropImageComponent"
+import { DragAndDropImageComponent } from "./DragAndDropImageComponent";
 import { Input, Button, Textarea, Select, SelectItem } from "@nextui-org/react";
-import { inputWrapperClassNames } from '../constants/inputWrapperClassNames'
+import { inputWrapperClassNames } from '../constants/inputWrapperClassNames';
 import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
 import { useFetch } from "../hooks/useFetch";
+import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
 import { useState, useEffect } from "react";
 
 export const AddElementFormComponent = ({ elementName }) => {
@@ -91,7 +92,7 @@ export const AddElementFormComponent = ({ elementName }) => {
     
     if (elementName !== "City") {
 
-      const imageUrlsArray = await uploadImagesToCloudinary()
+      const imageUrlsArray = await uploadImagesToCloudinary(currentImages)
 
       body = imageUrlsArray.length >= 1 && elementName === "Listing"  ? setElementData(null, imageUrlsArray) : setElementData(imageUrlsArray[0])
 
@@ -117,34 +118,15 @@ export const AddElementFormComponent = ({ elementName }) => {
     setCurrentImages(images)
   }
 
-  const uploadImagesToCloudinary = async () => {
-    const cloudinaryImageUrls = []
-    
-    const formData = new FormData()
-    formData.append("upload_preset", "vbnb-react-upload-unsigned")
-    formData.append("api_key", "312794646933875")
-
-    const uploadPromises = currentImages.map(async (image) => {
-      formData.append("file", image)
-      
-      const response = await fetch("https://api.cloudinary.com/v1_1/manumafe/image/upload", {
-        method: "POST",
-        body: formData,
-      })
-      const data = await response.json()
-      cloudinaryImageUrls.push(data.url)
-    })
-  
-    await Promise.all(uploadPromises)
-
-    return cloudinaryImageUrls
+  const handleImages = async (images) => {
+    console.log(images)
   }
 
   return (
     <section className="form-container">
       <div key={elementName} className="form form-element">
         {elementName !== "City" && (
-          <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} multiple={elementName === "Listing"}/>
+          <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={elementName === "Listing"}/>
         )}
         <Input 
           type="text" 
@@ -216,8 +198,8 @@ export const AddElementFormComponent = ({ elementName }) => {
                 <SelectItem key={characteristic.id} startContent={<img className="w-6 h-6" src={characteristic.imageUrl}/>}>
                   {characteristic.name}
                 </SelectItem>
-              ))}                           
-            </Select>            
+              ))}
+            </Select>
           </>
         )}
         <Button radius="full" className="bg-[#ff6f00] text-white" onClick={addElement}>

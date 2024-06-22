@@ -7,8 +7,10 @@ import { MissingPage } from "./pages/MissingPage"
 import { UnauthorizedPage } from "./pages/UnauthorizedPage"
 import { RequireAuthComponent } from "./components/RequireAuthComponent"
 import { UserAdministrationPage } from "./pages/UserAdministrationPage"
-import { CityAdministrationPage } from "./pages/CityAdministrationPage"
 import { ElementAdministrationPage } from "./pages/ElementAdministrationPage"
+import { ListingAdministrationPage } from "./pages/ListingAdministrationPage"
+import { UpdateCharacteristicPage } from "./pages/UpdateCharacteristicPage"
+import { UpdateListingPage } from "./pages/UpdateListingPage"
 
 export const VbnbApp = () => {
 
@@ -26,9 +28,12 @@ export const VbnbApp = () => {
           <Route path="/admin/add/city" element={<AddElementPage elementName="City" />}></Route>
           <Route path="/admin/add/listing" element={<AddElementPage elementName="Listing" />}></Route>
           <Route path="/admin/administrate/users" element={<UserAdministrationPage/>}></Route>
-          <Route path="/admin/administrate/cities" element={<CityAdministrationPage/>}></Route>
+          <Route path="/admin/administrate/listings" element={<ListingAdministrationPage/>}></Route>
+          <Route path="/admin/administrate/cities" element={<ElementAdministrationPage elementName="city"/>}></Route>
           <Route path="/admin/administrate/categories" element={<ElementAdministrationPage elementName="category"/>}></Route>
           <Route path="/admin/administrate/characteristics" element={<ElementAdministrationPage elementName="characteristic"/>}></Route>
+          <Route path="/admin/update/characteristics" element={<UpdateCharacteristicPage/>}></Route>
+          <Route path="/admin/update/listings" element={<UpdateListingPage/>}></Route>
         </Route>
         
         <Route path="*" element={<MissingPage />}></Route>

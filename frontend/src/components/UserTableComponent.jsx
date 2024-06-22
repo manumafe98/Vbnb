@@ -9,7 +9,6 @@ export const UserTableComponent = () => {
   const[users, setUsers] = useState([])
   const[editState, setEditState] = useState({})
   const[tableKey, setTableKey] = useState(0)
-  const[newRole, setNewRole] = useState('')
 
   const columns = [
     {name: "NAME", uid: "name"},
@@ -50,15 +49,11 @@ export const UserTableComponent = () => {
     }))
   }
 
-  const handleChange = (event) => {
-    setNewRole(event.target.value.split(".")[1] === "0" ? "ADMIN" : "USER")
+  const handleChange = (event, user) => {
+    user.role = event.target.value
   }
 
   const updateUser = async (id, user) => {
-    setNewRole((currentRole) => {
-      user.role = currentRole
-      return currentRole
-    })
 
     try {
       await useFetch(`/backend/api/v1/user/update/${id}?userRole=${user.role}`, "PUT", user)
@@ -101,10 +96,10 @@ export const UserTableComponent = () => {
                 className="user-role-select"
                 classNames={selectTriggerClassNames}
                 placeholder={cellValue.toLowerCase()}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e, user)}
               >
                 {roles.map(role => (
-                  <SelectItem key={role.id}>
+                  <SelectItem key={role.name.toUpperCase()}>
                     {role.name}
                   </SelectItem>
                 ))}

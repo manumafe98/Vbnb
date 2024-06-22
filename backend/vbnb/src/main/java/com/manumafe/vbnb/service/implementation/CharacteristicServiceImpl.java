@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.manumafe.vbnb.dto.CharacteristicDto;
 import com.manumafe.vbnb.dto.mapper.CharacteristicDtoMapper;
 import com.manumafe.vbnb.entity.Characteristic;
+import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CharacteristicRepository;
+import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.service.CharacteristicService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class CharacteristicServiceImpl implements CharacteristicService {
 
     private final CharacteristicRepository characteristicRepository;
     private final CharacteristicDtoMapper characteristicDtoMapper;
+    private final ListingRepository listingRepository;
 
     @Override
     public CharacteristicDto saveCharacteristic(CharacteristicDto characteristicDto) throws ResourceAlreadyExistentException {
@@ -42,9 +45,15 @@ public class CharacteristicServiceImpl implements CharacteristicService {
     }
 
     @Override
+    @Transactional
     public void deleteCharacteristic(Long id) throws ResourceNotFoundException {
-        characteristicRepository.findById(id)
+        Characteristic characteristic = characteristicRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Characteristic with id: " + id + " not found"));
+        
+        for (Listing listing : characteristic.getListings()) {
+            listing.getCharacteristics().remove(characteristic);
+            listingRepository.save(listing);
+        }
 
         characteristicRepository.deleteById(id);
     }
