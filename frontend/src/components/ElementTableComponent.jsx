@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Avatar, Input } from "@nextui-org/react";
 import { DeleteIcon, EditIcon, CheckIcon } from "../constants/Icons";
-import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
-import { inputWrapperClassNames } from '../constants/inputWrapperClassNames';
+import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { Link } from "react-router-dom";
 
 export const ElementTableComponent = ({ elementName }) => {
@@ -36,7 +35,7 @@ export const ElementTableComponent = ({ elementName }) => {
     }, [elementName])
 
     const getElements = async () => {
-      await useFetch(`/backend/api/v1/${elementName}`, "GET")
+      await useFetch(`/backend/api/v1/${elementName}/all`, "GET", null, false)
         .then(response => response.json())
         .then(data => setElements(data))
         .catch(error => console.log(error))

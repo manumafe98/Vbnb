@@ -1,6 +1,6 @@
 import { DragAndDropImageComponent } from "./DragAndDropImageComponent";
 import { Input, Button, Textarea, Select, SelectItem } from "@nextui-org/react";
-import { inputWrapperClassNames } from '../constants/inputWrapperClassNames';
+import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
 import { useFetch } from "../hooks/useFetch";
 import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
@@ -40,7 +40,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
   const getCities = async () => {
     
-    await useFetch("/backend/api/v1/city", "GET")
+    await useFetch("/backend/api/v1/city/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCities(data))
       .catch(error => console.log(error))
@@ -48,7 +48,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
   const getCategories = async () => {
     
-    await useFetch("/backend/api/v1/category", "GET")
+    await useFetch("/backend/api/v1/category/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCategories(data))
       .catch(error => console.log(error))
@@ -56,7 +56,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
   const getCharacteristics = async () => {
 
-    await useFetch("/backend/api/v1/characteristic", "GET")
+    await useFetch("/backend/api/v1/characteristic/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCharacteristics(data))
       .catch(error => console.log(error))

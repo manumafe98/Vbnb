@@ -76,7 +76,7 @@ public class CharacteristicControllerTest {
     @Test
     @Order(3)
     public void testGetAllCharacteristics() throws Exception {
-        mockMvc.perform(get("/api/v1/characteristic"))
+        mockMvc.perform(get("/api/v1/characteristic/all"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),

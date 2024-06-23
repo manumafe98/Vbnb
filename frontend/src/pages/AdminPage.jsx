@@ -1,4 +1,4 @@
-import { NavBarComponent } from "../components/NavBarComponent"
+import { NavBarComponent } from "../components/NavBarComponent";
 
 export const AdminPage = () =>{
   return (

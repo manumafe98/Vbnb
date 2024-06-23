@@ -1,52 +1,29 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
 import { ChevronDown } from "../constants/Icons";
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 export const NavBarComponent = () => {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { auth } = useAuth()
 
   const icons = {
     chevron: <ChevronDown fill="currentColor" size={16} />
   }
 
+  const logout = () => {
+    sessionStorage.removeItem("auth")
+    navigate("/")
+    window.location.reload()
+  }
+
   return (
-    <Navbar>
-      <NavbarBrand>
+    <Navbar maxWidth="full">
+      <NavbarBrand as={Link} to="/" className="ms-10">
         <p className="font-bold text-inherit">Vbnb</p>
       </NavbarBrand>
-      <NavbarContent justify="end">
-      {location.pathname === "/" && (
-        <>
-          <NavbarItem>
-            <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
-              Sign In
-            </Button>
-          </NavbarItem>
-          <NavbarItem>
-            <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
-              Sign Up
-            </Button>
-          </NavbarItem>
-        </>
-      )}
-      {location.pathname === "/auth/signin" && (
-        <>
-          <NavbarItem>
-            <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
-              Sign Up
-            </Button>
-          </NavbarItem>
-        </>
-      )}
-      {location.pathname === "/auth/signup" && (
-        <>
-          <NavbarItem>
-            <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
-              Sign In
-            </Button>
-          </NavbarItem>
-        </>
-      )}
+      <NavbarContent justify="center">
       {location.pathname.startsWith("/admin") && (
         <>
           <Dropdown>
@@ -64,7 +41,7 @@ export const NavBarComponent = () => {
               </DropdownTrigger>
             </NavbarItem>
             <DropdownMenu
-              aria-label="ACME features"
+              aria-label="Add actions"
               className="w-[120px]"
               itemClasses={{
                 base: "gap-4",
@@ -115,7 +92,7 @@ export const NavBarComponent = () => {
               </DropdownTrigger>
             </NavbarItem>
             <DropdownMenu
-              aria-label="ACME features"
+              aria-label="Administrate actions"
               className="w-[120px]"
               itemClasses={{
                 base: "gap-4",
@@ -155,12 +132,97 @@ export const NavBarComponent = () => {
                 to="/admin/administrate/users"
               >
                 Users
-              </DropdownItem>              
+              </DropdownItem>
             </DropdownMenu>
-          </Dropdown>          
+          </Dropdown>
         </>
         )}
       </NavbarContent>
+      <NavbarContent justify="end">
+      {auth?.user ? (
+        <div className="flex items-center gap-4">
+          <Dropdown>
+            <NavbarItem className="me-10">
+              <DropdownTrigger>
+                <Avatar
+                  isBordered
+                  color="warning"
+                  as="button"
+                  classNames={{
+                    base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B] capitalize"
+                  }}
+                  name={auth?.user}
+                />
+              </DropdownTrigger>
+            </NavbarItem>
+            <DropdownMenu variant="flat"aria-label="Profile actions">
+            <DropdownItem
+                className="h-12 gap-2"
+                key="profile"
+              >
+                <p className="font-semibold">Signed in as</p>
+                <p className="font-semibold">{auth?.user}</p>
+              </DropdownItem>
+            <DropdownItem
+                className="h-12 gap-2"
+                key="favorites"
+              >
+                Favorites
+              </DropdownItem>
+              <DropdownItem
+                className="h-14 gap-2"
+                key="reserves"
+              >
+                Reserves
+              </DropdownItem>
+              <DropdownItem
+                className="h-14 gap-2"
+                key="logout"
+                color="danger"
+                onClick={logout}
+              >
+                Logout
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      ) : (
+        <>
+          {location.pathname === "/" && (
+            <>
+              <NavbarItem>
+                <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
+                  Sign In
+                </Button>
+              </NavbarItem>
+              <NavbarItem className="me-10">
+                <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
+                  Sign Up
+                </Button>
+              </NavbarItem>
+            </>
+          )}
+          {location.pathname === "/auth/signin" && (
+            <>
+              <NavbarItem className="me-10">
+                <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
+                  Sign Up
+                </Button>
+              </NavbarItem>
+            </>
+          )}
+          {location.pathname === "/auth/signup" && (
+            <>
+              <NavbarItem className="me-10">
+                <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
+                  Sign In
+                </Button>
+              </NavbarItem>
+            </>
+          )}
+        </>
+      )}
+      </NavbarContent>
     </Navbar>
-  );
+  )
 }

@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Avatar } from "@nextui-org/react";
 import { EditIcon, DeleteIcon } from "../constants/Icons";
-import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { Link } from "react-router-dom";
 
@@ -24,7 +23,7 @@ export const ListingTableComponent = () => {
   }, [])
 
   const getListings = async () => {
-    await useFetch("/backend/api/v1/listing", "GET")
+    await useFetch("/backend/api/v1/listing/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setListings(data))
       .catch(error => console.log(error))

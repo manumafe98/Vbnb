@@ -1,6 +1,6 @@
 import { DragAndDropImageComponent } from "./DragAndDropImageComponent";
 import { Input, Button, Textarea, Select, SelectItem } from "@nextui-org/react";
-import { inputWrapperClassNames } from '../constants/inputWrapperClassNames';
+import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
 import { useFetch } from "../hooks/useFetch";
 import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
@@ -21,7 +21,7 @@ export const AddElementFormComponent = ({ elementName }) => {
   const[currentImages, setCurrentImages] = useState([])
   
   const url = elementName === "Listing" ? `/backend/api/v1/${elementName.toLowerCase()}/create` : `/backend/api/v1/${elementName.toLowerCase()}`
-  
+
   const setElementData = (imageUrl = null, imagesUrls = null) => {
     let elementData = {}
 
@@ -50,7 +50,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   useEffect(() => {
     clearMessages()
-    
+
     if (elementName === "Listing") {
       getCities()
       getCategories()
@@ -59,16 +59,16 @@ export const AddElementFormComponent = ({ elementName }) => {
   }, [elementName])
 
   const getCities = async () => {
-    
-    await useFetch("/backend/api/v1/city", "GET")
+
+    await useFetch("/backend/api/v1/city/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCities(data))
       .catch(error => console.log(error))
   }
 
   const getCategories = async () => {
-    
-    await useFetch("/backend/api/v1/category", "GET")
+
+    await useFetch("/backend/api/v1/category/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCategories(data))
       .catch(error => console.log(error))
@@ -76,7 +76,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   const getCharacteristics = async () => {
 
-    await useFetch("/backend/api/v1/characteristic", "GET")
+    await useFetch("/backend/api/v1/characteristic/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCharacteristics(data))
       .catch(error => console.log(error))
@@ -97,7 +97,7 @@ export const AddElementFormComponent = ({ elementName }) => {
       body = imageUrlsArray.length >= 1 && elementName === "Listing"  ? setElementData(null, imageUrlsArray) : setElementData(imageUrlsArray[0])
 
     } else {
-      
+
       body = setElementData()
     }
 

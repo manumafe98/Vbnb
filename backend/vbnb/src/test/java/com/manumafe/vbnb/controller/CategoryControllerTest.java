@@ -55,7 +55,7 @@ public class CategoryControllerTest {
     @Test
     @Order(2)
     public void testGetAllCategories() throws Exception {
-        mockMvc.perform(get("/api/v1/category"))
+        mockMvc.perform(get("/api/v1/category/all"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),

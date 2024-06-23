@@ -32,7 +32,7 @@ public class ListingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(listingResponseDto);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ListingResponseDto>> getListings() {
         List<ListingResponseDto> listings = listingService.findAllListings();
 
@@ -47,7 +47,7 @@ public class ListingController {
         return ResponseEntity.status(HttpStatus.OK).body(listing);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<ListingResponseDto> getListingById(@PathVariable Long id) {
         ListingResponseDto listing = listingService.findListingById(id);
 

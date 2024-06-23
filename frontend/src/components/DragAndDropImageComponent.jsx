@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import '../styles/DragAndDropImageComponent.css';
-import { DownloadCloud } from '../constants/Icons'
+import { useState, useRef, useEffect } from "react";
+import "../styles/DragAndDropImageComponent.css";
+import { DownloadCloud } from "../constants/Icons";
 
 export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple = false, incomingImages = [] }) => {
   const[images, setImages] = useState(incomingImages)
@@ -62,7 +62,7 @@ export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple =
   const onDragOver = (event) => {
     event.preventDefault()
     setIsDragging(true)
-    event.dataTransfer.dropEffect = 'copy'
+    event.dataTransfer.dropEffect = "copy"
   }
 
   const onDragLeave = (event) => {
@@ -81,7 +81,7 @@ export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple =
   return (
     <div className="card">
       <div
-        className={`drag-area ${isDragging ? 'dragging' : ''}`}
+        className={`drag-area ${isDragging ? "dragging" : ""}`}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
@@ -90,7 +90,7 @@ export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple =
           <DownloadCloud/>
         ) : (
           <>
-            Drag & Drop an image here or{' '}
+            Drag & Drop an image here or{" "}
             <span className="select" role="button" onClick={selectFiles}>
               Browse
             </span>

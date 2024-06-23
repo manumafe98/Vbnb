@@ -208,7 +208,7 @@ public class ListingControllerTest {
     @Test
     @Order(3)
     public void testGetListingById() throws Exception {
-        mockMvc.perform(get("/api/v1/listing/2")
+        mockMvc.perform(get("/api/v1/listing/get/2")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
@@ -219,7 +219,7 @@ public class ListingControllerTest {
     @Test
     @Order(4)
     public void testGetAllListings() throws Exception {
-        mockMvc.perform(get("/api/v1/listing"))
+        mockMvc.perform(get("/api/v1/listing/all"))
                 .andDo(print())
                 .andExpectAll(
                         status().isOk(),
@@ -260,7 +260,7 @@ public class ListingControllerTest {
     @Test
     @Order(8)
     public void testGetNonExistentListingException() throws Exception {
-        mockMvc.perform(get("/api/v1/listing/1")
+        mockMvc.perform(get("/api/v1/listing/get/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isNotFound(),

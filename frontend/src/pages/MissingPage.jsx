@@ -1,6 +1,11 @@
+import { NavBarComponent } from "../components/NavBarComponent";
+import { NotFoundComponent } from "../components/NotFoundComponent";
 
 export const MissingPage = () => {
   return (
-    <div>MissingPage</div>
+    <>
+      <NavBarComponent/>
+      <NotFoundComponent/>
+    </>
   )
 }
