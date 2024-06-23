@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch"
 import { Input, Button } from "@nextui-org/react";
-import { inputWrapperClassNames } from '../constants/inputWrapperClassNames'
-import { useNavigate } from 'react-router-dom';
+import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import "../styles/AuthFormComponent.css"
+import "../styles/AuthFormComponent.css";
 
 export const AuthFormComponent = ({ authenticationType }) => {
   const { setAuth } = useAuth()
@@ -41,7 +41,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
     e.preventDefault()
     clearErrorMessages()
 
-      await useFetch(authUrl, "POST", userData, true)
+      await useFetch(authUrl, "POST", userData, false)
         .then(response => response.json())
         .then(data => {
           if (data.message === "User not found") {
@@ -56,7 +56,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
             } else {
               const userRole = data.role
 
-              const authData = { user: email, password, role: userRole, accessToken: data.token}
+              const authData = { user: email, role: userRole, accessToken: data.token}
               setAuth(authData)
 
               if (userRole == "ADMIN") {

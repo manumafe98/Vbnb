@@ -69,7 +69,7 @@ public class CityControllerTest {
     @Test
     @Order(3)
     public void testGetAllCities() throws Exception {
-        mockMvc.perform(get("/api/v1/city"))
+        mockMvc.perform(get("/api/v1/city/all"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),

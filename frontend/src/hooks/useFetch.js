@@ -1,20 +1,20 @@
-export const useFetch = async (url, method, bodyData = null, authentication = false) => {
+export const useFetch = async (url, method, bodyData = null, requiresAuthentication = true) => {
     let accessToken = ""
 
     if (!url) return
 
-    if (!authentication) {
+    if (requiresAuthentication) {
         const user = JSON.parse(sessionStorage.getItem("auth"))
         accessToken = user.accessToken
     }
 
     const options = {
         method: method,
-        headers: authentication ? {
-            "Content-type": "application/json"
-        } : {
+        headers: requiresAuthentication ? {
             "Content-type": "application/json",
             "Authorization": `Bearer ${accessToken}`
+        } : {
+            "Content-type": "application/json"
         },
         body: method == "GET" || method == "DELETE" ? null : JSON.stringify(bodyData)
     }

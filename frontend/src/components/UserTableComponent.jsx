@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Tooltip, Select, SelectItem } from "@nextui-org/react";
 import { EditIcon, DeleteIcon, CheckIcon } from "../constants/Icons";
-import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
 
@@ -77,7 +76,7 @@ export const UserTableComponent = () => {
         return (
           <User
             description={user.email}
-            name={cellValue}
+            name={cellValue + " " + user.lastName}
           >
             {user.email}
           </User>

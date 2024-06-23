@@ -31,7 +31,7 @@ public class CharacteristicController {
         return ResponseEntity.status(HttpStatus.CREATED).body(characteristic);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<CharacteristicDto>> getCharacteristics() {
         List<CharacteristicDto> characteristics = characteristicService.findAllCharacteristics();
 

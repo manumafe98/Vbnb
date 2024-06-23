@@ -1,5 +1,5 @@
-import { AddElementFormComponent } from "../components/AddElementFormComponent"
-import { NavBarComponent } from "../components/NavBarComponent"
+import { AddElementFormComponent } from "../components/AddElementFormComponent";
+import { NavBarComponent } from "../components/NavBarComponent";
 
 export const AddElementPage = ({ elementName }) => {
   return (

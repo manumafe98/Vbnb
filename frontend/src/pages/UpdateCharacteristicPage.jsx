@@ -1,6 +1,6 @@
-import { NavBarComponent } from "../components/NavBarComponent"
-import { UpdateCharacteristicFormComponent } from "../components/UpdateCharacteristicFormComponent"
-import { useLocation } from "react-router-dom"
+import { NavBarComponent } from "../components/NavBarComponent";
+import { UpdateCharacteristicFormComponent } from "../components/UpdateCharacteristicFormComponent";
+import { useLocation } from "react-router-dom";
 
 export const UpdateCharacteristicPage = () => {
   const location = useLocation()

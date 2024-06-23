@@ -1,6 +1,6 @@
 import { Input, Button } from "@nextui-org/react";
 import { DragAndDropImageComponent } from "./DragAndDropImageComponent";
-import { inputWrapperClassNames } from '../constants/inputWrapperClassNames'
+import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { useFetch } from "../hooks/useFetch";
 import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
 import { useState } from "react";

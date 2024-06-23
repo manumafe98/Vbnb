@@ -1,16 +1,16 @@
-import { Route, Routes } from "react-router-dom"
-import { ListingPage } from "./pages/ListingPage"
-import { AuthenticationPage } from "./pages/AuthenticationPage"
-import { AdminPage } from "./pages/AdminPage"
-import { AddElementPage } from "./pages/AddElementPage"
-import { MissingPage } from "./pages/MissingPage"
-import { UnauthorizedPage } from "./pages/UnauthorizedPage"
-import { RequireAuthComponent } from "./components/RequireAuthComponent"
-import { UserAdministrationPage } from "./pages/UserAdministrationPage"
-import { ElementAdministrationPage } from "./pages/ElementAdministrationPage"
-import { ListingAdministrationPage } from "./pages/ListingAdministrationPage"
-import { UpdateCharacteristicPage } from "./pages/UpdateCharacteristicPage"
-import { UpdateListingPage } from "./pages/UpdateListingPage"
+import { Route, Routes } from "react-router-dom";
+import { ListingPage } from "./pages/ListingPage";
+import { AuthenticationPage } from "./pages/AuthenticationPage";
+import { AdminPage } from "./pages/AdminPage";
+import { AddElementPage } from "./pages/AddElementPage";
+import { MissingPage } from "./pages/MissingPage";
+import { UnauthorizedPage } from "./pages/UnauthorizedPage";
+import { RequireAuthComponent } from "./components/RequireAuthComponent";
+import { UserAdministrationPage } from "./pages/UserAdministrationPage";
+import { ElementAdministrationPage } from "./pages/ElementAdministrationPage";
+import { ListingAdministrationPage } from "./pages/ListingAdministrationPage";
+import { UpdateCharacteristicPage } from "./pages/UpdateCharacteristicPage";
+import { UpdateListingPage } from "./pages/UpdateListingPage";
 
 export const VbnbApp = () => {
 

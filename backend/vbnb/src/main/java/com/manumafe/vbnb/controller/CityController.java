@@ -31,7 +31,7 @@ public class CityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(city);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<CityDto>> getCities() {
         List<CityDto> cities = cityService.findAllCities();
 
