@@ -19,7 +19,7 @@ export const AddElementFormComponent = ({ elementName }) => {
   const[categoryId, setCategoryId] = useState(1)
   const[characteristicIds, setcharacteristicIds] = useState([])
   const[currentImages, setCurrentImages] = useState([])
-  
+
   const url = elementName === "Listing" ? `/backend/api/v1/${elementName.toLowerCase()}/create` : `/backend/api/v1/${elementName.toLowerCase()}`
 
   const setElementData = (imageUrl = null, imagesUrls = null) => {

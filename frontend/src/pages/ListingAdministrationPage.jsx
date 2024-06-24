@@ -6,6 +6,6 @@ export const ListingAdministrationPage = () => {
     <>
       <NavBarComponent/>
       <ListingTableComponent/>
-    </>    
+    </>
   )
 }

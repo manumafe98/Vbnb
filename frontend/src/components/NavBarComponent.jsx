@@ -71,7 +71,7 @@ export const NavBarComponent = () => {
               <DropdownItem
                 key="add_characteristic"
                 as={Link}
-                to="/admin/add/characteristic"                
+                to="/admin/add/characteristic"
               >
                 Characteristic
               </DropdownItem>
@@ -156,14 +156,24 @@ export const NavBarComponent = () => {
               </DropdownTrigger>
             </NavbarItem>
             <DropdownMenu variant="flat"aria-label="Profile actions">
-            <DropdownItem
+              <DropdownItem
                 className="h-12 gap-2"
                 key="profile"
               >
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{auth?.user}</p>
               </DropdownItem>
-            <DropdownItem
+              {auth?.role === "ADMIN" && (
+                <DropdownItem
+                  className="h-12 gap-2"
+                  key="admin_panel"
+                  as={Link}
+                  to="/admin"
+                >
+                  Admin Panel
+                </DropdownItem>
+              )}
+              <DropdownItem
                 className="h-12 gap-2"
                 key="favorites"
               >

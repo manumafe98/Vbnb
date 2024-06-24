@@ -35,7 +35,7 @@ export const VbnbApp = () => {
           <Route path="/admin/update/characteristics" element={<UpdateCharacteristicPage/>}></Route>
           <Route path="/admin/update/listings" element={<UpdateListingPage/>}></Route>
         </Route>
-        
+
         <Route path="*" element={<MissingPage />}></Route>
       </Routes>
   )

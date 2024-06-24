@@ -20,7 +20,7 @@ export const SearchBarComponent = () => {
       .then(data => setCities(data))
       .catch(error => console.log(error))
   }
-    
+
     return(
         <section className="search">
             <div className="search-bar">

@@ -5,7 +5,6 @@ import { useFetch } from "../hooks/useFetch";
 import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
 import { useState } from "react";
 
-
 export const UpdateCharacteristicFormComponent = ({ characteristicToUpdate }) => {
   const[categoryNameplaceholder, setCategoryNamePlaceholder] = useState(characteristicToUpdate.name);
   const[newUploadedImages, setNewUploadedImages] = useState([])
@@ -30,7 +29,7 @@ export const UpdateCharacteristicFormComponent = ({ characteristicToUpdate }) =>
       const imageUrlsArray = await uploadImagesToCloudinary(newUploadedImages)
       newCharacteristicData = {name: categoryNameplaceholder, imageUrl: imageUrlsArray[0]}
     }
-  
+
     try {
       await useFetch(`/backend/api/v1/characteristic/${characteristicToUpdate.id}`, "PUT", newCharacteristicData)
       setUpdatedSucessfully(true)
@@ -38,7 +37,7 @@ export const UpdateCharacteristicFormComponent = ({ characteristicToUpdate }) =>
       console.log(error)
     }
   }
-  
+
   return (
     <section className="form-container">
       <div className="form form-element">

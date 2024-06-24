@@ -51,7 +51,6 @@ export const ElementTableComponent = ({ elementName }) => {
     }
 
     const toggleEditState = (id) => {
-      console.log(id)
 
       setEditState(prevState => ({
         ...prevState,
@@ -62,11 +61,11 @@ export const ElementTableComponent = ({ elementName }) => {
     const handleCityChange = (event) => {
       setNewCity(event.target.value)
     }
-  
+
     const handleCountryChange = (event) => {
       setNewCountry(event.target.value)
     }
-  
+
     const updateCity = async (id, city) => {
       setNewCity((currentCity) => {
         if (currentCity !== "") {
@@ -74,14 +73,14 @@ export const ElementTableComponent = ({ elementName }) => {
         }
         return currentCity
       })
-  
+
       setNewCountry((currentCountry) => {
         if (currentCountry !== "") {
           city.country = currentCountry
         }
         return currentCountry
       })
-  
+
       try {
         await useFetch(`/backend/api/v1/city/${id}`, "PUT", city)
         setEditState(false)
@@ -97,7 +96,7 @@ export const ElementTableComponent = ({ elementName }) => {
 
     const renderCell = React.useCallback((element, columnKey) => {
       const cellValue = element[columnKey]
-    
+
       switch (columnKey) {
         case "id":
           return (
