@@ -80,9 +80,9 @@ public class ReserveControllerTest {
 
         listingRepository.saveAll(listings);
 
-        LocalDate today = LocalDate.now();
+        LocalDate date = LocalDate.of(2024, 07, 01);
 
-        ReserveDto reserve = new ReserveDto(today, today.plusDays(7));
+        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
 
         reserveService.saveReserve(user.getId(), listing1.getId(), reserve);
     }
@@ -100,9 +100,9 @@ public class ReserveControllerTest {
     public void testCreateReserve() throws Exception {
         setUp();
 
-        LocalDate today = LocalDate.now();
+        LocalDate date = LocalDate.of(2024, 6, 8);
 
-        ReserveDto reserve = new ReserveDto(today.plusDays(8), today.plusDays(15));
+        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
         String reserveJson = mapToJson(reserve);
 
         mockMvc.perform(post("/api/v1/reserve")
@@ -113,15 +113,15 @@ public class ReserveControllerTest {
                 .andExpectAll(
                     status().isCreated(),
                     content().contentType(MediaType.APPLICATION_JSON),
-                    jsonPath("checkInDate").value("2024-06-18"),
-                    jsonPath("checkOutDate").value("2024-06-25"));
+                    jsonPath("checkInDate").value("2024-06-08"),
+                    jsonPath("checkOutDate").value("2024-06-15"));
     }
 
     @Test
     @Order(2)
     public void updateReserve() throws Exception {
-        LocalDate today = LocalDate.now();
-        ReserveDto reserve = new ReserveDto(today.plusDays(1), today.plusDays(6));
+        LocalDate date = LocalDate.of(2024, 8, 1);
+        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
         String reserveJson = mapToJson(reserve);
 
         mockMvc.perform(put("/api/v1/reserve")
@@ -132,8 +132,8 @@ public class ReserveControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().contentType(MediaType.APPLICATION_JSON),
-                    jsonPath("checkInDate").value("2024-06-11"),
-                    jsonPath("checkOutDate").value("2024-06-16"));
+                    jsonPath("checkInDate").value("2024-08-01"),
+                    jsonPath("checkOutDate").value("2024-08-08"));
     }
 
     @Test
@@ -143,7 +143,7 @@ public class ReserveControllerTest {
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),
-                    content().string("[{\"checkInDate\":\"2024-06-18\",\"checkOutDate\":\"2024-06-25\"},{\"checkInDate\":\"2024-06-11\",\"checkOutDate\":\"2024-06-16\"}]"));
+                    content().string("[{\"checkInDate\":\"2024-06-08\",\"checkOutDate\":\"2024-06-15\"},{\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\"}]"));
     }
 
     @Test

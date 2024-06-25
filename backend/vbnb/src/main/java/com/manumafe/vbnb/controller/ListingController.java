@@ -1,8 +1,10 @@
 package com.manumafe.vbnb.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.manumafe.vbnb.dto.ListingCreateDto;
@@ -71,6 +74,27 @@ public class ListingController {
     @GetMapping("/city/{city}")
     public ResponseEntity<List<ListingResponseDto>> getListingsByCity(@PathVariable String city) {
         List<ListingResponseDto> listings = listingService.findListingByCityName(city);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listings);
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<ListingResponseDto>> getAvailableListings(
+            @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+            @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
+
+        List<ListingResponseDto> listings = listingService.findAvailableListingsByRangeDates(checkInDate, checkOutDate);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listings);
+    }
+
+    @GetMapping("/available/{city}")
+    public ResponseEntity<List<ListingResponseDto>> getAvailableListingsByCity(
+            @PathVariable String city,
+            @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+            @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
+
+        List<ListingResponseDto> listings = listingService.findAvailableListingsByRangeDatesAndCityName(checkInDate, checkOutDate, city);
 
         return ResponseEntity.status(HttpStatus.OK).body(listings);
     }

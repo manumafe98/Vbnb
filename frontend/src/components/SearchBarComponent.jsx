@@ -6,12 +6,28 @@ import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { LocationIcon } from "../constants/Icons";
 
-export const SearchBarComponent = () => {
+export const SearchBarComponent = ({ onListings }) => {
   const[cities, setCities] = useState([])
+  const[listings, setListings] = useState([])
+  const[selectedCity, setSelectedCity] = useState('')
+  const[checkIn, setCheckIn] = useState(new Date())
+  const[checkOut, setCheckOut] = useState(new Date())
 
   useEffect(() => {
+    onListings(listings)
+  }, [listings])
+
+  useEffect(() => {
+    getListings()
     getCities()
   }, [])
+
+  const getListings = async () => {
+    await useFetch("/backend/api/v1/listing/all", "GET", null, false)
+      .then(response => response.json())
+      .then(data => setListings(data))
+      .catch(error => console.log(error))
+  }
 
   const getCities = async () => {
 
@@ -19,6 +35,48 @@ export const SearchBarComponent = () => {
       .then(response => response.json())
       .then(data => setCities(data))
       .catch(error => console.log(error))
+  }
+
+  const getListingsByCity = async () => {
+    await useFetch(`/backend/api/v1/listing/city/${selectedCity}`, "GET", null, false)
+      .then(response => response.json())
+      .then(data => setListings(data))
+      .catch(error => console.log(error))
+  }
+
+  const getListingsByAvailability = async () => {
+    const formattedCheckInDate = checkIn.toISOString().split('T')[0]
+    const formattedCheckOutDate = checkOut.toISOString().split('T')[0]
+
+    await useFetch(`/backend/api/v1/listing/available?checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`, "GET", null, false)
+      .then(response => response.json())
+      .then(data => setListings(data))
+      .catch(error => console.log(error))
+  }
+
+  const getListingsByAvailabilityAndCityName = async () => {
+    const formattedCheckInDate = checkIn.toISOString().split('T')[0]
+    const formattedCheckOutDate = checkOut.toISOString().split('T')[0]
+
+    await useFetch(`/backend/api/v1/listing/available/${selectedCity}?checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`, "GET", null, false)
+      .then(response => response.json())
+      .then(data => setListings(data))
+      .catch(error => console.log(error))
+  }
+
+  const handleDates = (checkIn, checkOut) => {
+    setCheckIn(new Date(checkIn))
+    setCheckOut(new Date(checkOut))
+  }
+
+  const handleSearch = async () => {
+    if (selectedCity && checkIn && checkOut) {
+      getListingsByAvailabilityAndCityName()
+    } else if (!selectedCity && checkIn && checkOut) {
+      getListingsByAvailability()
+    } else if (selectedCity && !checkIn && !checkOut) {
+      getListingsByCity()
+    }
   }
 
     return(
@@ -31,9 +89,10 @@ export const SearchBarComponent = () => {
                 placeholder="Search destinations"
                 labelPlacement="inside"
                 className="max-w-xs"
+                onSelectionChange={(e) => e ? setSelectedCity(cities[e - 1].name) : setSelectedCity('')}
               >
                 {(city) => (
-                  <AutocompleteItem key={cities[city]} textValue={city.name}>
+                  <AutocompleteItem key={city.id} textValue={city.name}>
                     <div className="flex gap-2 items-center">
                       <LocationIcon/>
                       <div className="flex flex-col">
@@ -44,8 +103,8 @@ export const SearchBarComponent = () => {
                   </AutocompleteItem>
                 )}
               </Autocomplete>
-              <CheckInOutComponent/>
-              <Button radius="full" className="h-14 bg-[#ff6f00] text-white">
+              <CheckInOutComponent onDate={handleDates}/>
+              <Button radius="full" className="h-14 bg-[#ff6f00] text-white" onClick={handleSearch}>
                   <Search/> Search
               </Button>
             </div>

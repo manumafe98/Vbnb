@@ -1,5 +1,6 @@
 package com.manumafe.vbnb.controller;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -19,20 +20,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manumafe.vbnb.dto.ListingCreateDto;
+import com.manumafe.vbnb.dto.ReserveDto;
 import com.manumafe.vbnb.entity.Category;
 import com.manumafe.vbnb.entity.Characteristic;
 import com.manumafe.vbnb.entity.City;
 import com.manumafe.vbnb.entity.Listing;
+import com.manumafe.vbnb.entity.User;
+import com.manumafe.vbnb.entity.UserRole;
 import com.manumafe.vbnb.repository.CategoryRepository;
 import com.manumafe.vbnb.repository.CharacteristicRepository;
 import com.manumafe.vbnb.repository.CityRepository;
 import com.manumafe.vbnb.repository.ListingRepository;
+import com.manumafe.vbnb.repository.UserRepository;
+import com.manumafe.vbnb.service.ReserveService;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -54,6 +61,15 @@ public class ListingControllerTest {
 
     @Autowired
     private ListingRepository listingRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ReserveService reserveService;
 
     private Category createCategory(String name, String url) {
         Category category = new Category();
@@ -79,12 +95,25 @@ public class ListingControllerTest {
         return characteristic;
     }
 
-    private void createListing() {
+    private User createUser(String name, String lastName, String email, String password) {
+        return User.builder()
+                .name("Roberto")
+                .lastName("Carlos")
+                .email("roberto.carlos3@gmail.com")
+                .password(passwordEncoder.encode("1234"))
+                .userRole(UserRole.USER)
+                .build();
+    }
+
+    private void createContext() {
         Characteristic characteristic = createCharacteristic("Chimney", "http://image.chimney.example");
         Category category = createCategory("Cabins", "http://image.cabin.example");
         City city = createCity("Argentina", "Ushuaia");
         
         saveItemsToRepositories(category, city, characteristic);
+
+        User user = createUser("Roberto", "Carlos", "roberto.carlos3@gmail.com", "1234");
+        userRepository.save(user);
 
         Listing listing = new Listing();
         listing.setTitle("Snow Cabin");
@@ -94,6 +123,12 @@ public class ListingControllerTest {
         listing.setCharacteristics(Set.of(characteristic));
 
         listingRepository.save(listing);
+
+        LocalDate date = LocalDate.of(2024, 07, 01);
+
+        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
+
+        reserveService.saveReserve(user.getId(), listing.getId(), reserve);
     }
 
     private ListingCreateDto createListingDto(
@@ -126,7 +161,7 @@ public class ListingControllerTest {
     @Test
     @Order(1)
     public void testCreateListing() throws Exception {
-        createListing();
+        createContext();
 
         Characteristic characteristic = createCharacteristic("Wifi", "http://image.wifi.example");
         Category category = createCategory("Houses", "http://image.house.example");
@@ -218,6 +253,31 @@ public class ListingControllerTest {
 
     @Test
     @Order(4)
+    public void testGetAllAvailableListings() throws Exception {
+
+        mockMvc.perform(get("/api/v1/listing/available")
+                .param("checkInDate", "2024-07-01")
+                .param("checkOutDate", "2024-07-08"))
+                .andExpectAll(
+                    status().isOk(),
+                    content().string(
+                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
+    }
+
+    @Test
+    @Order(5)
+    public void testGetAllAvailableListingsByCityName() throws Exception {
+        mockMvc.perform(get("/api/v1/listing/available/Ushuaia")
+                .param("checkInDate", "2024-07-01")
+                .param("checkOutDate", "2024-07-08"))
+                .andExpectAll(
+                    status().isOk(),
+                    content().string("[]"));
+    }
+
+
+    @Test
+    @Order(5)
     public void testGetAllListings() throws Exception {
         mockMvc.perform(get("/api/v1/listing/all"))
                 .andDo(print())
@@ -229,7 +289,7 @@ public class ListingControllerTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void testGetListingByCityName() throws Exception {
         mockMvc.perform(get("/api/v1/listing/city/Ushuaia"))
                 .andDo(print())
@@ -240,7 +300,7 @@ public class ListingControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testGetListingByCategoryName() throws Exception {
         mockMvc.perform(get("/api/v1/listing/category/Departments"))
                 .andDo(print())
@@ -251,14 +311,14 @@ public class ListingControllerTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void testDeleteListingById() throws Exception {
         mockMvc.perform(delete("/api/v1/listing/delete/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @Order(8)
+    @Order(9)
     public void testGetNonExistentListingException() throws Exception {
         mockMvc.perform(get("/api/v1/listing/get/1")
                 .contentType(MediaType.APPLICATION_JSON))

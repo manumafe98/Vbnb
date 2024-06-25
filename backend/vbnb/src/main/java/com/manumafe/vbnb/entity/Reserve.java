@@ -30,7 +30,7 @@ public class Reserve implements Serializable {
     private LocalDate checkInDate;
 
     @Column(name = "check_out")
-    private LocalDate checkOuDate;
+    private LocalDate checkOutDate;
 
     @JsonIgnore
     @ManyToOne

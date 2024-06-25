@@ -3,6 +3,7 @@ package com.manumafe.vbnb.service.implementation;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.manumafe.vbnb.dto.ReserveDto;
 import com.manumafe.vbnb.dto.mapper.ReserveDtoMapper;
@@ -28,6 +29,7 @@ public class ReserveServiceImpl implements ReserveService {
     private final ReserveDtoMapper reserveDtoMapper;
 
     @Override
+    @Transactional
     public ReserveDto saveReserve(Long userId, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
@@ -41,35 +43,59 @@ public class ReserveServiceImpl implements ReserveService {
         
         reserve.setId(reserveId);
         reserve.setCheckInDate(reserveDto.checkInDate());
-        reserve.setCheckOuDate(reserveDto.checkOutDate());
+        reserve.setCheckOutDate(reserveDto.checkOutDate());
         reserve.setUser(user);
         reserve.setListing(listing);
 
+
+        user.getReserves().add(reserve);
+        listing.getReserves().add(reserve);
+
+        listingRepository.save(listing);
+        userRepository.save(user);
         reserveRepository.save(reserve);
 
         return reserveDtoMapper.toDto(reserve);
     }
 
     @Override
+    @Transactional
     public void deleteReserve(Long userId, Long listingId) throws ResourceNotFoundException {
         ReserveId reserveId = new ReserveId(userId, listingId);
-        reserveRepository.findById(reserveId)
+        Reserve reserve = reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " notfound"));
+
+        Listing listing = reserve.getListing();
+        User user = reserve.getUser();
+
+        listing.getReserves().remove(reserve);
+        user.getReserves().remove(reserve);
 
         reserveRepository.deleteById(reserveId);
     }
 
     @Override
-    public ReserveDto updateReserve(Long userId, Long listingId, ReserveDto reserveDto)
-            throws ResourceNotFoundException {
+    @Transactional
+    public ReserveDto updateReserve(Long userId, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
         ReserveId reserveId = new ReserveId(userId, listingId);
 
         Reserve reserveToUpdate = reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " not found"));
 
-        reserveToUpdate.setCheckInDate(reserveDto.checkInDate());
-        reserveToUpdate.setCheckOuDate(reserveDto.checkOutDate());
+        Listing listing = reserveToUpdate.getListing();
+        User user = reserveToUpdate.getUser();
 
+        listing.getReserves().remove(reserveToUpdate);
+        user.getReserves().remove(reserveToUpdate);
+
+        reserveToUpdate.setCheckInDate(reserveDto.checkInDate());
+        reserveToUpdate.setCheckOutDate(reserveDto.checkOutDate());
+
+        user.getReserves().add(reserveToUpdate);
+        listing.getReserves().add(reserveToUpdate);
+
+        listingRepository.save(listing);
+        userRepository.save(user);
         reserveRepository.save(reserveToUpdate);
 
         return reserveDto;

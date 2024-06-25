@@ -1,5 +1,6 @@
 package com.manumafe.vbnb.service.implementation;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -158,5 +159,18 @@ public class ListingServiceImpl implements ListingService {
 				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " notfound"));
 		
 		return listingRepository.findByCity(city).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findAvailableListingsByRangeDates(LocalDate checkInDate, LocalDate checkOutDate) {
+		return listingRepository.findAvailableListings(checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String cityName) {
+		City city = cityRepository.findByName(cityName)
+				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " notfound"));
+
+		return listingRepository.findAvailableListingsByCity(city, checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
 	}
 }

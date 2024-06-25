@@ -11,6 +11,6 @@ public class ReserveDtoMapper {
     public ReserveDto toDto(Reserve reserve) {
         return new ReserveDto(
                 reserve.getCheckInDate(),
-                reserve.getCheckOuDate());
+                reserve.getCheckOutDate());
     }
 }
