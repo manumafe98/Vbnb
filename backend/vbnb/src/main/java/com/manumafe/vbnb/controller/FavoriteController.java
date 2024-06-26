@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.manumafe.vbnb.dto.FavoriteDto;
+import com.manumafe.vbnb.dto.UserFavoriteDto;
 import com.manumafe.vbnb.service.FavoriteService;
 
 @RestController
@@ -25,27 +26,27 @@ public class FavoriteController {
 
     @PostMapping
     public ResponseEntity<FavoriteDto> createFavorite(
-            @RequestParam("userId") Long userId,
+            @RequestParam("userEmail") String userEmail,
             @RequestParam("listingId") Long listingId) {
             
-        FavoriteDto favorite = favoriteService.saveFavorite(userId, listingId);
+        FavoriteDto favorite = favoriteService.saveFavorite(userEmail, listingId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(favorite);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteFavorite(
-            @RequestParam("userId") Long userId,
+            @RequestParam("userEmail") String userEmail,
             @RequestParam("listingId") Long listingId) {
             
-        favoriteService.deleteFavorite(userId, listingId);
+        favoriteService.deleteFavorite(userEmail, listingId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<FavoriteDto>> getUserFavorites(@PathVariable Long userId) {
-        List<FavoriteDto> favorites = favoriteService.findFavoritesByUserId(userId);
+    @GetMapping("/{userEmail}")
+    public ResponseEntity<List<UserFavoriteDto>> getUserFavorites(@PathVariable String userEmail) {
+        List<UserFavoriteDto> favorites = favoriteService.findFavoritesByUserEmail(userEmail);
 
         return ResponseEntity.status(HttpStatus.OK).body(favorites);
     }

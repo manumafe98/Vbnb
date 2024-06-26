@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.manumafe.vbnb.dto.ListingCreateDto;
+import com.manumafe.vbnb.dto.ListingFullDataDto;
 import com.manumafe.vbnb.dto.ListingResponseDto;
 
 public interface ListingService {
@@ -17,6 +18,8 @@ public interface ListingService {
     ListingResponseDto findListingById(Long id);
 
     List<ListingResponseDto> findAllListings();
+
+    List<ListingFullDataDto> findAllListingsFullData();
 
     List<ListingResponseDto> findListingByCategoryName(String categoryName);
 

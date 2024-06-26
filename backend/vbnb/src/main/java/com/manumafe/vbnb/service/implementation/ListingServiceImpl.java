@@ -2,12 +2,14 @@ package com.manumafe.vbnb.service.implementation;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.manumafe.vbnb.dto.ListingCreateDto;
+import com.manumafe.vbnb.dto.ListingFullDataDto;
 import com.manumafe.vbnb.dto.ListingResponseDto;
 import com.manumafe.vbnb.dto.mapper.ListingDtoMapper;
 import com.manumafe.vbnb.entity.Category;
@@ -15,6 +17,7 @@ import com.manumafe.vbnb.entity.Characteristic;
 import com.manumafe.vbnb.entity.City;
 import com.manumafe.vbnb.entity.Image;
 import com.manumafe.vbnb.entity.Listing;
+import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.CategoryRepository;
 import com.manumafe.vbnb.repository.CharacteristicRepository;
@@ -40,6 +43,12 @@ public class ListingServiceImpl implements ListingService {
 	@Override
 	@Transactional
 	public ListingResponseDto saveListing(ListingCreateDto listingDto) {
+		Optional<Listing> optionalListing = listingRepository.findByTitle(listingDto.title());
+
+		if (optionalListing.isPresent()) {
+			throw new ResourceAlreadyExistentException("Listing with name: " + listingDto.title() + " already exists");
+		}
+
 		City city = cityRepository.findById(listingDto.cityId())
 				.orElseThrow(
 						() -> new ResourceNotFoundException("City with id: " + listingDto.cityId() + " not found"));
@@ -172,5 +181,10 @@ public class ListingServiceImpl implements ListingService {
 				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " notfound"));
 
 		return listingRepository.findAvailableListingsByCity(city, checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingFullDataDto> findAllListingsFullData() {
+		return listingRepository.findAll().stream().map(listingDtoMapper::toFullDataDto).toList();
 	}
 }

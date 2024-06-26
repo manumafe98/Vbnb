@@ -9,6 +9,7 @@ export const ListingSectionComponent = ({ listings }) => {
           {listings.map((listing) => (
             <ListingComponent
               key={listing.id}
+              id={listing.id}
               title={listing.title}
               image={listing.images[0].imageUrl}
               description={listing.description}

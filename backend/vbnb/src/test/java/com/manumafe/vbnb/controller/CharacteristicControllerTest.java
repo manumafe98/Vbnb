@@ -28,7 +28,7 @@ import com.manumafe.vbnb.entity.Characteristic;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CharacteristicControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
 

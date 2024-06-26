@@ -9,8 +9,13 @@ import org.springframework.stereotype.Component;
 import com.manumafe.vbnb.dto.CategoryDto;
 import com.manumafe.vbnb.dto.CharacteristicDto;
 import com.manumafe.vbnb.dto.CityDto;
+import com.manumafe.vbnb.dto.ListingFullDataDto;
 import com.manumafe.vbnb.dto.ListingResponseDto;
+import com.manumafe.vbnb.entity.Favorite;
+import com.manumafe.vbnb.entity.FavoriteId;
 import com.manumafe.vbnb.entity.Listing;
+import com.manumafe.vbnb.entity.Reserve;
+import com.manumafe.vbnb.entity.ReserveId;
 
 @Component
 public class ListingDtoMapper {
@@ -29,7 +34,7 @@ public class ListingDtoMapper {
         CategoryDto category = categoryDtoMapper.toDto(listing.getCategory());
 
         CityDto city = cityDtoMapper.toDto(listing.getCity());
-        
+
         Set<CharacteristicDto> characteristicDtos = listing.getCharacteristics().stream()
                 .map(characteristicDtoMapper::toDto).collect(Collectors.toSet());
 
@@ -41,5 +46,30 @@ public class ListingDtoMapper {
                 category,
                 listing.getImages(),
                 characteristicDtos);
+    }
+
+    public ListingFullDataDto toFullDataDto(Listing listing) {
+
+        CategoryDto category = categoryDtoMapper.toDto(listing.getCategory());
+
+        CityDto city = cityDtoMapper.toDto(listing.getCity());
+
+        Set<CharacteristicDto> characteristicDtos = listing.getCharacteristics().stream()
+                .map(characteristicDtoMapper::toDto).collect(Collectors.toSet());
+
+        Set<ReserveId> reserveIds = listing.getReserves().stream().map(Reserve::getId).collect(Collectors.toSet());
+
+        Set<FavoriteId> favoriteIds = listing.getFavorites().stream().map(Favorite::getId).collect(Collectors.toSet());
+
+        return new ListingFullDataDto(
+                listing.getId(),
+                listing.getTitle(),
+                listing.getDescription(),
+                city,
+                category,
+                listing.getImages(),
+                characteristicDtos,
+                reserveIds,
+                favoriteIds);
     }
 }

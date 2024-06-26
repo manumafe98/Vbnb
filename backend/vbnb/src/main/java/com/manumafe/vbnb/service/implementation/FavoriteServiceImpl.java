@@ -3,8 +3,10 @@ package com.manumafe.vbnb.service.implementation;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.manumafe.vbnb.dto.FavoriteDto;
+import com.manumafe.vbnb.dto.UserFavoriteDto;
 import com.manumafe.vbnb.dto.mapper.FavoriteDtoMapper;
 import com.manumafe.vbnb.entity.Favorite;
 import com.manumafe.vbnb.entity.FavoriteId;
@@ -28,39 +30,56 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteDtoMapper favoriteDtoMapper;
 
     @Override
-    public FavoriteDto saveFavorite(Long userId, Long listingId) throws ResourceNotFoundException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + "not found"));
+    @Transactional
+    public FavoriteDto saveFavorite(String userEmail, Long listingId) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + "not found"));
 
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
-        FavoriteId favoriteId = new FavoriteId(userId, listingId);
+        FavoriteId favoriteId = new FavoriteId(user.getId(), listingId);
 
         Favorite favorite = new Favorite();
         favorite.setId(favoriteId);
         favorite.setUser(user);
         favorite.setListing(listing);
 
+        user.getFavorites().add(favorite);
+        listing.getFavorites().add(favorite);
+
+        listingRepository.save(listing);
+        userRepository.save(user);
         favoriteRepository.save(favorite);
 
         return favoriteDtoMapper.toDto(favorite);
     }
 
     @Override
-    public void deleteFavorite(Long userId, Long listingId) throws ResourceNotFoundException {
-        FavoriteId favoriteId = new FavoriteId(userId, listingId);
-        favoriteRepository.findById(favoriteId)
+    @Transactional
+    public void deleteFavorite(String userEmail, Long listingId) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + "not found"));
+
+        FavoriteId favoriteId = new FavoriteId(user.getId(), listingId);
+        Favorite favorite = favoriteRepository.findById(favoriteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Favorite with id: " + favoriteId + " not found"));
 
+        Listing listing = favorite.getListing();
+
+        listing.getFavorites().remove(favorite);
+        user.getFavorites().remove(favorite);
+
+        listingRepository.save(listing);
+        userRepository.save(user);
         favoriteRepository.deleteById(favoriteId);
     }
 
     @Override
-    public List<FavoriteDto> findFavoritesByUserId(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
+    public List<UserFavoriteDto> findFavoritesByUserEmail(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + "not found"));
 
-        return favoriteRepository.findByUser(user).stream().map(favoriteDtoMapper::toDto).toList();
+        return favoriteRepository.findByUser(user).stream().map(favoriteDtoMapper::toUserFavoriteDto).toList();
     }
 }

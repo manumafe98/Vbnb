@@ -21,13 +21,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manumafe.vbnb.entity.AuthenticationRequest;
 import com.manumafe.vbnb.entity.RegisterRequest;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AuthenticationControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
 

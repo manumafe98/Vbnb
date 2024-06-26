@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -28,19 +28,24 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.manumafe.vbnb.dto.ReserveDto;
+import com.manumafe.vbnb.entity.Category;
+import com.manumafe.vbnb.entity.Characteristic;
+import com.manumafe.vbnb.entity.City;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.User;
 import com.manumafe.vbnb.entity.UserRole;
+import com.manumafe.vbnb.repository.CategoryRepository;
+import com.manumafe.vbnb.repository.CharacteristicRepository;
+import com.manumafe.vbnb.repository.CityRepository;
 import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.repository.UserRepository;
-import com.manumafe.vbnb.service.ReserveService;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ReserveControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -54,37 +59,72 @@ public class ReserveControllerTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private ReserveService reserveService;
+    private CityRepository cityRepository;
+    
+    @Autowired
+    private CategoryRepository categoryRepository;
 
-    private void setUp() {
+    @Autowired
+    private CharacteristicRepository characteristicRepository;
 
-        var user = User.builder()
-                .name("Roberto")
-                .lastName("Carlos")
-                .email("roberto.carlos3@gmail.com")
-                .password(passwordEncoder.encode("1234"))
+    private Category createCategory(String name, String url) {
+        Category category = new Category();
+        category.setName(name);
+        category.setImageUrl(url);
+
+        return category;
+    }
+
+    private City createCity(String country, String name) {
+        City city = new City();
+        city.setCountry(country);
+        city.setName(name);
+
+        return city;
+    }
+
+    private Characteristic createCharacteristic(String name, String url) {
+        Characteristic characteristic = new Characteristic();
+        characteristic.setName(name);
+        characteristic.setImageUrl(url);
+
+        return characteristic;
+    }
+
+    private User createUser(String name, String lastName, String email, String password) {
+        return User.builder()
+                .name(name)
+                .lastName(lastName)
+                .email(email)
+                .password(passwordEncoder.encode(password))
                 .userRole(UserRole.USER)
                 .build();
+    }
 
+    private void saveItemsToRepositories(Category category, City city, Characteristic characteristic) {
+        cityRepository.save(city);
+        categoryRepository.save(category);
+        characteristicRepository.save(characteristic);
+    }
+
+    private void createContext() {
+        Characteristic characteristic = createCharacteristic("Chimney", "http://image.chimney.example");
+        Category category = createCategory("Cabins", "http://image.cabin.example");
+        City city = createCity("Argentina", "Ushuaia");
+
+        saveItemsToRepositories(category, city, characteristic);
+
+        User user = createUser("Roberto", "Carlos", "roberto.carlos3@gmail.com", "1234");
         userRepository.save(user);
 
-        Listing listing1 = new Listing();
-        listing1.setTitle("House in Mar del Plata");
-        listing1.setDescription("Beautiful house near the beach");
+        Listing listing = new Listing();
+        listing.setTitle("Snow Cabin");
+        listing.setDescription("Warm cabin near the mountains to enjoy hiking and snowboarding");
+        listing.setCategory(category);
+        listing.setCity(city);
+        listing.setCharacteristics(Set.of(characteristic));
 
-        Listing listing2 = new Listing();
-        listing2.setTitle("Department in Cordoba");
-        listing2.setDescription("Beautiful deparment near the mountains");
-
-        List<Listing> listings = List.of(listing1, listing2);
-
-        listingRepository.saveAll(listings);
-
-        LocalDate date = LocalDate.of(2024, 07, 01);
-
-        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
-
-        reserveService.saveReserve(user.getId(), listing1.getId(), reserve);
+        listingRepository.save(listing);
     }
 
     private String mapToJson(ReserveDto reserve) throws JsonProcessingException{
@@ -94,11 +134,10 @@ public class ReserveControllerTest {
         return mapper.writeValueAsString(reserve);
     }
 
-
     @Test
     @Order(1)
     public void testCreateReserve() throws Exception {
-        setUp();
+        createContext();
 
         LocalDate date = LocalDate.of(2024, 6, 8);
 
@@ -108,8 +147,8 @@ public class ReserveControllerTest {
         mockMvc.perform(post("/api/v1/reserve")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reserveJson)
-                .param("userId", "1")
-                .param("listingId", "2"))
+                .param("userEmail", "roberto.carlos3@gmail.com")
+                .param("listingId", "1"))
                 .andExpectAll(
                     status().isCreated(),
                     content().contentType(MediaType.APPLICATION_JSON),
@@ -127,7 +166,7 @@ public class ReserveControllerTest {
         mockMvc.perform(put("/api/v1/reserve")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reserveJson)
-                .param("userId", "1")
+                .param("userEmail", "roberto.carlos3@gmail.com")
                 .param("listingId", "1"))
                 .andExpectAll(
                     status().isOk(),
@@ -139,18 +178,19 @@ public class ReserveControllerTest {
     @Test
     @Order(3)
     public void getReservesByUser() throws Exception {
-        mockMvc.perform(get("/api/v1/reserve/1"))
+        mockMvc.perform(get("/api/v1/reserve/roberto.carlos3@gmail.com"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),
-                    content().string("[{\"checkInDate\":\"2024-06-08\",\"checkOutDate\":\"2024-06-15\"},{\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\"}]"));
+                    content().string(
+                        "[{\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
     }
 
     @Test
     @Order(4)
     public void deleteReserve() throws Exception {
         mockMvc.perform(delete("/api/v1/reserve")
-                .param("userId", "1")
+                .param("userEmail", "roberto.carlos3@gmail.com")
                 .param("listingId", "1"))
                 .andExpect(status().isNoContent());
     }

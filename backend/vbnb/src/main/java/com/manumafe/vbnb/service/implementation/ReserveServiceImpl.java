@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.manumafe.vbnb.dto.ReserveDto;
+import com.manumafe.vbnb.dto.UserReserveDto;
 import com.manumafe.vbnb.dto.mapper.ReserveDtoMapper;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Reserve;
@@ -30,14 +31,14 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     @Transactional
-    public ReserveDto saveReserve(Long userId, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
+    public ReserveDto saveReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail)
+            .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
 
         Listing listing = listingRepository.findById(listingId)
-                .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + userId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
-        ReserveId reserveId = new ReserveId(userId, listingId);
+        ReserveId reserveId = new ReserveId(user.getId(), listingId);
 
         Reserve reserve = new Reserve();
         
@@ -46,7 +47,6 @@ public class ReserveServiceImpl implements ReserveService {
         reserve.setCheckOutDate(reserveDto.checkOutDate());
         reserve.setUser(user);
         reserve.setListing(listing);
-
 
         user.getReserves().add(reserve);
         listing.getReserves().add(reserve);
@@ -60,30 +60,36 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     @Transactional
-    public void deleteReserve(Long userId, Long listingId) throws ResourceNotFoundException {
-        ReserveId reserveId = new ReserveId(userId, listingId);
+    public void deleteReserve(String userEmail, Long listingId) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail)
+            .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
+
+        ReserveId reserveId = new ReserveId(user.getId(), listingId);
         Reserve reserve = reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " notfound"));
 
         Listing listing = reserve.getListing();
-        User user = reserve.getUser();
 
         listing.getReserves().remove(reserve);
         user.getReserves().remove(reserve);
 
+        listingRepository.save(listing);
+        userRepository.save(user);
         reserveRepository.deleteById(reserveId);
     }
 
     @Override
     @Transactional
-    public ReserveDto updateReserve(Long userId, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
-        ReserveId reserveId = new ReserveId(userId, listingId);
+    public ReserveDto updateReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail)
+            .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
+
+        ReserveId reserveId = new ReserveId(user.getId(), listingId);
 
         Reserve reserveToUpdate = reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " not found"));
 
         Listing listing = reserveToUpdate.getListing();
-        User user = reserveToUpdate.getUser();
 
         listing.getReserves().remove(reserveToUpdate);
         user.getReserves().remove(reserveToUpdate);
@@ -102,13 +108,10 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public List<ReserveDto> findReservesByUserId(Long userId) throws ResourceNotFoundException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
+    public List<UserReserveDto> findReservesByUserEmail(String userEmail) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
 
-        return reserveRepository.findByUser(user)
-                .stream()
-                .map(reserveDtoMapper::toDto)
-                .toList();
+        return reserveRepository.findByUser(user).stream().map(reserveDtoMapper::toUserReserveDto).toList();
     }
 }

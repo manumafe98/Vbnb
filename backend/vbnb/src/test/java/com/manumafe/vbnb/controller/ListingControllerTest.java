@@ -97,10 +97,10 @@ public class ListingControllerTest {
 
     private User createUser(String name, String lastName, String email, String password) {
         return User.builder()
-                .name("Roberto")
-                .lastName("Carlos")
-                .email("roberto.carlos3@gmail.com")
-                .password(passwordEncoder.encode("1234"))
+                .name(name)
+                .lastName(lastName)
+                .email(email)
+                .password(passwordEncoder.encode(password))
                 .userRole(UserRole.USER)
                 .build();
     }
@@ -128,7 +128,7 @@ public class ListingControllerTest {
 
         ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
 
-        reserveService.saveReserve(user.getId(), listing.getId(), reserve);
+        reserveService.saveReserve(user.getEmail(), listing.getId(), reserve);
     }
 
     private ListingCreateDto createListingDto(

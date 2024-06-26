@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.manumafe.vbnb.dto.RatingDto;
 import com.manumafe.vbnb.dto.mapper.RatingDtoMapper;
@@ -30,9 +31,10 @@ public class RatingServiceImpl implements RatingService {
 
 
     @Override
-    public RatingDto saveOrUpdateRating(Long listingId, Long userId, RatingDto ratingDto) throws ResourceNotFoundException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
+    @Transactional
+    public RatingDto saveOrUpdateRating(Long listingId, String userEmail, RatingDto ratingDto) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
         
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
@@ -42,18 +44,26 @@ public class RatingServiceImpl implements RatingService {
 
         if (optionalRating.isPresent()) {
             rating = optionalRating.get();
+
+            listing.getRating().remove(rating);
+
             rating.setRating(ratingDto.rating());
+
+            listing.getRating().add(rating);
             
         } else {
-            RatingId ratingId = new RatingId(userId, listingId);
+            RatingId ratingId = new RatingId(user.getId(), listingId);
 
             rating = new Rating();
             rating.setId(ratingId);
             rating.setRating(ratingDto.rating());
             rating.setListing(listing);
             rating.setUser(user);
+
+            listing.getRating().add(rating);
         }
 
+        listingRepository.save(listing);
         ratingRepository.save(rating);
 
         return ratingDtoMapper.toDto(rating);

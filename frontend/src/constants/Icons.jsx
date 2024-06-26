@@ -261,7 +261,6 @@ export const FacebookIcon = (props) => {
 
 export const FavoriteIcon = (props) => {
   return(
-    <div className="group h-6 w-6 absolute top-2 right-2 z-10">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -289,6 +288,5 @@ export const FavoriteIcon = (props) => {
             mask="url(#ipTLike0)"
           />
       </svg>
-    </div>
   )
 }

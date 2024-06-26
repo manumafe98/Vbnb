@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.manumafe.vbnb.dto.ListingCreateDto;
+import com.manumafe.vbnb.dto.ListingFullDataDto;
 import com.manumafe.vbnb.dto.ListingResponseDto;
 import com.manumafe.vbnb.service.ListingService;
 
@@ -95,6 +96,13 @@ public class ListingController {
             @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
 
         List<ListingResponseDto> listings = listingService.findAvailableListingsByRangeDatesAndCityName(checkInDate, checkOutDate, city);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listings);
+    }
+
+    @GetMapping("/full")
+    public ResponseEntity<List<ListingFullDataDto>> getListingsWithFullData() {
+        List<ListingFullDataDto> listings = listingService.findAllListingsFullData();
 
         return ResponseEntity.status(HttpStatus.OK).body(listings);
     }

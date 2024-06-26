@@ -65,7 +65,7 @@ public class CityControllerTest {
                     jsonPath("$.name").value("Cordoba"),
                     jsonPath("$.country").value("Argentina"));
     }
-    
+
     @Test
     @Order(3)
     public void testGetAllCities() throws Exception {

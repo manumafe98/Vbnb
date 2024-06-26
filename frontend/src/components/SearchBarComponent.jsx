@@ -70,12 +70,14 @@ export const SearchBarComponent = ({ onListings }) => {
   }
 
   const handleSearch = async () => {
-    if (selectedCity && checkIn && checkOut) {
+    if (selectedCity && !isNaN(checkIn) && !isNaN(checkOut)) {
       getListingsByAvailabilityAndCityName()
-    } else if (!selectedCity && checkIn && checkOut) {
+    } else if (!selectedCity && !isNaN(checkIn) && !isNaN(checkOut)) {
       getListingsByAvailability()
-    } else if (selectedCity && !checkIn && !checkOut) {
+    } else if (selectedCity && isNaN(checkIn) && isNaN(checkOut)) {
       getListingsByCity()
+    } else {
+      getListings()
     }
   }
 

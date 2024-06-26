@@ -26,15 +26,15 @@ public class RatingController {
     @PutMapping
     public ResponseEntity<RatingDto> creteRating(
             @RequestParam("listingId") Long listingId,
-            @RequestParam("userId") Long userId,
+            @RequestParam("userEmail") String userEmail,
             @RequestBody RatingDto ratingDto) {
 
-        RatingDto rating = ratingService.saveOrUpdateRating(listingId, userId, ratingDto);
+        RatingDto rating = ratingService.saveOrUpdateRating(listingId, userEmail, ratingDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(rating);
     }
 
-    @GetMapping("/{listingId}")
+    @GetMapping("/average/{listingId}")
     public ResponseEntity<RatingDto> getAverageRating(@PathVariable Long listingId){
         RatingDto averageRating = ratingService.calculateListingAverageRating(listingId);
 

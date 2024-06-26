@@ -37,7 +37,7 @@ import com.manumafe.vbnb.repository.UserRepository;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RatingControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -54,7 +54,7 @@ public class RatingControllerTest {
     private PasswordEncoder passwordEncoder;
 
     private void setUp(){
-        
+
         var user1 = User.builder()
                 .name("Roberto")
                 .lastName("Carlos")
@@ -78,7 +78,7 @@ public class RatingControllerTest {
                 .password(passwordEncoder.encode("1234"))
                 .userRole(UserRole.USER)
                 .build();
-        
+
         List<User> users = List.of(user1, user2, user3); 
 
         userRepository.saveAll(users);
@@ -86,7 +86,7 @@ public class RatingControllerTest {
         Listing listing = new Listing();
         listing.setTitle("House in Mar del Plata");
         listing.setDescription("Beautiful house near the beach");
-        
+
         listingRepository.save(listing);
 
         RatingId ratingId1 = new RatingId(user1.getId(), listing.getId());
@@ -123,7 +123,7 @@ public class RatingControllerTest {
         String ratingJson = getRatingJson(rating);
 
         mockMvc.perform(post("/api/v1/rating")
-                .param("userId", "3")
+                .param("userEmail", "cr7@gmail.com")
                 .param("listingId", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(ratingJson))
@@ -136,7 +136,7 @@ public class RatingControllerTest {
     @Test
     @Order(2)
     public void getListingAverageRating() throws Exception {
-        mockMvc.perform(get("/api/v1/rating/1")
+        mockMvc.perform(get("/api/v1/rating/average/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                     status().isOk(),

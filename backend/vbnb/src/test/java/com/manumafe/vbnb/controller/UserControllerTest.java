@@ -29,7 +29,7 @@ import com.manumafe.vbnb.repository.UserRepository;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
 

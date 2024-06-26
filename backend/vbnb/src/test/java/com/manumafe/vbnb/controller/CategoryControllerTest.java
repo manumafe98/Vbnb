@@ -27,7 +27,7 @@ import com.manumafe.vbnb.entity.Category;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CategoryControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
 

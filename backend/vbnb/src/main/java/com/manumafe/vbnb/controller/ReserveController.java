@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.manumafe.vbnb.dto.ReserveDto;
+import com.manumafe.vbnb.dto.UserReserveDto;
 import com.manumafe.vbnb.service.ReserveService;
 
 @RestController
@@ -27,39 +28,39 @@ public class ReserveController {
 
     @PostMapping
     public ResponseEntity<ReserveDto> createReserve(
-            @RequestParam("userId") Long userId,
+            @RequestParam("userEmail") String userEmail,
             @RequestParam("listingId") Long listingId,
             @RequestBody ReserveDto reserveDto) {
 
-        ReserveDto reserve = reserveService.saveReserve(userId, listingId, reserveDto);
+        ReserveDto reserve = reserveService.saveReserve(userEmail, listingId, reserveDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(reserve);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteReserve(
-            @RequestParam("userId") Long userId,
+            @RequestParam("userEmail") String userEmail,
             @RequestParam("listingId") Long listingId) {
 
-        reserveService.deleteReserve(userId, listingId);
+        reserveService.deleteReserve(userEmail, listingId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping
     public ResponseEntity<ReserveDto> updateReserve(
-            @RequestParam("userId") Long userId,
+            @RequestParam("userEmail") String userEmail,
             @RequestParam("listingId") Long listingId,
             @RequestBody ReserveDto reserveDto) {
         
-        ReserveDto reserve = reserveService.updateReserve(userId, listingId, reserveDto);
+        ReserveDto reserve = reserveService.updateReserve(userEmail, listingId, reserveDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(reserve);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<ReserveDto>> getUserReserves(@PathVariable Long userId) {
-        List<ReserveDto> reserves = reserveService.findReservesByUserId(userId);
+    @GetMapping("/{userEmail}")
+    public ResponseEntity<List<UserReserveDto>> getUserReserves(@PathVariable String userEmail) {
+        List<UserReserveDto> reserves = reserveService.findReservesByUserEmail(userEmail);
 
         return ResponseEntity.status(HttpStatus.OK).body(reserves);
     }
