@@ -1,5 +1,5 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
-import { ChevronDown } from "../constants/Icons";
+import { ChevronDownIcon } from "../constants/Icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
@@ -9,7 +9,7 @@ export const NavBarComponent = () => {
   const { auth } = useAuth()
 
   const icons = {
-    chevron: <ChevronDown fill="currentColor" size={16} />
+    chevron: <ChevronDownIcon fill="currentColor" size={16} />
   }
 
   const logout = () => {

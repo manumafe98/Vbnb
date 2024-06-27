@@ -4,6 +4,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manumafe.vbnb.dto.RatingDto;
+import com.manumafe.vbnb.dto.RatingCreateDto;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
 import com.manumafe.vbnb.entity.RatingId;
@@ -109,7 +110,7 @@ public class RatingControllerTest {
         ratingRepository.saveAll(ratings);
     }
 
-    private String getRatingJson(RatingDto rating) throws JsonProcessingException {
+    private String getRatingJson(RatingCreateDto rating) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(rating);
     }
 
@@ -118,7 +119,7 @@ public class RatingControllerTest {
     public void createRating() throws Exception {
         setUp();
 
-        RatingDto rating = new RatingDto(4.0);
+        RatingCreateDto rating = new RatingCreateDto(4.0);
 
         String ratingJson = getRatingJson(rating);
 
@@ -128,18 +129,36 @@ public class RatingControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(ratingJson))
                 .andExpectAll(
-                    status().isOk(),
+                    status().isCreated(),
                     content().contentType(MediaType.APPLICATION_JSON),
                     jsonPath("$.rating").value("4.0"));
     }
 
     @Test
     @Order(2)
-    public void getListingAverageRating() throws Exception {
+    public void getListingInformationRating() throws Exception {
         mockMvc.perform(get("/api/v1/rating/average/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                     status().isOk(),
-                    jsonPath("$.rating").value("4.5"));
+                    jsonPath("$.rating").value("4.5"),
+                    jsonPath("$.timesRated").value("3"));
+    }
+
+    @Test
+    @Order(3)
+    public void updateRating() throws Exception {
+        RatingCreateDto rating = new RatingCreateDto(3.2);
+        String ratingJson = getRatingJson(rating);
+
+        mockMvc.perform(put("/api/v1/rating")
+                .param("userEmail", "cr7@gmail.com")
+                .param("listingId", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(ratingJson))
+                .andExpectAll(
+                    status().isOk(),
+                    content().contentType(MediaType.APPLICATION_JSON),
+                    jsonPath("$.rating").value("3.2"));
     }
 }

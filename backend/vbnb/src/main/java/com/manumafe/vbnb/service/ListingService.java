@@ -27,5 +27,11 @@ public interface ListingService {
 
     List<ListingResponseDto> findAvailableListingsByRangeDates(LocalDate checkInDate, LocalDate checkOutDate);
 
+    List<ListingResponseDto> findListingByCityNameAndCategoryName(String cityName, String categoryName);
+
     List<ListingResponseDto> findAvailableListingsByRangeDatesAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String cityName);
+
+    List<ListingResponseDto> findAvailableListingsByRangeDatesAndCategoryName(LocalDate checkInDate, LocalDate checkOutDate, String categoryName);
+
+    List<ListingResponseDto> findAvailableListingsByRangeDatesAndCategoryNameAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String categoryName, String cityName);
 }

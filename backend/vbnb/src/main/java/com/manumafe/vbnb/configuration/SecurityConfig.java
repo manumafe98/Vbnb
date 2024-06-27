@@ -28,10 +28,12 @@ public class SecurityConfig {
             "/api/v1/listing/get/*",
             "/api/v1/listing/available*",
             "/api/v1/listing/available/*",
+            "/api/v1/listing/by-city-category*",
+            "/api/v1/listing/available/by-category-city**",
             "/api/v1/listing/city/*",
             "/api/v1/listing/category/*",
             "/api/v1/characteristic/all",
-            "/api/v1/rating/average/*"
+            "/api/v1/rating/info/*"
     };
     private static final String[] ADMIN_ACCESS_URL = {
             "/api/v1/category/*",

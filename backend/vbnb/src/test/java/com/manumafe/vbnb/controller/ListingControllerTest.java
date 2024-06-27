@@ -266,8 +266,20 @@ public class ListingControllerTest {
 
     @Test
     @Order(5)
+    public void testGetAllListingsByCityNameAndCategoryName() throws Exception {
+        mockMvc.perform(get("/api/v1/listing/by-city-category")
+                .param("cityName", "Ushuaia")
+                .param("categoryName", "Departments"))
+                .andExpectAll(
+                    status().isOk(),
+                    content().string("[]"));
+    }
+
+    @Test
+    @Order(6)
     public void testGetAllAvailableListingsByCityName() throws Exception {
-        mockMvc.perform(get("/api/v1/listing/available/Ushuaia")
+        mockMvc.perform(get("/api/v1/listing/available/by-city")
+                .param("cityName", "Ushuaia")
                 .param("checkInDate", "2024-07-01")
                 .param("checkOutDate", "2024-07-08"))
                 .andExpectAll(
@@ -275,9 +287,35 @@ public class ListingControllerTest {
                     content().string("[]"));
     }
 
+    @Test
+    @Order(7)
+    public void testGetAllAvailableListingsByCategoryName() throws Exception {
+        mockMvc.perform(get("/api/v1/listing/available/by-category")
+                .param("categoryName", "Departments")
+                .param("checkInDate", "2024-07-01")
+                .param("checkOutDate", "2024-07-08"))
+                .andExpectAll(
+                    status().isOk(),
+                    content().string(
+                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
+    }
 
     @Test
-    @Order(5)
+    @Order(8)
+    public void testGetAllAvailableListingsByCategoryNameAndCityName() throws Exception {
+        mockMvc.perform(get("/api/v1/listing/available/by-category-city")
+                .param("categoryName", "Cabins")
+                .param("cityName", "Ushuaia")
+                .param("checkInDate", "2024-07-09")
+                .param("checkOutDate", "2024-07-15"))
+                .andExpectAll(
+                    status().isOk(),
+                    content().string(
+                        "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}]"));
+    }
+
+    @Test
+    @Order(9)
     public void testGetAllListings() throws Exception {
         mockMvc.perform(get("/api/v1/listing/all"))
                 .andDo(print())
@@ -289,7 +327,7 @@ public class ListingControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(10)
     public void testGetListingByCityName() throws Exception {
         mockMvc.perform(get("/api/v1/listing/city/Ushuaia"))
                 .andDo(print())
@@ -300,7 +338,7 @@ public class ListingControllerTest {
     }
 
     @Test
-    @Order(7)
+    @Order(11)
     public void testGetListingByCategoryName() throws Exception {
         mockMvc.perform(get("/api/v1/listing/category/Departments"))
                 .andDo(print())
@@ -311,14 +349,14 @@ public class ListingControllerTest {
     }
 
     @Test
-    @Order(8)
+    @Order(12)
     public void testDeleteListingById() throws Exception {
         mockMvc.perform(delete("/api/v1/listing/delete/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @Order(9)
+    @Order(13)
     public void testGetNonExistentListingException() throws Exception {
         mockMvc.perform(get("/api/v1/listing/get/1")
                 .contentType(MediaType.APPLICATION_JSON))

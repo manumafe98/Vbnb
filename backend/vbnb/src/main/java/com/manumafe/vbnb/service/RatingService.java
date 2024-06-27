@@ -1,11 +1,14 @@
 package com.manumafe.vbnb.service;
 
-import com.manumafe.vbnb.dto.RatingDto;
+import com.manumafe.vbnb.dto.RatingCreateDto;
+import com.manumafe.vbnb.dto.RatingResponseDto;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 
 public interface RatingService {
     
-    RatingDto saveOrUpdateRating(Long listingId, String userEmail, RatingDto ratingDto) throws ResourceNotFoundException;
+    RatingCreateDto createRating(Long listingId, String userEmail, RatingCreateDto ratingDto) throws ResourceNotFoundException;
 
-    RatingDto calculateListingAverageRating(Long listingId) throws ResourceNotFoundException;
+    RatingCreateDto updateRating(Long listingId, String userEmail, RatingCreateDto ratingDto) throws ResourceNotFoundException;
+
+    RatingResponseDto getListingRatingInformation(Long listingId) throws ResourceNotFoundException;
 }

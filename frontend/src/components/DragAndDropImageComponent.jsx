@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "../styles/DragAndDropImageComponent.css";
-import { DownloadCloud } from "../constants/Icons";
+import { DownloadCloudIcon } from "../constants/Icons";
 
 export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple = false, incomingImages = [] }) => {
   const[images, setImages] = useState(incomingImages)
@@ -87,7 +87,7 @@ export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple =
         onDrop={onDrop}
       >
         {isDragging ? (
-          <DownloadCloud/>
+          <DownloadCloudIcon/>
         ) : (
           <>
             Drag & Drop an image here or{" "}

@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.manumafe.vbnb.dto.RatingDto;
+import com.manumafe.vbnb.dto.RatingCreateDto;
+import com.manumafe.vbnb.dto.RatingResponseDto;
 import com.manumafe.vbnb.service.RatingService;
 
 @RestController
@@ -23,20 +24,30 @@ public class RatingController {
     private RatingService ratingService;
 
     @PostMapping
-    @PutMapping
-    public ResponseEntity<RatingDto> creteRating(
+    public ResponseEntity<RatingCreateDto> creteRating(
             @RequestParam("listingId") Long listingId,
             @RequestParam("userEmail") String userEmail,
-            @RequestBody RatingDto ratingDto) {
+            @RequestBody RatingCreateDto ratingDto) {
 
-        RatingDto rating = ratingService.saveOrUpdateRating(listingId, userEmail, ratingDto);
+        RatingCreateDto rating = ratingService.createRating(listingId, userEmail, ratingDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(rating);
+    }
+
+    @PutMapping
+    public ResponseEntity<RatingCreateDto> updateRating(
+        @RequestParam("listingId") Long listingId,
+        @RequestParam("userEmail") String userEmail,
+        @RequestBody RatingCreateDto ratingDto) {
+
+        RatingCreateDto rating = ratingService.updateRating(listingId, userEmail, ratingDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(rating);
     }
 
-    @GetMapping("/average/{listingId}")
-    public ResponseEntity<RatingDto> getAverageRating(@PathVariable Long listingId){
-        RatingDto averageRating = ratingService.calculateListingAverageRating(listingId);
+    @GetMapping("/info/{listingId}")
+    public ResponseEntity<RatingResponseDto> getAverageRating(@PathVariable Long listingId){
+        RatingResponseDto averageRating = ratingService.getListingRatingInformation(listingId);
 
         return ResponseEntity.status(HttpStatus.OK).body(averageRating);
     }

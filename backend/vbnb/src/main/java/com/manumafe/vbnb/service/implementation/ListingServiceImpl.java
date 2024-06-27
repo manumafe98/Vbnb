@@ -130,6 +130,70 @@ public class ListingServiceImpl implements ListingService {
 		return listingRepository.findAll().stream().map(listingDtoMapper::toResponseDto).toList();
 	}
 
+	@Override
+	public List<ListingResponseDto> findListingByCategoryName(String categoryName) {
+		Category category = categoryRepository.findByName(categoryName)
+				.orElseThrow(() -> new ResourceNotFoundException("Category with name: " + categoryName + " not found"));
+
+		return listingRepository.findByCategory(category).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findListingByCityName(String cityName) {
+		City city = cityRepository.findByName(cityName)
+				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " not found"));
+
+		return listingRepository.findByCity(city).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findAvailableListingsByRangeDates(LocalDate checkInDate, LocalDate checkOutDate) {
+		return listingRepository.findAvailableListings(checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findListingByCityNameAndCategoryName(String cityName, String categoryName) {
+		City city = cityRepository.findByName(cityName)
+				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " not found"));
+
+		Category category = categoryRepository.findByName(categoryName)
+				.orElseThrow(() -> new ResourceNotFoundException("Category with name: " + categoryName + " not found"));
+
+		return listingRepository.findListingByCategoryAndCity(category, city).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String cityName) {
+		City city = cityRepository.findByName(cityName)
+				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " not found"));
+
+		return listingRepository.findAvailableListingsByCity(city, checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCategoryName(LocalDate checkInDate, LocalDate checkOutDate, String categoryName) {
+		Category category = categoryRepository.findByName(categoryName)
+				.orElseThrow(() -> new ResourceNotFoundException("Category with name: " + categoryName + " not found"));
+
+		return listingRepository.findAvailableListingsByCategory(category, checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCategoryNameAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String categoryName, String cityName) {
+		City city = cityRepository.findByName(cityName)
+				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " not found"));
+
+		Category category = categoryRepository.findByName(categoryName)
+				.orElseThrow(() -> new ResourceNotFoundException("Category with name: " + categoryName + " not found"));
+
+		return listingRepository.findAvailableListingsByCategoryAndCity(category, city, checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
+	}
+
+	@Override
+	public List<ListingFullDataDto> findAllListingsFullData() {
+		return listingRepository.findAll().stream().map(listingDtoMapper::toFullDataDto).toList();
+	}
+
 	private Set<Characteristic> getCharacteristics(Set<Long> characteristicIds, Listing listing) {
 		return characteristicIds.stream().map(characteristicId -> {
 			Characteristic characteristic = characteristicRepository.findById(characteristicId)
@@ -151,40 +215,5 @@ public class ListingServiceImpl implements ListingService {
 
 			return image;
 		}).collect(Collectors.toSet());
-	}
-
-	@Override
-	public List<ListingResponseDto> findListingByCategoryName(String categoryName) {
-		Category category = categoryRepository.findByName(categoryName)
-				.orElseThrow(() -> new ResourceNotFoundException("Category with name: " + categoryName + " not found"));
-		
-		
-		return listingRepository.findByCategory(category).stream().map(listingDtoMapper::toResponseDto).toList();
-	}
-
-	@Override
-	public List<ListingResponseDto> findListingByCityName(String cityName) {
-		City city = cityRepository.findByName(cityName)
-				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " notfound"));
-		
-		return listingRepository.findByCity(city).stream().map(listingDtoMapper::toResponseDto).toList();
-	}
-
-	@Override
-	public List<ListingResponseDto> findAvailableListingsByRangeDates(LocalDate checkInDate, LocalDate checkOutDate) {
-		return listingRepository.findAvailableListings(checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
-	}
-
-	@Override
-	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String cityName) {
-		City city = cityRepository.findByName(cityName)
-				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " notfound"));
-
-		return listingRepository.findAvailableListingsByCity(city, checkInDate, checkOutDate).stream().map(listingDtoMapper::toResponseDto).toList();
-	}
-
-	@Override
-	public List<ListingFullDataDto> findAllListingsFullData() {
-		return listingRepository.findAll().stream().map(listingDtoMapper::toFullDataDto).toList();
 	}
 }

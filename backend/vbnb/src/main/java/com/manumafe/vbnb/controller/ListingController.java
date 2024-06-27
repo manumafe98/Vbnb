@@ -89,13 +89,46 @@ public class ListingController {
         return ResponseEntity.status(HttpStatus.OK).body(listings);
     }
 
-    @GetMapping("/available/{city}")
+    @GetMapping("/by-city-category")
+    public ResponseEntity<List<ListingResponseDto>> getListingsByCategoryAndCity(
+            @RequestParam("cityName") String cityName,
+            @RequestParam("categoryName") String categoryName) {
+
+        List<ListingResponseDto> listings = listingService.findListingByCityNameAndCategoryName(cityName, categoryName);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listings);
+    }
+
+    @GetMapping("/available/by-city")
     public ResponseEntity<List<ListingResponseDto>> getAvailableListingsByCity(
-            @PathVariable String city,
+            @RequestParam("cityName") String cityName,
             @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
             @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
 
-        List<ListingResponseDto> listings = listingService.findAvailableListingsByRangeDatesAndCityName(checkInDate, checkOutDate, city);
+        List<ListingResponseDto> listings = listingService.findAvailableListingsByRangeDatesAndCityName(checkInDate, checkOutDate, cityName);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listings);
+    }
+
+    @GetMapping("/available/by-category")
+    public ResponseEntity<List<ListingResponseDto>> getAvailableListingsByCategory(
+            @RequestParam("categoryName") String categoryName,
+            @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+            @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
+
+        List<ListingResponseDto> listings = listingService.findAvailableListingsByRangeDatesAndCategoryName(checkInDate, checkOutDate, categoryName);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listings);
+    }
+
+    @GetMapping("/available/by-category-city")
+    public ResponseEntity<List<ListingResponseDto>> getAvailableListingsByCategoryAndCity(
+            @RequestParam("categoryName") String categoryName,
+            @RequestParam("cityName") String cityName,
+            @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+            @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
+
+        List<ListingResponseDto> listings = listingService.findAvailableListingsByRangeDatesAndCategoryNameAndCityName(checkInDate, checkOutDate, categoryName, cityName);
 
         return ResponseEntity.status(HttpStatus.OK).body(listings);
     }
