@@ -5,6 +5,7 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manumafe.vbnb.dto.RatingCreateDto;
+import com.manumafe.vbnb.dto.RatingDto;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
 import com.manumafe.vbnb.entity.RatingId;
@@ -98,28 +99,30 @@ public class RatingControllerTest {
         rating1.setListing(listing);
         rating1.setUser(user1);
         rating1.setRating(5.0);
+        rating1.setComment("Amazing Place!");
 
         Rating rating2 = new Rating();
         rating2.setId(ratingId2);
         rating2.setListing(listing);
         rating2.setUser(user2);
         rating2.setRating(4.5);
+        rating2.setComment("Pretty comfortable and spaceful");
 
         List<Rating> ratings = List.of(rating1, rating2);
 
         ratingRepository.saveAll(ratings);
     }
 
-    private String getRatingJson(RatingCreateDto rating) throws JsonProcessingException {
+    private String getRatingJson(RatingDto rating) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(rating);
     }
 
     @Test
     @Order(1)
-    public void createRating() throws Exception {
+    public void testCreateRating() throws Exception {
         setUp();
 
-        RatingCreateDto rating = new RatingCreateDto(4.0);
+        RatingDto rating = new RatingDto(4.0, "Nice house near to the beach");
 
         String ratingJson = getRatingJson(rating);
 
@@ -131,12 +134,13 @@ public class RatingControllerTest {
                 .andExpectAll(
                     status().isCreated(),
                     content().contentType(MediaType.APPLICATION_JSON),
-                    jsonPath("$.rating").value("4.0"));
+                    jsonPath("$.rating").value("4.0"),
+                    jsonPath("$.comment").value("Nice house near to the beach"));
     }
 
     @Test
     @Order(2)
-    public void getListingInformationRating() throws Exception {
+    public void testGetListingRatingInformation() throws Exception {
         mockMvc.perform(get("/api/v1/rating/info/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(
@@ -147,8 +151,8 @@ public class RatingControllerTest {
 
     @Test
     @Order(3)
-    public void updateRating() throws Exception {
-        RatingCreateDto rating = new RatingCreateDto(3.2);
+    public void testUpdateRating() throws Exception {
+        RatingDto rating = new RatingDto(3.2, "Was ok, not 100% what expected");
         String ratingJson = getRatingJson(rating);
 
         mockMvc.perform(put("/api/v1/rating")
@@ -159,6 +163,17 @@ public class RatingControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().contentType(MediaType.APPLICATION_JSON),
-                    jsonPath("$.rating").value("3.2"));
+                    jsonPath("$.rating").value("3.2"),
+                    jsonPath("$.comment").value("Was ok, not 100% what expected"));
+    }
+
+    @Test
+    @Order(4)
+    public void testGetRatingsByListingId() throws Exception {
+        mockMvc.perform(get("/api/v1/rating/1"))
+                .andDo(print())
+                .andExpectAll(
+                    status().isOk(),
+                    content().string("[{\"rating\":5.0,\"comment\":\"Amazing Place!\"},{\"rating\":4.5,\"comment\":\"Pretty comfortable and spaceful\"},{\"rating\":3.2,\"comment\":\"Was ok, not 100% what expected\"}]"));
     }
 }

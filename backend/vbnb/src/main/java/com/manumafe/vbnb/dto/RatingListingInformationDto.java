@@ -1,6 +1,6 @@
 package com.manumafe.vbnb.dto;
 
-public record RatingResponseDto(
+public record RatingListingInformationDto(
         Double rating,
         Integer timesRated) {
 }

@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.manumafe.vbnb.dto.RatingCreateDto;
-import com.manumafe.vbnb.dto.RatingResponseDto;
+import com.manumafe.vbnb.dto.RatingDto;
+import com.manumafe.vbnb.dto.RatingListingInformationDto;
 import com.manumafe.vbnb.dto.mapper.RatingDtoMapper;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Rating;
@@ -34,7 +34,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @Transactional
-    public RatingCreateDto createRating(Long listingId, String userEmail, RatingCreateDto ratingDto) throws ResourceNotFoundException {
+    public RatingDto createRating(Long listingId, String userEmail, RatingDto ratingDto) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
 
@@ -52,6 +52,7 @@ public class RatingServiceImpl implements RatingService {
         
         rating.setId(ratingId);
         rating.setRating(ratingDto.rating());
+        rating.setComment(ratingDto.comment());
         rating.setListing(listing);
         rating.setUser(user);
 
@@ -65,7 +66,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @Transactional
-    public RatingCreateDto updateRating(Long listingId, String userEmail, RatingCreateDto ratingDto) {
+    public RatingDto updateRating(Long listingId, String userEmail, RatingDto ratingDto) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
 
@@ -77,6 +78,7 @@ public class RatingServiceImpl implements RatingService {
 
         listing.getRating().remove(rating);
         rating.setRating(ratingDto.rating());
+        rating.setComment(ratingDto.comment());
         listing.getRating().add(rating);
 
         listingRepository.save(listing);
@@ -86,7 +88,15 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public RatingResponseDto getListingRatingInformation(Long listingId) throws ResourceNotFoundException {
+    public List<RatingDto> getRatingsByListingId(Long listingId) throws ResourceNotFoundException {
+        Listing listing = listingRepository.findById(listingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
+
+        return ratingRepository.findByListing(listing).stream().map(ratingDtoMapper::toDto).toList();
+    }
+
+    @Override
+    public RatingListingInformationDto getListingRatingInformation(Long listingId) throws ResourceNotFoundException {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
@@ -94,6 +104,6 @@ public class RatingServiceImpl implements RatingService {
 
         Double average = ratings.stream().mapToDouble(Rating::getRating).average().orElse(0.0);
 
-        return new RatingResponseDto(average, ratings.size());
+        return new RatingListingInformationDto(average, ratings.size());
     }
 }

@@ -2,9 +2,11 @@ package com.manumafe.vbnb.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
@@ -23,6 +25,10 @@ public class Rating {
     private RatingId id;
 
     private Double rating;
+
+    @Lob
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String comment;
 
     @JsonIgnore
     @ManyToOne

@@ -1,5 +1,7 @@
 package com.manumafe.vbnb.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.manumafe.vbnb.dto.RatingCreateDto;
-import com.manumafe.vbnb.dto.RatingResponseDto;
+import com.manumafe.vbnb.dto.RatingDto;
+import com.manumafe.vbnb.dto.RatingListingInformationDto;
 import com.manumafe.vbnb.service.RatingService;
 
 @RestController
@@ -24,30 +26,37 @@ public class RatingController {
     private RatingService ratingService;
 
     @PostMapping
-    public ResponseEntity<RatingCreateDto> creteRating(
+    public ResponseEntity<RatingDto> creteRating(
             @RequestParam("listingId") Long listingId,
             @RequestParam("userEmail") String userEmail,
-            @RequestBody RatingCreateDto ratingDto) {
+            @RequestBody RatingDto ratingDto) {
 
-        RatingCreateDto rating = ratingService.createRating(listingId, userEmail, ratingDto);
+        RatingDto rating = ratingService.createRating(listingId, userEmail, ratingDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(rating);
     }
 
     @PutMapping
-    public ResponseEntity<RatingCreateDto> updateRating(
+    public ResponseEntity<RatingDto> updateRating(
         @RequestParam("listingId") Long listingId,
         @RequestParam("userEmail") String userEmail,
-        @RequestBody RatingCreateDto ratingDto) {
+        @RequestBody RatingDto ratingDto) {
 
-        RatingCreateDto rating = ratingService.updateRating(listingId, userEmail, ratingDto);
+        RatingDto rating = ratingService.updateRating(listingId, userEmail, ratingDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(rating);
     }
 
+    @GetMapping("/{listingId}")
+    public ResponseEntity<List<RatingDto>> getRatingsByListingId(@PathVariable Long listingId) {
+        List<RatingDto> ratings = ratingService.getRatingsByListingId(listingId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ratings);
+    }
+
     @GetMapping("/info/{listingId}")
-    public ResponseEntity<RatingResponseDto> getAverageRating(@PathVariable Long listingId){
-        RatingResponseDto averageRating = ratingService.getListingRatingInformation(listingId);
+    public ResponseEntity<RatingListingInformationDto> getAverageRating(@PathVariable Long listingId){
+        RatingListingInformationDto averageRating = ratingService.getListingRatingInformation(listingId);
 
         return ResponseEntity.status(HttpStatus.OK).body(averageRating);
     }

@@ -158,7 +158,7 @@ public class ReserveControllerTest {
 
     @Test
     @Order(2)
-    public void updateReserve() throws Exception {
+    public void testUpdateReserve() throws Exception {
         LocalDate date = LocalDate.of(2024, 8, 1);
         ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
         String reserveJson = mapToJson(reserve);
@@ -177,7 +177,7 @@ public class ReserveControllerTest {
 
     @Test
     @Order(3)
-    public void getReservesByUser() throws Exception {
+    public void testGetReservesByUser() throws Exception {
         mockMvc.perform(get("/api/v1/reserve/roberto.carlos3@gmail.com"))
                 .andDo(print())
                 .andExpectAll(
@@ -188,7 +188,7 @@ public class ReserveControllerTest {
 
     @Test
     @Order(4)
-    public void deleteReserve() throws Exception {
+    public void testdeleteReserve() throws Exception {
         mockMvc.perform(delete("/api/v1/reserve")
                 .param("userEmail", "roberto.carlos3@gmail.com")
                 .param("listingId", "1"))
