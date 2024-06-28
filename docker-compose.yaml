@@ -29,7 +29,9 @@ services:
   springapi:
     depends_on:
       - pgsql
-    build: ./backend/vbnb
+    build:
+      context: ./backend/vbnb
+      dockerfile: Dockerfile
     container_name: spring-boot-api-container
     ports:
       - "8080:8080"
