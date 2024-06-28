@@ -47,7 +47,7 @@ public class RatingController {
         return ResponseEntity.status(HttpStatus.OK).body(rating);
     }
 
-    @GetMapping("/{listingId}")
+    @GetMapping("/get/{listingId}")
     public ResponseEntity<List<RatingDto>> getRatingsByListingId(@PathVariable Long listingId) {
         List<RatingDto> ratings = ratingService.getRatingsByListingId(listingId);
 

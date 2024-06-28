@@ -170,10 +170,11 @@ public class RatingControllerTest {
     @Test
     @Order(4)
     public void testGetRatingsByListingId() throws Exception {
-        mockMvc.perform(get("/api/v1/rating/1"))
+        mockMvc.perform(get("/api/v1/rating/get/1"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),
-                    content().string("[{\"rating\":5.0,\"comment\":\"Amazing Place!\"},{\"rating\":4.5,\"comment\":\"Pretty comfortable and spaceful\"},{\"rating\":3.2,\"comment\":\"Was ok, not 100% what expected\"}]"));
+                    content().string(
+                        "[{\"rating\":5.0,\"comment\":\"Amazing Place!\"},{\"rating\":4.5,\"comment\":\"Pretty comfortable and spaceful\"},{\"rating\":3.2,\"comment\":\"Was ok, not 100% what expected\"}]"));
     }
 }

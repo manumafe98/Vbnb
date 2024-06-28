@@ -33,7 +33,8 @@ public class SecurityConfig {
             "/api/v1/listing/city/*",
             "/api/v1/listing/category/*",
             "/api/v1/characteristic/all",
-            "/api/v1/rating/info/*"
+            "/api/v1/rating/info/*",
+            "/api/v1/rating/get/*"
     };
     private static final String[] ADMIN_ACCESS_URL = {
             "/api/v1/category/*",
