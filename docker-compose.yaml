@@ -29,7 +29,7 @@ services:
   springapi:
     depends_on:
       - pgsql
-    build: ./backend/book_repo
+    build: ./backend/vbnb
     container_name: spring-boot-api-container
     ports:
       - "8080:8080"
