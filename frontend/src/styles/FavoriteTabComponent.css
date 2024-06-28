@@ -1,0 +1,11 @@
+.favorites-section {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 80%;
+}
+
+.favorites-container {
+    width: 60%;
+    height: 80%;
+}

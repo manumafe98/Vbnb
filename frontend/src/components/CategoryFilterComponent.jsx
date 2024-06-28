@@ -22,7 +22,9 @@ export const CategoryFilterComponent = ({ onCategorySelection }) => {
   }
 
   const handleClick = (event) => {
-    setSelectedCategory(event.currentTarget.dataset.value)
+    const category = event.currentTarget.dataset.value
+
+    setSelectedCategory(category === "All" ? null : category)
   }
 
   return (

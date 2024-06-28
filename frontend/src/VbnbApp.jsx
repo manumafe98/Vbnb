@@ -11,6 +11,7 @@ import { ElementAdministrationPage } from "./pages/ElementAdministrationPage";
 import { ListingAdministrationPage } from "./pages/ListingAdministrationPage";
 import { UpdateCharacteristicPage } from "./pages/UpdateCharacteristicPage";
 import { UpdateListingPage } from "./pages/UpdateListingPage";
+import { FavoritePage } from "./pages/FavoritePage";
 
 export const VbnbApp = () => {
 
@@ -34,6 +35,10 @@ export const VbnbApp = () => {
           <Route path="/admin/administrate/characteristics" element={<ElementAdministrationPage elementName="characteristic"/>}></Route>
           <Route path="/admin/update/characteristics" element={<UpdateCharacteristicPage/>}></Route>
           <Route path="/admin/update/listings" element={<UpdateListingPage/>}></Route>
+        </Route>
+
+        <Route element={<RequireAuthComponent allowedRole={"USER"} />}>
+          <Route path="/user/favorites" element={<FavoritePage/>}></Route>
         </Route>
 
         <Route path="*" element={<MissingPage />}></Route>

@@ -12,8 +12,8 @@ export const SearchBarComponent = ({ onSearching }) => {
   const[listings, setListings] = useState([])
   const[selectedCity, setSelectedCity] = useState('')
   const[selectedCategory, setSelectedCategory] = useState('')
-  const[checkIn, setCheckIn] = useState(new Date())
-  const[checkOut, setCheckOut] = useState(new Date())
+  const[checkIn, setCheckIn] = useState(null)
+  const[checkOut, setCheckOut] = useState(null)
 
   useEffect(() => {
     onSearching(listings)
@@ -46,37 +46,83 @@ export const SearchBarComponent = ({ onSearching }) => {
       .catch(error => console.log(error))
   }
 
-  const getListingsByAvailability = async () => {
-    const formattedCheckInDate = checkIn.toISOString().split('T')[0]
-    const formattedCheckOutDate = checkOut.toISOString().split('T')[0]
+  const getListingByCategory = async (category) => {
+    await useFetch(`/backend/api/v1/listing/category/${category}`, "GET", null, false)
+      .then(response => response.json())
+      .then(data => setListings(data))
+      .catch(error => console.log(error))
+  }
 
-    await useFetch(`/backend/api/v1/listing/available?checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`, "GET", null, false)
+  const getListingsByAvailability = async () => {
+    const formattedCheckInDate = new Date(checkIn).toISOString().split('T')[0]
+    const formattedCheckOutDate = new Date(checkOut).toISOString().split('T')[0]
+    const url = `/backend/api/v1/listing/available?checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
+
+    await useFetch(url, "GET", null, false)
+      .then(response => response.json())
+      .then(data => setListings(data))
+      .catch(error => console.log(error))
+  }
+
+  const getListingsByCityAndCategoryNames = async (category) => {
+    const url = `/backend/api/v1/listing/by-city-category?cityName=${selectedCity}&categoryName=${category}`
+
+    await useFetch(url, "GET", null, false)
       .then(response => response.json())
       .then(data => setListings(data))
       .catch(error => console.log(error))
   }
 
   const getListingsByAvailabilityAndCityName = async () => {
-    const formattedCheckInDate = checkIn.toISOString().split('T')[0]
-    const formattedCheckOutDate = checkOut.toISOString().split('T')[0]
+    const formattedCheckInDate = new Date(checkIn).toISOString().split('T')[0]
+    const formattedCheckOutDate = new Date(checkOut).toISOString().split('T')[0]
+    const url = `/backend/api/v1/listing/available/by-city?cityName=${selectedCity}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
-    await useFetch(`/backend/api/v1/listing/available/${selectedCity}?checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`, "GET", null, false)
+    await useFetch(url, "GET", null, false)
+      .then(response => response.json())
+      .then(data => setListings(data))
+      .catch(error => console.log(error))
+  }
+
+  const getListingsByAvailabilityAndCategoryName = async (category) => {
+    const formattedCheckInDate = new Date(checkIn).toISOString().split('T')[0]
+    const formattedCheckOutDate = new Date(checkOut).toISOString().split('T')[0]
+    const url = `/backend/api/v1/listing/available/by-category?categoryName=${category}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
+
+    await useFetch(url, "GET", null, false)
+      .then(response => response.json())
+      .then(data => setListings(data))
+      .catch(error => console.log(error))
+  }
+
+  const getListingsByAvailabilityAndCategoryAndCityNames = async (category) => {
+    const formattedCheckInDate = new Date(checkIn).toISOString().split('T')[0]
+    const formattedCheckOutDate = new Date(checkOut).toISOString().split('T')[0]
+    const url = `/backend/api/v1/listing/available/by-category-city?categoryName=${category}&cityName=${selectedCity}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
+
+    await useFetch(url, "GET", null, false)
       .then(response => response.json())
       .then(data => setListings(data))
       .catch(error => console.log(error))
   }
 
   const handleDates = (checkIn, checkOut) => {
-    setCheckIn(new Date(checkIn))
-    setCheckOut(new Date(checkOut))
+    setCheckIn(checkIn)
+    setCheckOut(checkOut)
   }
 
   const handleSearch = async () => {
-    if (selectedCity && !isNaN(checkIn) && !isNaN(checkOut)) {
+    if (selectedCategory && selectedCity && checkIn && checkOut) {
+      getListingsByAvailabilityAndCategoryAndCityNames(selectedCategory)
+    } else if (selectedCategory && checkIn && checkOut) {
+      getListingsByAvailabilityAndCategoryName(selectedCategory)
+    } else if (selectedCity && checkIn && checkOut) {
       getListingsByAvailabilityAndCityName()
-    } else if (!selectedCity && !isNaN(checkIn) && !isNaN(checkOut)) {
+    } else if (selectedCity && selectedCategory && !checkIn && !checkOut) {
+      getListingsByCityAndCategoryNames(selectedCategory)
+    } else if (!selectedCategory && !selectedCity && checkIn && checkOut) {
       getListingsByAvailability()
-    } else if (selectedCity && isNaN(checkIn) && isNaN(checkOut)) {
+    } else if (selectedCity && !selectedCategory && !checkIn && !checkOut) {
       getListingsByCity()
     } else {
       getListings()
@@ -86,13 +132,16 @@ export const SearchBarComponent = ({ onSearching }) => {
   const getListingsByCategory = async (selectedCategory) => {
     setSelectedCategory(selectedCategory)
 
-    if (selectedCategory === "All") {
-      getListings()
+    if (selectedCategory && selectedCity && checkIn && checkOut) {
+      getListingsByAvailabilityAndCategoryAndCityNames(selectedCategory)
+    } else if (selectedCategory && checkIn && checkOut) {
+      getListingsByAvailabilityAndCategoryName(selectedCategory)
+    } else if (selectedCity && selectedCategory && !checkIn && !checkOut) {
+      getListingsByCityAndCategoryNames(selectedCategory)
+    } else if (selectedCategory && !selectedCity && !checkIn && !checkOut) {
+      getListingByCategory(selectedCategory)
     } else {
-      await useFetch(`/backend/api/v1/listing/category/${selectedCategory}`, "GET", null, false)
-        .then(response => response.json())
-        .then(data => setListings(data))
-        .catch(error => console.log(error))
+      getListings()
     }
   }
 
@@ -107,7 +156,7 @@ export const SearchBarComponent = ({ onSearching }) => {
               placeholder="Search destinations"
               labelPlacement="inside"
               className="max-w-xs"
-              onSelectionChange={(e) => e ? setSelectedCity(cities[e - 1].name) : setSelectedCity('')}
+              onSelectionChange={(e) => e ? setSelectedCity(cities[e - 1].name) : setSelectedCity(null)}
             >
               {(city) => (
                 <AutocompleteItem key={city.id} textValue={city.name}>

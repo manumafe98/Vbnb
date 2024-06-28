@@ -8,8 +8,6 @@ export const ListingComponent = ({ id, title, images, description, rating }) => 
   const { auth } = useAuth()
   const navigate = useNavigate()
 
-  console.log(rating)
-
   const addListingToFavorite = async (event) => {
     if (auth.user) {
       const listingId = event.currentTarget.value
@@ -33,7 +31,7 @@ export const ListingComponent = ({ id, title, images, description, rating }) => 
       <ImageCarouselComponent>
         {[
           ...images.map((image) => 
-            <img src={image.imageUrl} alt={title} className="w-full rounded-md"/>
+            <img key={image.id} src={image.imageUrl} alt={title} className=" rounded-md"/>
           )
         ]}
       </ImageCarouselComponent>

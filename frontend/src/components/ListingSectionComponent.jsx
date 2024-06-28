@@ -19,10 +19,14 @@ export const ListingSectionComponent = ({ listings }) => {
   }
 
   const getListingRating = async (id) => {
-    const response = await useFetch(`/backend/api/v1/rating/average/${id}`, "GET", null, false)
-    const data = await response.json()
+    try {
+      const response = await useFetch(`/backend/api/v1/rating/info/${id}`, "GET", null, false)
+      const data = await response.json()
 
-    return data.rating
+      return data
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -36,7 +40,7 @@ export const ListingSectionComponent = ({ listings }) => {
               title={listing.title}
               images={listing.images}
               description={listing.description}
-              rating={ratings[listing.id] !== undefined ? ratings[listing.id] : null}
+              rating={ratings[listing.id] !== undefined ? ratings[listing.id].rating : null}
             />
           ))}
         </div>

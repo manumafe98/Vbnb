@@ -137,7 +137,7 @@ public class RatingControllerTest {
     @Test
     @Order(2)
     public void getListingInformationRating() throws Exception {
-        mockMvc.perform(get("/api/v1/rating/average/1")
+        mockMvc.perform(get("/api/v1/rating/info/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                     status().isOk(),

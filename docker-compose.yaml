@@ -11,6 +11,8 @@ services:
       POSTGRES_DB: vbnb
     ports:
       - "5432:5432"
+    networks:
+      - app_network
 
   pgsql-test:
     image: postgres:latest
@@ -21,3 +23,19 @@ services:
       POSTGRES_DB: vbnb-test
     ports:
       - "5433:5432"
+    networks:
+      - app_network
+
+  springapi:
+    depends_on:
+      - pgsql
+    build: ./backend/book_repo
+    container_name: spring-boot-api-container
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    name: app_network

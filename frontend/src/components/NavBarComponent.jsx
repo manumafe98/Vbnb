@@ -19,6 +19,7 @@ export const NavBarComponent = () => {
   }
 
   return (
+    <header>
     <Navbar maxWidth="full">
       <NavbarBrand as={Link} to="/" className="ms-10">
         <p className="font-bold text-inherit">Vbnb</p>
@@ -176,6 +177,8 @@ export const NavBarComponent = () => {
               <DropdownItem
                 className="h-12 gap-2"
                 key="favorites"
+                as={Link}
+                to="/user/favorites"
               >
                 Favorites
               </DropdownItem>
@@ -234,5 +237,6 @@ export const NavBarComponent = () => {
       )}
       </NavbarContent>
     </Navbar>
+    </header>
   )
 }
