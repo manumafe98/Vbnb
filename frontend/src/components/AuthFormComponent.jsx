@@ -5,7 +5,6 @@ import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "../constants/Icons";
-import "../styles/AuthFormComponent.css";
 
 export const AuthFormComponent = ({ authenticationType }) => {
   const { setAuth } = useAuth()
@@ -97,15 +96,15 @@ export const AuthFormComponent = ({ authenticationType }) => {
   }
 
   return (
-    <section className="form-container">
-      <div key={authenticationType} className="form">
+    <section className="flex justify-center my-auto min-h-full">
+      <div key={authenticationType} className="flex flex-col items-center justify-center w-1/5 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-6">
         {authenticationType === "Sign Up" && (
-          <div className="text-type-container">
+          <div className="flex min-w-[100%] justify-center text-type-container">
             <Input
               type="text"
               variant="bordered"
               label="Name"
-              className="form-input form-flex" 
+              className="w-[31%] mb-2.5"
               classNames={inputWrapperClassNames}
               onChange={(e) => setName(e.target.value)}
             />
@@ -113,7 +112,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
               type="text"
               variant="bordered"
               label="Lastname"
-              className="form-input form-flex"
+              className="w-[31%] mb-2.5"
               classNames={inputWrapperClassNames}
               onChange={(e) => setLastName(e.target.value)}
             />
@@ -123,7 +122,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
           type="email"
           variant="bordered"
           label="Email"
-          className="form-input"
+          className="w-[65%] mb-2.5"
           classNames={inputWrapperClassNames}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -141,7 +140,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
             </button>
           }
           type={isVisible ? "text" : "password"}
-          className="form-input"
+          className="w-[65%] mb-2.5"
           classNames={inputWrapperClassNames}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -161,20 +160,20 @@ export const AuthFormComponent = ({ authenticationType }) => {
                 </button>
               }
               type={isVisible ? "text" : "password"}
-              className="form-input"
+              className="w-[65%] mb-2.5"
               classNames={inputWrapperClassNames}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </>
         )}
-        <Button radius="full" className="bg-[#ff6f00] text-white" onClick={authenticateUser}>
+        <Button radius="full" className="bg-main-orange text-white" onClick={authenticateUser}>
           { authenticationType }
         </Button>
-        { invalidRegistration && authenticationType === "Sign Up" && <p className="error-message">The email is already registered</p> }
-        { invalidUser && <p className="error-message">Invalid user, sign up first</p> }
-        { invalidPassword && <p className="error-message">Incorrect password, try again</p> }
-        { invalidEmail && <p className="error-message">Please enter a valid email address</p> }
-        { passwordsDoNotMatch && <p className="error-message">Passwords do not match, try again</p> }
+        { invalidRegistration && authenticationType === "Sign Up" && <p className="text-red-600 mt-2.5">The email is already registered</p> }
+        { invalidUser && <p className="text-red-600 mt-2.5">Invalid user, sign up first</p> }
+        { invalidPassword && <p className="text-red-600 mt-2.5">Incorrect password, try again</p> }
+        { invalidEmail && <p className="text-red-600 mt-2.5">Please enter a valid email address</p> }
+        { passwordsDoNotMatch && <p className="text-red-600 mt-2.5">Passwords do not match, try again</p> }
       </div>
     </section>
   )

@@ -1,11 +1,10 @@
+import { LayoutComponent } from "../components/LayoutComponent";
 import { ListingTableComponent } from "../components/ListingTableComponent";
-import { NavBarComponent } from "../components/NavBarComponent";
 
 export const ListingAdministrationPage = () => {
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <ListingTableComponent/>
-    </>
+    </LayoutComponent>
   )
 }

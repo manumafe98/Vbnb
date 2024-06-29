@@ -1,41 +1,62 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthProvider"
 import { useFetch } from "../hooks/useFetch"
-import "../styles/FavoriteTabComponent.css"
 
 export const FavoriteTabComponent = () => {
   const[favorites, setFavorites] = useState([])
   const { auth } = useAuth()
-
-  console.log(favorites)
 
   useEffect(() => {
     getUserFavorites()
   }, [])
 
   const getUserFavorites = async () => {
-    await useFetch(`/backend/api/v1/favorite/${auth.user}`, "GET")
-      .then(response => response.json())
-      .then(data => setFavorites(data))
-      .catch(error => console.log(error))
+    try {
+      const response = await useFetch(`/backend/api/v1/favorite/${auth.user}`, "GET")
+      const data = await response.json()
+      setFavorites(data);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const deleteFavorite = async (event) => {
+    const listingId = event.target.value
+    try {
+      await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${listingId}`, "DELETE")
+      getUserFavorites()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
-    <section className="favorites-section">
-      <ul className="favorites-container">
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Favorites</h1>
+      </div>
+      <ul className="space-y-4">
         {favorites.map((favorite) => (
-          <li key={favorite.id.listingId}>
-            <div className="max-h-64 flex">
+          <li key={favorite.id.listingId} className="flex border rounded-lg p-4 shadow-sm">
+            <div className="flex-shrink-0 w-32 h-32 mr-4">
               <img
-                className="w-full rounded-md"
-                src={favorite.listing.images[0].imageUrl} 
+                className="w-full h-full object-cover rounded"
+                src={favorite.listing.images[0].imageUrl}
                 alt={favorite.listing.title}
               />
             </div>
-            <div></div>
+            <div className="flex-grow">
+              <h2 className="text-lg font-semibold mb-2">{favorite.listing.title}</h2>
+              <p className="text-gray-600 mb-2">{favorite.listing.description}</p>
+              <div className="flex justify-between items-center">
+                <div className="space-x-2">
+                  <button value={favorite.id.listingId} className="text-blue-500" onClick={deleteFavorite}>Delete</button>
+                </div>
+              </div>
+            </div>
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   )
 }

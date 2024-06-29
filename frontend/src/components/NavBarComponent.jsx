@@ -174,20 +174,24 @@ export const NavBarComponent = () => {
                   Admin Panel
                 </DropdownItem>
               )}
-              <DropdownItem
-                className="h-12 gap-2"
-                key="favorites"
-                as={Link}
-                to="/user/favorites"
-              >
-                Favorites
-              </DropdownItem>
-              <DropdownItem
-                className="h-14 gap-2"
-                key="reserves"
-              >
-                Reserves
-              </DropdownItem>
+              {auth?.role === "USER" && (
+                <DropdownItem
+                  className="h-12 gap-2"
+                  key="favorites"
+                  as={Link}
+                  to="/user/favorites"
+                >
+                  Favorites
+                </DropdownItem>
+              )}
+              {auth?.role === "USER" && (
+                <DropdownItem
+                  className="h-14 gap-2"
+                  key="reserves"
+                >
+                  Reserves
+                </DropdownItem>
+              )}
               <DropdownItem
                 className="h-14 gap-2"
                 key="logout"

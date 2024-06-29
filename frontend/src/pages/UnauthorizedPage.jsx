@@ -1,11 +1,10 @@
-import { NavBarComponent } from "../components/NavBarComponent";
+import { LayoutComponent } from "../components/LayoutComponent";
 import { UnauthorizedComponent } from "../components/UnauthorizedComponent";
 
 export const UnauthorizedPage = () => {
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <UnauthorizedComponent/>
-    </>
+    </LayoutComponent>
   )
 }

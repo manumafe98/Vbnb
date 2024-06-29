@@ -12,7 +12,6 @@ export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple =
   useEffect(() => {
     onImagesLoaded(fileObjects)
     onImages(updateIncomingImages)
-
   }, [fileObjects, images])
 
   const selectFiles = () => {

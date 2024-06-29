@@ -1,14 +1,10 @@
-import React from 'react'
-import { NavBarComponent } from '../components/NavBarComponent'
 import { FavoriteTabComponent } from '../components/FavoriteTabComponent'
-import { FooterComponent } from '../components/FooterComponent'
+import { LayoutComponent } from "../components/LayoutComponent";
 
 export const FavoritePage = () => {
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <FavoriteTabComponent/>
-      <FooterComponent/>
-    </>
+    </LayoutComponent>
   )
 }

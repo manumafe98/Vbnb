@@ -1,6 +1,7 @@
 package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import com.manumafe.vbnb.entity.Favorite;
 import com.manumafe.vbnb.entity.FavoriteId;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.User;
+import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.FavoriteRepository;
 import com.manumafe.vbnb.repository.ListingRepository;
@@ -39,6 +41,12 @@ public class FavoriteServiceImpl implements FavoriteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
         FavoriteId favoriteId = new FavoriteId(user.getId(), listingId);
+
+        Optional<Favorite> optionalFavorite = favoriteRepository.findById(favoriteId);
+
+        if (optionalFavorite.isPresent()) {
+            throw new ResourceAlreadyExistentException("Favorite with id: " + favoriteId + " already exists");
+        }
 
         Favorite favorite = new Favorite();
         favorite.setId(favoriteId);

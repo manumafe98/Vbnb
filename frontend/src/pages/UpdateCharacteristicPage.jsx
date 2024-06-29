@@ -1,4 +1,4 @@
-import { NavBarComponent } from "../components/NavBarComponent";
+import { LayoutComponent } from "../components/LayoutComponent";
 import { UpdateCharacteristicFormComponent } from "../components/UpdateCharacteristicFormComponent";
 import { useLocation } from "react-router-dom";
 
@@ -7,9 +7,8 @@ export const UpdateCharacteristicPage = () => {
   const { characteristic } = location.state
 
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <UpdateCharacteristicFormComponent characteristicToUpdate={characteristic}/>
-    </>
+    </LayoutComponent>
   )
 }

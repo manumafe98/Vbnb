@@ -1,11 +1,10 @@
-import { NavBarComponent } from "../components/NavBarComponent";
+import { LayoutComponent } from "../components/LayoutComponent";
 import { UserTableComponent } from "../components/UserTableComponent";
 
 export const UserAdministrationPage = () => {
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <UserTableComponent/>
-    </>
+    </LayoutComponent>
   )
 }

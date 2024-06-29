@@ -1,6 +1,7 @@
 package com.manumafe.vbnb.service.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Reserve;
 import com.manumafe.vbnb.entity.ReserveId;
 import com.manumafe.vbnb.entity.User;
+import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.repository.ReserveRepository;
@@ -39,6 +41,12 @@ public class ReserveServiceImpl implements ReserveService {
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
         ReserveId reserveId = new ReserveId(user.getId(), listingId);
+
+        Optional<Reserve> optinalReserve = reserveRepository.findById(reserveId);
+
+        if (optinalReserve.isPresent()) {
+            throw new ResourceAlreadyExistentException("Reserve with id: " + reserveId + " already exists");
+        }
 
         Reserve reserve = new Reserve();
         

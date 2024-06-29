@@ -1,9 +1,14 @@
 import { ListingComponent } from "./ListingComponent";
 import { useFetch } from "../hooks/useFetch";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthProvider";
+import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 
 export const ListingSectionComponent = ({ listings }) => {
-  const [ratings, setRatings] = useState({})
+  const[ratings, setRatings] = useState({})
+  const[showPopup, setShowPopup] = useState(false)
+  const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
+  const { auth } = useAuth()
 
   useEffect(() => {
     fetchRatings()
@@ -28,6 +33,19 @@ export const ListingSectionComponent = ({ listings }) => {
       console.log(error)
     }
   }
+  
+  const addListingToFavorite = async (selectedListing) => {
+    try {
+      await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${selectedListing}`, "POST", null, true)
+      setShowPopup(true)
+      setPopupData({ message: "Added to Favorites", action: "View Favorites", type: "success" })
+      setTimeout(() => setShowPopup(false), 7500)
+    } catch (error) {
+      setShowPopup(true)
+      setPopupData({ message: "Already added to Favorites", action: "View Favorites", type: "error" })
+      setTimeout(() => setShowPopup(false), 7500)
+    }
+  }
 
   return (
     <section className="listings">
@@ -41,9 +59,11 @@ export const ListingSectionComponent = ({ listings }) => {
               images={listing.images}
               description={listing.description}
               rating={ratings[listing.id] !== undefined ? ratings[listing.id].rating : null}
+              onFavoriteSelection={addListingToFavorite}
             />
           ))}
         </div>
+        {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
       </div>
     </section>
   )

@@ -1,6 +1,5 @@
 import { CheckInOutComponent } from "./CheckInOutComponent";
 import { Autocomplete, AutocompleteItem, Button} from "@nextui-org/react";
-import "../styles/SearchBarComponent.css";
 import { SearchIcon } from "../constants/Icons";
 import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
@@ -32,7 +31,6 @@ export const SearchBarComponent = ({ onSearching }) => {
   }
 
   const getCities = async () => {
-
     await useFetch("/backend/api/v1/city/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCities(data))
@@ -147,8 +145,8 @@ export const SearchBarComponent = ({ onSearching }) => {
 
     return(
       <>
-      <section className="search">
-          <div className="search-bar">
+      <section className="flex justify-center border-b-1 border-solid border-main-gray p-5">
+          <div className="grid items-center w-[45%] m-1.5 p-1 border-1 border-solid border-main-gray shadow-md search-bar">
             <Autocomplete
               defaultItems={cities}
               radius="full"
@@ -171,7 +169,7 @@ export const SearchBarComponent = ({ onSearching }) => {
               )}
             </Autocomplete>
             <CheckInOutComponent onDate={handleDates}/>
-            <Button radius="full" className="h-14 bg-[#ff6f00] text-white" onClick={handleSearch}>
+            <Button radius="full" className="h-14 bg-main-orange text-white" onClick={handleSearch}>
                 <SearchIcon/> Search
             </Button>
           </div>

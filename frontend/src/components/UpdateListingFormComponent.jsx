@@ -97,14 +97,14 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   }
 
   return (
-    <section className="form-container">
-      <div className="form form-element">
+    <section className="flex justify-center my-auto min-h-full">
+      <div className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-3">
         <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={true} incomingImages={incomingData}/>
         <Input 
           type="text" 
           variant="bordered" 
           label="Title"
-          className="form-input"
+          className="w-4/6 mb-2.5"
           classNames={inputWrapperClassNames}
           value={titlePlaceholder}
           onChange={(e) => setTitlePlaceholder(e.target.value)}
@@ -113,7 +113,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
           label="Description"
           variant="bordered"
           placeholder="Enter your description"
-          className="form-input"
+          className="w-4/6 mb-2.5"
           classNames={inputWrapperClassNames}
           value={descriptionPlaceholder}
           onChange={(e) => setDescriptionPlaceholder(e.target.value)}
@@ -121,7 +121,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
         <Select
           label="Select a category"
           variant="bordered"
-          className="select-input"
+          className="w-4/6 mb-2.5"
           selectedKeys={categoryPlaceholder}
           onChange={(e) => setCategoryPlaceholder([e.target.value])}
           classNames={selectTriggerClassNames}
@@ -135,7 +135,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
         <Select
           label="Select a city"
           variant="bordered"
-          className="select-input"
+          className="w-4/6 mb-2.5"
           selectedKeys={cityPlaceholder}
           onChange={(e) => setCityPlaceholder([e.target.value])}
           classNames={selectTriggerClassNames}
@@ -150,7 +150,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
           label="Select characteristics"
           variant="bordered"
           selectionMode="multiple"
-          className="select-input"
+          className="w-4/6 mb-2.5"
           selectedKeys={characteristicPlaceholder}
           onChange={handleCharacteristics}
           classNames={selectTriggerClassNames}
@@ -164,7 +164,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
         <Button radius="full" className="bg-[#ff6f00] text-white" onClick={updateListing}>
           Update Listing
         </Button>
-        {updatedSucessfully && <p className="sucessfull-message">Listing updated sucessfully</p>}
+        {updatedSucessfully && <p className="text-green-600 mt-2.5">Listing updated sucessfully</p>}
       </div>
     </section>
   )

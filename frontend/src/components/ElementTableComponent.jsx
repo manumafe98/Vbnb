@@ -124,7 +124,7 @@ export const ElementTableComponent = ({ elementName }) => {
                     label="City"
                     placeholder={cellValue}
                     variant="bordered"
-                    className="table-input"
+                    className="w-[20%]"
                     classNames={inputWrapperClassNames}
                     onChange={handleCityChange}
                   />
@@ -149,7 +149,7 @@ export const ElementTableComponent = ({ elementName }) => {
                     label="Country"
                     placeholder={cellValue}
                     variant="bordered"
-                    className="table-input"
+                    className="w-[20%]"
                     classNames={inputWrapperClassNames}
                     onChange={handleCountryChange}
                   />
@@ -201,8 +201,8 @@ export const ElementTableComponent = ({ elementName }) => {
       }, [elementName, editState])
 
   return (
-    <div className="table-container">
-      <Table key={tableKey} aria-label={`${elementName} table`} className="table">
+    <div className="flex justify-center">
+      <Table key={tableKey} aria-label={`${elementName} table`} className="w-[70%] mt-2">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

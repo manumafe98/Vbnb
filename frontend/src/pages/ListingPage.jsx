@@ -1,8 +1,7 @@
-import { NavBarComponent } from "../components/NavBarComponent";
 import { SearchBarComponent } from "../components/SearchBarComponent";
-import { FooterComponent } from "../components/FooterComponent";
 import { ListingSectionComponent } from "../components/ListingSectionComponent";
 import { useState } from "react";
+import { LayoutComponent } from "../components/LayoutComponent";
 
 export const ListingPage = () => {
   const[currentListings, setCurrentListings] = useState([])
@@ -12,11 +11,9 @@ export const ListingPage = () => {
   }
 
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <SearchBarComponent onSearching={handleListings}/>
       <ListingSectionComponent listings={currentListings}/>
-      <FooterComponent/>
-    </>
+    </LayoutComponent>
   )
 }

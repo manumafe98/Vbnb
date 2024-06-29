@@ -1,11 +1,10 @@
 import { AuthFormComponent } from "../components/AuthFormComponent";
-import { NavBarComponent } from "../components/NavBarComponent";
+import { LayoutComponent } from "../components/LayoutComponent";
 
 export const AuthenticationPage = ({ authenticationType }) => {
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <AuthFormComponent authenticationType={authenticationType}/>
-    </>
+    </LayoutComponent>
   )
 }

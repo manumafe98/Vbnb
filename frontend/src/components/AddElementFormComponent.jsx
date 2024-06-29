@@ -5,12 +5,11 @@ import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
 import { useFetch } from "../hooks/useFetch";
 import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
 import { useState, useEffect } from "react";
+import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 
 export const AddElementFormComponent = ({ elementName }) => {
   const[element, setElement] = useState('')
   const[country, setCountry] = useState('')
-  const[addedSucessfully, setAddedSucessfully] = useState(false)
-  const[duplicatedElement, setDuplicatedElement] = useState(false)
   const[cities, setCities] = useState([])
   const[categories, setCategories] = useState([])
   const[characteristics, setCharacteristics] = useState([])
@@ -19,6 +18,8 @@ export const AddElementFormComponent = ({ elementName }) => {
   const[categoryId, setCategoryId] = useState(1)
   const[characteristicIds, setcharacteristicIds] = useState([])
   const[currentImages, setCurrentImages] = useState([])
+  const[showPopup, setShowPopup] = useState(false)
+  const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
 
   const url = elementName === "Listing" ? `/backend/api/v1/${elementName.toLowerCase()}/create` : `/backend/api/v1/${elementName.toLowerCase()}`
 
@@ -43,14 +44,7 @@ export const AddElementFormComponent = ({ elementName }) => {
     return elementData
   }
 
-  const clearMessages = () => {
-    setAddedSucessfully(false)
-    setDuplicatedElement(false)
-  }
-
   useEffect(() => {
-    clearMessages()
-
     if (elementName === "Listing") {
       getCities()
       getCategories()
@@ -89,7 +83,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   const addElement = async () => {
     let body = {}
-    
+
     if (elementName !== "City") {
 
       const imageUrlsArray = await uploadImagesToCloudinary(currentImages)
@@ -103,12 +97,16 @@ export const AddElementFormComponent = ({ elementName }) => {
 
     await useFetch(url, "POST", body)
       .then(response => {
+        const action = elementName === "City" || elementName === "Category" ? `${elementName.substring(0, elementName.length - 1)}ies` : `${elementName}s`
+
         if (response.ok) {
-          setAddedSucessfully(true)
-          setDuplicatedElement(false)
+          setShowPopup(true)
+          setPopupData({ message: `${elementName} added successfully`, action: `View ${action}` , type: "success" })
+          setTimeout(() => setShowPopup(false), 7500)
         } else {
-          setDuplicatedElement(true)
-          setAddedSucessfully(false)
+          setShowPopup(true)
+          setPopupData({ message: `${elementName} already exists`, action: `View ${action}` , type: "error" })
+          setTimeout(() => setShowPopup(false), 7500)
         }
       })
       .catch(error => console.log(error))
@@ -123,8 +121,8 @@ export const AddElementFormComponent = ({ elementName }) => {
   }
 
   return (
-    <section className="form-container">
-      <div key={elementName} className="form form-element">
+    <section className="flex justify-center content content-center my-auto min-h-full">
+      <div key={elementName} className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-3">
         {elementName !== "City" && (
           <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={elementName === "Listing"}/>
         )}
@@ -132,20 +130,16 @@ export const AddElementFormComponent = ({ elementName }) => {
           type="text" 
           variant="bordered" 
           label={elementName == "Listing" ? "Title" : `${elementName}`}
-          className="form-input"
+          className="w-4/6 mb-2.5"
           classNames={inputWrapperClassNames}
-          onChange={(e) => {
-            setElement(e.target.value)
-            setAddedSucessfully(false)
-            setDuplicatedElement(false)
-          }}
+          onChange={(e) => {setElement(e.target.value)}}
         />
         {elementName === "City" && (
           <Input
             type="text"
             label="Country"
             variant="bordered"
-            className="form-input"
+            className="w-4/6 mb-2.5"
             classNames={inputWrapperClassNames}
             onChange={(e) => setCountry(e.target.value)}
           />
@@ -156,14 +150,14 @@ export const AddElementFormComponent = ({ elementName }) => {
               label="Description"
               variant="bordered"
               placeholder="Enter your description"
-              className="form-input"
+              className="w-4/6 mb-2.5"
               classNames={inputWrapperClassNames}
               onChange={(e) => setDescription(e.target.value)}
             />
             <Select
               label="Select a category"
               variant="bordered"
-              className="select-input"
+              className="w-4/6 mb-2.5"
               onChange={(e) => setCategoryId(e.target.value)}
               classNames={selectTriggerClassNames}
             >
@@ -176,7 +170,7 @@ export const AddElementFormComponent = ({ elementName }) => {
             <Select
               label="Select a city"
               variant="bordered"
-              className="select-input"
+              className="w-4/6 mb-2.5"
               onChange={(e) => setCityId(e.target.value)}
               classNames={selectTriggerClassNames}
             >
@@ -190,7 +184,7 @@ export const AddElementFormComponent = ({ elementName }) => {
               label="Select characteristics"
               variant="bordered"
               selectionMode="multiple"
-              className="select-input"
+              className="w-4/6 mb-2.5"
               onChange={(e) => handleCharacteristicsSelectChange(e.target.value)}
               classNames={selectTriggerClassNames}
             >
@@ -202,11 +196,10 @@ export const AddElementFormComponent = ({ elementName }) => {
             </Select>
           </>
         )}
-        <Button radius="full" className="bg-[#ff6f00] text-white" onClick={addElement}>
+        <Button radius="full" className="bg-main-orange text-white" onClick={addElement}>
             Add { elementName }
         </Button>
-        {addedSucessfully && <p className="sucessfull-message">{elementName}: {element} added sucessfully</p>}
-        {duplicatedElement && <p className="error-message">{elementName} already exists</p>}
+        {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
       </div>
     </section>
   )

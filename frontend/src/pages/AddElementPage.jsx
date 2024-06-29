@@ -1,11 +1,10 @@
 import { AddElementFormComponent } from "../components/AddElementFormComponent";
-import { NavBarComponent } from "../components/NavBarComponent";
+import { LayoutComponent } from "../components/LayoutComponent";
 
 export const AddElementPage = ({ elementName }) => {
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <AddElementFormComponent elementName={ elementName }/>
-    </>
+    </LayoutComponent>
   )
 }

@@ -1,19 +1,18 @@
 import { FavoriteIcon, RatingStarIcon } from "../constants/Icons";
-import { useFetch } from "../hooks/useFetch";
 import { useAuth } from "../context/AuthProvider"
 import { useNavigate } from "react-router-dom";
 import { ImageCarouselComponent } from "./ImageCarouselComponent";
+import { useState } from "react";
 
-export const ListingComponent = ({ id, title, images, description, rating }) => {
+export const ListingComponent = ({ id, title, images, description, rating, onFavoriteSelection }) => {
+  const[selectedListing, setSelectedListing] = useState(0)
   const { auth } = useAuth()
   const navigate = useNavigate()
 
-  const addListingToFavorite = async (event) => {
+  const handleClick = (event) => {
     if (auth.user) {
       const listingId = event.currentTarget.value
-      
-      await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${listingId}`, "POST", null, true)
-        .catch(error => console.log(error))
+      onFavoriteSelection(listingId)
     } else {
       navigate("/auth/signin")
     }
@@ -23,7 +22,7 @@ export const ListingComponent = ({ id, title, images, description, rating }) => 
     <div className="listings-data relative">
       <button
         value={id}
-        onClick={addListingToFavorite}
+        onClick={handleClick}
         className="group absolute transition-transform duration-300 hover:scale-110 p-2 bg-transparent border-none cursor-pointer z-10 top-2 right-2"
       >
         <FavoriteIcon className="w-6 h-6"/>

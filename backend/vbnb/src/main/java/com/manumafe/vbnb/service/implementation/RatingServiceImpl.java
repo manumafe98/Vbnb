@@ -44,7 +44,7 @@ public class RatingServiceImpl implements RatingService {
         Optional<Rating> optinalRating = ratingRepository.findByUserAndListing(user, listing);
 
         if (optinalRating.isPresent()) {
-            throw new ResourceAlreadyExistentException("Rating already existent");
+            throw new ResourceAlreadyExistentException("Rating already exists");
         }
 
         Rating rating = new Rating();

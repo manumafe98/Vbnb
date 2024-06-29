@@ -39,14 +39,14 @@ export const UpdateCharacteristicFormComponent = ({ characteristicToUpdate }) =>
   }
 
   return (
-    <section className="form-container">
-      <div className="form form-element">
+    <section className="flex justify-center my-auto min-h-full">
+      <div className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-3">
         <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={false} incomingImages={incomingData}/>
         <Input 
           type="text" 
           variant="bordered" 
           label="Characteristic"
-          className="form-input"
+          className="w-4/6 mb-2.5"
           classNames={inputWrapperClassNames}
           value={categoryNameplaceholder}
           onChange={(e) => setCategoryNamePlaceholder(e.target.value)}
@@ -54,7 +54,7 @@ export const UpdateCharacteristicFormComponent = ({ characteristicToUpdate }) =>
         <Button radius="full" className="bg-[#ff6f00] text-white" onClick={updateCharacteristic}>
           Update Characteristic
         </Button>
-        {updatedSucessfully && <p className="sucessfull-message">Category updated sucessfully</p>}
+        {updatedSucessfully && <p className="text-green-600 mt-2.5">Category updated sucessfully</p>}
       </div>
     </section>
   )

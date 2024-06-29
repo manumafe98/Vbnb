@@ -92,7 +92,7 @@ export const UserTableComponent = () => {
               <Select
                 label="Role"
                 variant="bordered"
-                className="user-role-select"
+                className="w-[40%]"
                 classNames={selectTriggerClassNames}
                 placeholder={cellValue.toLowerCase()}
                 onChange={(e) => handleChange(e, user)}
@@ -134,8 +134,8 @@ export const UserTableComponent = () => {
   }, [editState])
 
   return (
-    <div className="table-container">
-      <Table key={tableKey} aria-label="User table" className="table">
+    <div className="flex justify-center">
+      <Table key={tableKey} aria-label="User table" className="w-[70%] mt-2">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

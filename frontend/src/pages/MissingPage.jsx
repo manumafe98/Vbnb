@@ -1,11 +1,10 @@
-import { NavBarComponent } from "../components/NavBarComponent";
+import { LayoutComponent } from "../components/LayoutComponent";
 import { NotFoundComponent } from "../components/NotFoundComponent";
 
 export const MissingPage = () => {
   return (
-    <>
-      <NavBarComponent/>
+    <LayoutComponent>
       <NotFoundComponent/>
-    </>
+    </LayoutComponent>
   )
 }

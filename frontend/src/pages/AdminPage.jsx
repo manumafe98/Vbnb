@@ -1,9 +1,9 @@
-import { NavBarComponent } from "../components/NavBarComponent";
+import { LayoutComponent } from "../components/LayoutComponent";
 
 export const AdminPage = () =>{
   return (
-    <>
-      <NavBarComponent />
-    </>
+    <LayoutComponent>
+
+    </LayoutComponent>
   )
 }

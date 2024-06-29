@@ -112,8 +112,8 @@ export const ListingTableComponent = () => {
   }, [])
 
   return (
-    <div className="table-container">
-      <Table aria-label="Listing table" className="table">
+    <div className="flex justify-center">
+      <Table aria-label="Listing table" className="w-[70%] mt-2">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
