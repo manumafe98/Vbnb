@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export const PopUpNotificationComponent = ({ message, action, duration = 7500, type = "success" }) => {
+export const PopUpNotificationComponent = ({ message, action = null, duration = 7500, type = "success" }) => {
   const[isVisible, setIsVisible] = useState(false)
   const navigate = useNavigate()
 
   const bgColor = type === "error" ? "bg-gray-800" : "bg-main-orange"
   const buttonTextColor = type === "error" ? "text-gray-800" : "text-main-orange"
   const bgHover = type === "error" ? "hover:bg-gray-100" : "hover:bg-orange-100"
+  const justify = action ? "justify-between" : "justify-center"
 
   useEffect(() => {
     setIsVisible(true)
@@ -25,10 +26,14 @@ export const PopUpNotificationComponent = ({ message, action, duration = 7500, t
       navigate("/admin/administrate/listings")
     } else if (action.includes("Categories")) {
       navigate("/admin/administrate/categories")
-    } else if (action.includes("Characterisitcs")) {
+    } else if (action.includes("Characteristics")) {
       navigate("/admin/administrate/characteristics")
     } else if (action.includes("Cities")) {
       navigate("/admin/administrate/cities")
+    } else if (action.includes("Sign Up")) {
+      navigate("/auth/signup")
+    } else if (action.includes("Sign In")) {
+      navigate("/auth/signin")
     }
   }
 
@@ -39,14 +44,16 @@ export const PopUpNotificationComponent = ({ message, action, duration = 7500, t
                   transition-all duration-300 ease-in-out
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
     >
-      <div className="flex justify-between items-center p-4">
+      <div className={`flex ${justify} items-center p-4`}>
         <span>{message}</span>
-        <button 
-          className={`bg-white ${buttonTextColor} px-4 py-2 rounded ${bgHover} transition-colors`}
-          onClick={handleClick}
-        >
-          { action }
-        </button>
+        {action && (
+          <button 
+            className={`bg-white ${buttonTextColor} px-4 py-2 rounded ${bgHover} transition-colors`}
+            onClick={handleClick}
+          >
+            { action }
+          </button>
+        )}
       </div>
     </div>
   )

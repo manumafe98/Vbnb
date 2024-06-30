@@ -14,8 +14,8 @@ export const AddElementFormComponent = ({ elementName }) => {
   const[categories, setCategories] = useState([])
   const[characteristics, setCharacteristics] = useState([])
   const[description, setDescription] = useState('')
-  const[cityId, setCityId] = useState(1)
-  const[categoryId, setCategoryId] = useState(1)
+  const[cityId, setCityId] = useState(null)
+  const[categoryId, setCategoryId] = useState(null)
   const[characteristicIds, setcharacteristicIds] = useState([])
   const[currentImages, setCurrentImages] = useState([])
   const[showPopup, setShowPopup] = useState(false)
@@ -81,6 +81,61 @@ export const AddElementFormComponent = ({ elementName }) => {
     setcharacteristicIds(newcharacteristicIds)
   }
 
+  const validateForm = (body) => {
+
+    if (elementName !== "Listing") {
+      if (!body.name.trim()) {
+        handlePopUp(`Please add a valid ${elementName} name`, null, "error")
+        return false
+      }
+
+      if (elementName!== "City" && !body.imageUrl) {
+        handlePopUp(`You Must add an image`, null, "error")
+        return false
+      }
+    }
+
+    if (elementName === "City" && !body.country.trim()) {
+      handlePopUp(`Please add a valid country`, null, "error")
+      return false
+    }
+
+    if (elementName === "Listing") {
+
+      if (!body.title.trim()) {
+        handlePopUp(`Please add a valid title`, null, "error")
+        return false
+      }
+
+      if (!body.description.trim()) {
+        handlePopUp(`Please add a valid description`, null, "error")
+        return false
+      }
+
+      if (!body.cityId) {
+        handlePopUp(`Please select a city`, null, "error")
+        return false
+      }
+
+      if (!body.categoryId) {
+        handlePopUp(`Please select a category`, null, "error")
+        return false
+      }
+
+      if (!body.images) {
+        handlePopUp(`You must add at least one image`, null, "error")
+        return false
+      }
+
+      if (body.characteristicIds.some(Number.isNaN) || body.characteristicIds.length === 0) {
+        handlePopUp(`You must add at least one characteristic`, null, "error")
+        return false
+      }
+    }
+
+    return true
+  }
+
   const addElement = async () => {
     let body = {}
 
@@ -95,21 +150,24 @@ export const AddElementFormComponent = ({ elementName }) => {
       body = setElementData()
     }
 
-    await useFetch(url, "POST", body)
-      .then(response => {
-        const action = elementName === "City" || elementName === "Category" ? `${elementName.substring(0, elementName.length - 1)}ies` : `${elementName}s`
+    const isValid = validateForm(body)
 
-        if (response.ok) {
-          setShowPopup(true)
-          setPopupData({ message: `${elementName} added successfully`, action: `View ${action}` , type: "success" })
-          setTimeout(() => setShowPopup(false), 7500)
-        } else {
-          setShowPopup(true)
-          setPopupData({ message: `${elementName} already exists`, action: `View ${action}` , type: "error" })
-          setTimeout(() => setShowPopup(false), 7500)
-        }
-      })
-      .catch(error => console.log(error))
+    if (isValid) {
+      const action = elementName === "City" || elementName === "Category" ? `${elementName.substring(0, elementName.length - 1)}ies` : `${elementName}s`
+
+      try {
+        const response = await useFetch(url, "POST", body)  
+        response.ok ? handlePopUp(`${element} added successfully`, `View ${action}`, "success") : handlePopUp( `${element} already exists`, `View ${action}`, "error")
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+  
+  const handlePopUp = (message, action, type) => {
+    setShowPopup(true)
+    setPopupData({ message, action, type })
+    setTimeout(() => setShowPopup(false), 7500)
   }
 
   const handleImagesLoaded = async (images) => {
@@ -122,7 +180,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   return (
     <section className="flex justify-center content content-center my-auto min-h-full">
-      <div key={elementName} className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-3">
+      <div key={elementName} className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-4">
         {elementName !== "City" && (
           <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={elementName === "Listing"}/>
         )}
@@ -196,7 +254,7 @@ export const AddElementFormComponent = ({ elementName }) => {
             </Select>
           </>
         )}
-        <Button radius="full" className="bg-main-orange text-white" onClick={addElement}>
+        <Button radius="full" className="bg-main-orange w-4/6 text-white" onClick={addElement}>
             Add { elementName }
         </Button>
         {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}

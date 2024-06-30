@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.manumafe.vbnb.entity.ApiResponse;
 import com.manumafe.vbnb.exceptions.EmailAlreadyRegisteredException;
+import com.manumafe.vbnb.exceptions.ListingUnavailableForReserves;
 import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.exceptions.UnauthorizedException;
@@ -37,6 +38,13 @@ public class ExceptionController {
 
     @ExceptionHandler(ResourceAlreadyExistentException.class)
     public ResponseEntity<ApiResponse> handleResourceAlreadyExistentException(ResourceAlreadyExistentException exception) {
+        ApiResponse response = new ApiResponse(exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(ListingUnavailableForReserves.class)
+    public ResponseEntity<ApiResponse> handleListingUnavailableForReservesException(ListingUnavailableForReserves exception) {
         ApiResponse response = new ApiResponse(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);

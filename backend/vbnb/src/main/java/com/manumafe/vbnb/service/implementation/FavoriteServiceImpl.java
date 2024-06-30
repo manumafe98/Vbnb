@@ -33,7 +33,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional
-    public FavoriteDto saveFavorite(String userEmail, Long listingId) throws ResourceNotFoundException {
+    public FavoriteDto saveFavorite(String userEmail, Long listingId) throws ResourceNotFoundException, ResourceAlreadyExistentException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + "not found"));
 

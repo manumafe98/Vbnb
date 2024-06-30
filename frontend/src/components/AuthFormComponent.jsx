@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFetch } from "../hooks/useFetch"
 import { Input, Button } from "@nextui-org/react";
 import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "../constants/Icons";
+import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 
 export const AuthFormComponent = ({ authenticationType }) => {
   const { setAuth } = useAuth()
@@ -14,12 +15,9 @@ export const AuthFormComponent = ({ authenticationType }) => {
   const[email, setEmail] = useState('')
   const[password, setPassword] = useState('')
   const[confirmPassword, setConfirmPassword] = useState('')
-  const[invalidRegistration, setInvalidRegistration] = useState(false)
-  const[invalidUser, setInvalidUser] = useState(false)
-  const[invalidPassword, setInvalidPassword] = useState(false)
-  const[invalidEmail, setInvalidEmail] = useState(false)
-  const[passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false)
   const[isVisible, setIsVisible] = useState(false)
+  const[showPopup, setShowPopup] = useState(false)
+  const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
   const navigate = useNavigate()
 
   const validEmailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
@@ -27,38 +25,31 @@ export const AuthFormComponent = ({ authenticationType }) => {
   const authUrl = authenticationType === "Sign Up" ? "/backend/api/v1/auth/register" : "/backend/api/v1/auth/authenticate"
   const userData = authenticationType === "Sign Up" ? { name, lastName, email, password } : { email, password }
 
-  useEffect(() => {
-    clearFormData()
-    clearErrorMessages()
-  }, [authenticationType])
-
-  const clearFormData = () => {
-    setEmail('')
-    setPassword('')
-  }
-
-  const clearErrorMessages = () => {
-    setInvalidRegistration(false)
-    setInvalidUser(false)
-    setInvalidPassword(false)
-    setInvalidEmail(false)
-    setPasswordsDoNotMatch(false)
-  }
-
   const checkValidRegistration = () => {
-    if (!validEmailRegex.test(email.trim())) {
-      setInvalidEmail(true)
+    if (!name.trim()) {
+      handlePopUp("Please enter a valid name", null, "error")
+      return false
+    } else if (!lastName.trim()) {
+      handlePopUp("Please enter a valid last name", null, "error")
+      return false
+    } else if (!validEmailRegex.test(email.trim())) {
+      handlePopUp("Please enter a valid email address", null, "error")
       return false
     } else if (password !== confirmPassword) {
-      setPasswordsDoNotMatch(true)
+      handlePopUp("Passwords do not match, try again", null, "error")
       return false
-    } else {
-      return true
     }
+
+    return true
   }
+  
+  const handlePopUp = (message, action, type) => {
+    setShowPopup(true)
+    setPopupData({ message, action, type })
+    setTimeout(() => setShowPopup(false), 7500)
+  }  
 
   const authenticateUser = async () => {
-    clearErrorMessages()
     let validRegistration = true
 
     if (authenticationType === "Sign Up") {
@@ -66,15 +57,16 @@ export const AuthFormComponent = ({ authenticationType }) => {
     }
 
     if (validRegistration) {
-      await useFetch(authUrl, "POST", userData, false)
-      .then(response => response.json())
-      .then(data => {
+      try {
+        const response = await useFetch(authUrl, "POST", userData, false)
+        const data = await response.json()
+
         if (data.message === "User not found") {
-          setInvalidUser(true)
+          handlePopUp("Invalid user, sign up first", "Sign Up", "error")
         } else if (data.message === "Incorrect password") {
-          setInvalidPassword(true)
+          handlePopUp("Incorrect password, try again", null, "error")
         } else if (data.message === "Email already registered") {
-          setInvalidRegistration(true)
+          handlePopUp("The email is already registered", "Sign In", "error")
         } else {
           if (authenticationType === "Sign Up") {
             navigate("/auth/signin")
@@ -91,7 +83,9 @@ export const AuthFormComponent = ({ authenticationType }) => {
             }
           }
         }
-      }).catch(error => console.log(error))
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 
@@ -166,14 +160,10 @@ export const AuthFormComponent = ({ authenticationType }) => {
             />
           </>
         )}
-        <Button radius="full" className="bg-main-orange text-white" onClick={authenticateUser}>
+        <Button radius="full" className="bg-main-orange w-[65%] text-white" onClick={authenticateUser}>
           { authenticationType }
         </Button>
-        { invalidRegistration && authenticationType === "Sign Up" && <p className="text-red-600 mt-2.5">The email is already registered</p> }
-        { invalidUser && <p className="text-red-600 mt-2.5">Invalid user, sign up first</p> }
-        { invalidPassword && <p className="text-red-600 mt-2.5">Incorrect password, try again</p> }
-        { invalidEmail && <p className="text-red-600 mt-2.5">Please enter a valid email address</p> }
-        { passwordsDoNotMatch && <p className="text-red-600 mt-2.5">Passwords do not match, try again</p> }
+        {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
       </div>
     </section>
   )

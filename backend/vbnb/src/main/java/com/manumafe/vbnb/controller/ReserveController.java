@@ -64,4 +64,11 @@ public class ReserveController {
 
         return ResponseEntity.status(HttpStatus.OK).body(reserves);
     }
+
+    @GetMapping("/current/{userEmail}")
+    public ResponseEntity<List<UserReserveDto>> getUserCurrentReserves(@PathVariable String userEmail) {
+        List<UserReserveDto> reserves = reserveService.findCurrentReservesByUserEmail(userEmail);
+
+        return ResponseEntity.status(HttpStatus.OK).body(reserves);
+    }
 }

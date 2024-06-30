@@ -66,7 +66,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @Transactional
-    public RatingDto updateRating(Long listingId, String userEmail, RatingDto ratingDto) {
+    public RatingDto updateRating(Long listingId, String userEmail, RatingDto ratingDto) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
 

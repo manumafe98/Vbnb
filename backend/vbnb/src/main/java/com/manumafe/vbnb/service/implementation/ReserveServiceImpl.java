@@ -1,5 +1,6 @@
 package com.manumafe.vbnb.service.implementation;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Reserve;
 import com.manumafe.vbnb.entity.ReserveId;
 import com.manumafe.vbnb.entity.User;
+import com.manumafe.vbnb.exceptions.ListingUnavailableForReserves;
 import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.ListingRepository;
@@ -33,12 +35,18 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     @Transactional
-    public ReserveDto saveReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
+    public ReserveDto saveReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException, ListingUnavailableForReserves {
         User user = userRepository.findByEmail(userEmail)
             .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
 
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
+
+        List<Listing> availableListings = listingRepository.findAvailableListings(reserveDto.checkInDate(), reserveDto.checkOutDate());
+
+        if (!availableListings.contains(listing)) {
+            throw new ListingUnavailableForReserves("Listing already reserved for those dates");
+        }
 
         ReserveId reserveId = new ReserveId(user.getId(), listingId);
 
@@ -121,5 +129,13 @@ public class ReserveServiceImpl implements ReserveService {
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
 
         return reserveRepository.findByUser(user).stream().map(reserveDtoMapper::toUserReserveDto).toList();
+    }
+
+    @Override
+    public List<UserReserveDto> findCurrentReservesByUserEmail(String userEmail) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
+        
+        return reserveRepository.findCurrentReserves(user, LocalDate.now()).stream().map(reserveDtoMapper::toUserReserveDto).toList();
     }
 }

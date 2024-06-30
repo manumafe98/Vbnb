@@ -158,6 +158,16 @@ public class ReserveControllerTest {
 
     @Test
     @Order(2)
+    public void testGetCurrentReservesByUser() throws Exception {
+        mockMvc.perform(get("/api/v1/reserve/current/roberto.carlos3@gmail.com"))
+                .andDo(print())
+                .andExpectAll(
+                    status().isOk(),
+                    content().string("[]"));
+    }
+
+    @Test
+    @Order(3)
     public void testUpdateReserve() throws Exception {
         LocalDate date = LocalDate.of(2024, 8, 1);
         ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
@@ -176,7 +186,7 @@ public class ReserveControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     public void testGetReservesByUser() throws Exception {
         mockMvc.perform(get("/api/v1/reserve/roberto.carlos3@gmail.com"))
                 .andDo(print())
@@ -187,7 +197,7 @@ public class ReserveControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void testdeleteReserve() throws Exception {
         mockMvc.perform(delete("/api/v1/reserve")
                 .param("userEmail", "roberto.carlos3@gmail.com")

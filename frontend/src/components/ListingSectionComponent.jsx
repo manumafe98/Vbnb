@@ -3,11 +3,14 @@ import { useFetch } from "../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
+import { PaginationComponent } from "./PaginationComponent";
 
 export const ListingSectionComponent = ({ listings }) => {
   const[ratings, setRatings] = useState({})
   const[showPopup, setShowPopup] = useState(false)
   const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
+  const[currentPage, setCurrentPage] = useState(1)
+  const[listingsPerPage, setListingsPerPage] = useState(12)
   const { auth } = useAuth()
 
   useEffect(() => {
@@ -47,11 +50,15 @@ export const ListingSectionComponent = ({ listings }) => {
     }
   }
 
+  const lastPostIndex = currentPage * listingsPerPage
+  const firstPostIndex = lastPostIndex - listingsPerPage
+  const currentListings = listings.slice(firstPostIndex, lastPostIndex)
+
   return (
     <section className="listings">
       <div className="py-3 sm:py-5 me-20 ms-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-          {listings.map((listing) => (
+          {currentListings.map((listing) => (
             <ListingComponent
               key={listing.id}
               id={listing.id}
@@ -63,6 +70,7 @@ export const ListingSectionComponent = ({ listings }) => {
             />
           ))}
         </div>
+        <PaginationComponent totalListings={listings.length} listingsPerPage={listingsPerPage} setCurrentPage={setCurrentPage}/>
         {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
       </div>
     </section>
