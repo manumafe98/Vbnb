@@ -116,6 +116,12 @@ public class ReserveServiceImpl implements ReserveService {
 
         Listing listing = reserveToUpdate.getListing();
 
+        List<Listing> availableListings = listingRepository.findAvailableListings(reserveDto.checkInDate(), reserveDto.checkOutDate());
+
+        if (!availableListings.contains(listing)) {
+            throw new ListingUnavailableForReserves("Listing already reserved for those dates");
+        }
+
         listing.getReserves().remove(reserveToUpdate);
         user.getReserves().remove(reserveToUpdate);
 
