@@ -16,8 +16,10 @@ import com.manumafe.vbnb.exceptions.UnauthorizedException;
 import com.manumafe.vbnb.exceptions.EmailAlreadyRegisteredException;
 import com.manumafe.vbnb.repository.UserRepository;
 import com.manumafe.vbnb.service.AuthenticationService;
+import com.manumafe.vbnb.service.EmailService;
 import com.manumafe.vbnb.service.JwtService;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -28,6 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) throws EmailAlreadyRegisteredException {
@@ -46,6 +49,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         userRepository.save(user);
+
+        try {
+            emailService.sendSuccessfulRegistrationEmail(request);
+        } catch (MessagingException e) {
+            System.out.println(e);
+        }
 
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
