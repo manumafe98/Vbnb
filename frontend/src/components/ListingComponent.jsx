@@ -2,10 +2,8 @@ import { FavoriteIcon, RatingStarIcon } from "../constants/Icons";
 import { useAuth } from "../context/AuthProvider"
 import { useNavigate } from "react-router-dom";
 import { ImageCarouselComponent } from "./ImageCarouselComponent";
-import { useState } from "react";
 
 export const ListingComponent = ({ id, title, images, description, rating, onFavoriteSelection }) => {
-  const[selectedListing, setSelectedListing] = useState(0)
   const { auth } = useAuth()
   const navigate = useNavigate()
 

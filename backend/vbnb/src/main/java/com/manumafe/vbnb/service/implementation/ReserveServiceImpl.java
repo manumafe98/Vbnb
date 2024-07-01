@@ -20,8 +20,10 @@ import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.repository.ReserveRepository;
 import com.manumafe.vbnb.repository.UserRepository;
+import com.manumafe.vbnb.service.EmailService;
 import com.manumafe.vbnb.service.ReserveService;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,6 +34,7 @@ public class ReserveServiceImpl implements ReserveService {
     private final UserRepository userRepository;
     private final ListingRepository listingRepository;
     private final ReserveDtoMapper reserveDtoMapper;
+    private final EmailService emailService;
 
     @Override
     @Transactional
@@ -70,6 +73,12 @@ public class ReserveServiceImpl implements ReserveService {
         listingRepository.save(listing);
         userRepository.save(user);
         reserveRepository.save(reserve);
+
+        try {
+            emailService.sendSucessfulReserveEmail(reserve);
+        } catch (MessagingException e) {
+            System.out.println(e);
+        }
 
         return reserveDtoMapper.toDto(reserve);
     }
