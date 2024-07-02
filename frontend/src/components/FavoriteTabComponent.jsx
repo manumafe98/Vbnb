@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthProvider"
 import { useFetch } from "../hooks/useFetch"
+import { PopUpNotificationComponent } from "./PopUpNotificationComponent"
 
 export const FavoriteTabComponent = () => {
   const[favorites, setFavorites] = useState([])
+  const[showPopup, setShowPopup] = useState(false)
+  const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
   const { auth } = useAuth()
 
   useEffect(() => {
@@ -20,11 +23,18 @@ export const FavoriteTabComponent = () => {
     }
   }
 
+  const handlePopUp = (message, action, type) => {
+    setShowPopup(true)
+    setPopupData({ message, action, type })
+    setTimeout(() => setShowPopup(false), 7500)
+  }
+
   const deleteFavorite = async (event) => {
     const listingId = event.target.value
     try {
       await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${listingId}`, "DELETE")
       getUserFavorites()
+      handlePopUp("You removed the listing from favorites", null, "error")
     } catch (error) {
       console.log(error)
     }
@@ -57,6 +67,7 @@ export const FavoriteTabComponent = () => {
           </li>
         ))}
       </ul>
+      {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
     </div>
   )
 }

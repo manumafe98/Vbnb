@@ -36,17 +36,19 @@ export const ListingSectionComponent = ({ listings }) => {
       console.log(error)
     }
   }
+
+  const handlePopUp = (message, action, type) => {
+    setShowPopup(true)
+    setPopupData({ message, action, type })
+    setTimeout(() => setShowPopup(false), 7500)
+  }
   
   const addListingToFavorite = async (selectedListing) => {
     try {
       await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${selectedListing}`, "POST", null, true)
-      setShowPopup(true)
-      setPopupData({ message: "Added to Favorites", action: "View Favorites", type: "success" })
-      setTimeout(() => setShowPopup(false), 7500)
+      handlePopUp("Added to Favorites", "View Favorites",  "success")
     } catch (error) {
-      setShowPopup(true)
-      setPopupData({ message: "Already added to Favorites", action: "View Favorites", type: "error" })
-      setTimeout(() => setShowPopup(false), 7500)
+      handlePopUp("Already added to Favorites", "View Favorites", "error")
     }
   }
 

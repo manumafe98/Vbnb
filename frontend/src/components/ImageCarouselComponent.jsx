@@ -4,10 +4,8 @@ import { useState } from "react"
 export const ImageCarouselComponent = ({ children: slides }) => {
   const [curr, setCurr] = useState(0)
 
-  const prev = () =>
-    setCurr((curr) => (curr === 0 ? slides.length - 1 : curr - 1))
-  const next = () =>
-    setCurr((curr) => (curr === slides.length - 1 ? 0 : curr + 1))
+  const prev = () => setCurr((curr) => (curr === 0 ? slides.length - 1 : curr - 1))
+  const next = () => setCurr((curr) => (curr === slides.length - 1 ? 0 : curr + 1))
 
   return (
     <div className="overflow-hidden relative group">
@@ -21,13 +19,13 @@ export const ImageCarouselComponent = ({ children: slides }) => {
         <button
           onClick={prev}
           className="transition-transform duration-300 hover:scale-110">
-          <ChevronLeftIcon className="h-8 w-8 text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+          <ChevronLeftIcon className="fill-current text-white h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
         </button>
         <button
           onClick={next}
           className="transition-transform duration-300 hover:scale-110"
         >
-          <ChevronRightIcon className="h-8 w-8 text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+          <ChevronRightIcon className="fill-current text-white h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
         </button>
       </div>
 
