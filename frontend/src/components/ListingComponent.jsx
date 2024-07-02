@@ -27,7 +27,7 @@ export const ListingComponent = ({ id, title, images, description, rating, onFav
       </button>
       <ImageCarouselComponent>
         {[
-          ...images.map((image) => 
+          ...images.map((image) =>
             <img key={image.id} src={image.imageUrl} alt={title} className=" rounded-md"/>
           )
         ]}
