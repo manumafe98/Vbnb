@@ -188,7 +188,7 @@ public class ReserveControllerTest {
     @Test
     @Order(4)
     public void testGetReservesByUser() throws Exception {
-        mockMvc.perform(get("/api/v1/reserve/roberto.carlos3@gmail.com"))
+        mockMvc.perform(get("/api/v1/reserve/user/roberto.carlos3@gmail.com"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),
@@ -198,6 +198,17 @@ public class ReserveControllerTest {
 
     @Test
     @Order(5)
+    public void testGetReservesByListingId() throws Exception {
+        mockMvc.perform(get("/api/v1/reserve/listing/1"))
+                .andDo(print())
+                .andExpectAll(
+                    status().isOk(),
+                    content().string(
+                        "[{\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\"}]"));
+    }
+
+    @Test
+    @Order(6)
     public void testdeleteReserve() throws Exception {
         mockMvc.perform(delete("/api/v1/reserve")
                 .param("userEmail", "roberto.carlos3@gmail.com")

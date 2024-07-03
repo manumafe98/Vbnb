@@ -1,27 +1,68 @@
 import { DateRangePicker, Button } from "@nextui-org/react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { RatingStarIcon } from "../constants/Icons";
 import { dateRangePickerClassNames } from "../constants/dateRangePickerClassNames";
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthProvider";
+import { useFetch } from "../hooks/useFetch";
 
 export const ListingTabComponent = () => {
   const[rating, setRating] = useState(0)
   const[timesRated, setTimesRated] = useState(0)
+  const[dateRange, setDateRange] = useState(null)
+  const[checkInDate, setCheckInDate] = useState('')
+  const[checkOutDate, setCheckOutDate] = useState('')
   const location = useLocation()
+  const navigate = useNavigate()
+  const { auth } = useAuth()
   const { listing } = location.state
 
   useEffect(() => {
     getListingRating(listing.id)
   }, [])
 
+  useEffect(() => {
+    if (dateRange) {
+      setCheckInDate(`${dateRange.start.year}-${dateRange.start.month}-${dateRange.start.day}`)
+      setCheckOutDate(`${dateRange.end.year}-${dateRange.end.month}-${dateRange.end.day}`)
+    }
+  }, [dateRange])
+
   const getListingRating = async (id) => {
     try {
       const response = await useFetch(`/backend/api/v1/rating/info/${id}`, "GET", null, false)
       const data = await response.json()
       setRating(data.rating)
-      timesRated(data.timesRated)
+      setTimesRated(data.timesRated)
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  const getListingReserves = async () => {
+    console.log("placeholder")
+  }
+
+  const addListingReserve = async () => {
+    if (auth.user) {
+      const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0]
+      const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0]
+  
+      try {
+        const reserve = { formattedCheckInDate, formattedCheckOutDate }
+        const response = await useFetch(`/backend/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
+  
+        if (response.ok) {
+          console.log("reserved!")
+        } else {
+          console.log("failed!")
+        }
+  
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      navigate("/auth/signin")
     }
   }
 
@@ -43,7 +84,7 @@ export const ListingTabComponent = () => {
             >
               <img 
                 src={image.imageUrl} 
-                alt={`${listing.title} ${index + 2}`} 
+                alt={`${listing.title} ${index + 2}`}
                 className="rounded-lg w-full h-full hover:opacity-90"
               />
             </div>
@@ -72,7 +113,7 @@ export const ListingTabComponent = () => {
               <div className="grid grid-cols-2 grid-rows-3 max-h-20 h-20 my-5 gap-2">
                 {listing.characteristics.slice(0, 6).map((characteristic, index) => (
                   <div key={index} className="flex items-center gap-2">
-                    <img src={characteristic.imageUrl} alt="" className="h-full"/>
+                    <img src={characteristic.imageUrl} alt={`${characteristic.name} image`} className="h-full"/>
                     <span>{characteristic.name}</span>
                   </div>
                 ))}
@@ -87,9 +128,12 @@ export const ListingTabComponent = () => {
               variant="bordered"
               label="Check in - Check out"
               className="my-5 w-11/12"
+              visibleMonths={2}
+              value={dateRange}
+              onChange={setDateRange}
               classNames={dateRangePickerClassNames}
             />
-            <Button radius="medium" className="bg-main-orange w-11/12 text-white">
+            <Button radius="medium" className="bg-main-orange w-11/12 text-white" onClick={addListingReserve}>
               Reserve
             </Button>
           </div>

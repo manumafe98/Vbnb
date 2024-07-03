@@ -14,6 +14,8 @@ public interface ReserveService {
 
     ReserveDto updateReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException;
 
+    List<ReserveDto> findByListingId(Long listingId) throws ResourceNotFoundException;
+
     List<UserReserveDto> findReservesByUserEmail(String userEmail) throws ResourceNotFoundException;
 
     List<UserReserveDto> findCurrentReservesByUserEmail(String userEmail) throws ResourceNotFoundException;

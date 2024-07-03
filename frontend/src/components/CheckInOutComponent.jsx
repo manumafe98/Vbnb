@@ -26,6 +26,7 @@ export const CheckInOutComponent = ({ onDate }) => {
       radius="full"
       label="Check in - Check out"
       className="max-w-xs"
+      visibleMonths={2}
       value={dateRange}
       onChange={setDateRange}
       startContent={

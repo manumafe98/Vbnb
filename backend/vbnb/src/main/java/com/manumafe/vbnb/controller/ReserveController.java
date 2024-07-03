@@ -58,7 +58,14 @@ public class ReserveController {
         return ResponseEntity.status(HttpStatus.OK).body(reserve);
     }
 
-    @GetMapping("/{userEmail}")
+    @GetMapping("/listing/{listingId}")
+    public ResponseEntity<List<ReserveDto>> getListingReserves(@PathVariable Long listingId) {
+        List<ReserveDto> reserves = reserveService.findByListingId(listingId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(reserves);
+    }
+
+    @GetMapping("/user/{userEmail}")
     public ResponseEntity<List<UserReserveDto>> getUserReserves(@PathVariable String userEmail) {
         List<UserReserveDto> reserves = reserveService.findReservesByUserEmail(userEmail);
 

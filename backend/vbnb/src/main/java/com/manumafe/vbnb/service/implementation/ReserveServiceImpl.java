@@ -150,7 +150,15 @@ public class ReserveServiceImpl implements ReserveService {
     public List<UserReserveDto> findCurrentReservesByUserEmail(String userEmail) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
-        
+
         return reserveRepository.findCurrentReserves(user, LocalDate.now()).stream().map(reserveDtoMapper::toUserReserveDto).toList();
+    }
+
+    @Override
+    public List<ReserveDto> findByListingId(Long listingId) throws ResourceNotFoundException {
+        Listing listing = listingRepository.findById(listingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
+
+        return reserveRepository.findByListing(listing).stream().map(reserveDtoMapper::toDto).toList();
     }
 }
