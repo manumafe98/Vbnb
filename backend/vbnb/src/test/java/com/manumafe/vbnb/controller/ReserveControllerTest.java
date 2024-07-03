@@ -158,16 +158,38 @@ public class ReserveControllerTest {
 
     @Test
     @Order(2)
+    public void testCreateReserveWithSameUserButAnotherDate() throws Exception {
+
+        LocalDate date = LocalDate.of(2024, 9, 8);
+
+        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
+        String reserveJson = mapToJson(reserve);
+
+        mockMvc.perform(post("/api/v1/reserve")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(reserveJson)
+                .param("userEmail", "roberto.carlos3@gmail.com")
+                .param("listingId", "1"))
+                .andExpectAll(
+                    status().isCreated(),
+                    content().contentType(MediaType.APPLICATION_JSON),
+                    jsonPath("checkInDate").value("2024-09-08"),
+                    jsonPath("checkOutDate").value("2024-09-15"));
+    }
+
+    @Test
+    @Order(3)
     public void testGetCurrentReservesByUser() throws Exception {
         mockMvc.perform(get("/api/v1/reserve/current/roberto.carlos3@gmail.com"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),
-                    content().string("[]"));
+                    content().string(
+                        "[{\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     public void testUpdateReserve() throws Exception {
         LocalDate date = LocalDate.of(2024, 8, 1);
         ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
@@ -186,7 +208,7 @@ public class ReserveControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void testGetReservesByUser() throws Exception {
         mockMvc.perform(get("/api/v1/reserve/user/roberto.carlos3@gmail.com"))
                 .andDo(print())
@@ -197,7 +219,7 @@ public class ReserveControllerTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void testGetReservesByListingId() throws Exception {
         mockMvc.perform(get("/api/v1/reserve/listing/1"))
                 .andDo(print())
@@ -208,7 +230,7 @@ public class ReserveControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testdeleteReserve() throws Exception {
         mockMvc.perform(delete("/api/v1/reserve")
                 .param("userEmail", "roberto.carlos3@gmail.com")

@@ -60,7 +60,7 @@ public class Listing {
 
     @JsonIgnore
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reserve> reserves;
+    private List<Reserve> reserves;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

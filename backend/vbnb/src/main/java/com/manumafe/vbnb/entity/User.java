@@ -62,7 +62,7 @@ public class User implements UserDetails {
     
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reserve> reserves;
+    private List<Reserve> reserves;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

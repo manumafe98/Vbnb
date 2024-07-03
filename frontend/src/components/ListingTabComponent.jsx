@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { useFetch } from "../hooks/useFetch";
 import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
+import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 
 export const ListingTabComponent = () => {
   const[rating, setRating] = useState(0)
@@ -18,6 +19,8 @@ export const ListingTabComponent = () => {
   const navigate = useNavigate()
   const { auth } = useAuth()
   const { listing } = location.state
+  const[showPopup, setShowPopup] = useState(false)
+  const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
 
   useEffect(() => {
     getListingRating(listing.id)
@@ -60,13 +63,8 @@ export const ListingTabComponent = () => {
       const reserve = { checkInDate: formattedCheckInDate, checkOutDate: formattedCheckOutDate }
 
       try {
-        const response = await useFetch(`/backend/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
-  
-        if (response.ok) {
-          console.log("reserved!")
-        } else {
-          console.log("failed!")
-        }
+        await useFetch(`/backend/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
+        handlePopUp("Listing reserved successfully", "View Reserves", "success")
   
       } catch (error) {
         console.log(error)
@@ -74,6 +72,12 @@ export const ListingTabComponent = () => {
     } else {
       navigate("/auth/signin")
     }
+  }
+
+  const handlePopUp = (message, action, type) => {
+    setShowPopup(true)
+    setPopupData({ message, action, type })
+    setTimeout(() => setShowPopup(false), 7500)
   }
 
   return (
@@ -164,6 +168,7 @@ export const ListingTabComponent = () => {
           </div>
         </div>
       </div>
+      {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
     </section>
   )
 }
