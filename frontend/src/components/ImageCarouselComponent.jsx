@@ -17,12 +17,12 @@ export const ImageCarouselComponent = ({ children: slides }) => {
       </div>
       <div className="absolute inset-0 flex items-center justify-between p-4">
         <button
-          onClick={prev}
+          onClick={(e) => { e.stopPropagation(); prev(); }}
           className="transition-transform duration-300 hover:scale-110">
           <ChevronLeftIcon className="fill-current text-white h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
         </button>
         <button
-          onClick={next}
+          onClick={(e) => { e.stopPropagation(); next(); }}
           className="transition-transform duration-300 hover:scale-110"
         >
           <ChevronRightIcon className="fill-current text-white h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>

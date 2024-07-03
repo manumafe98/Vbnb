@@ -22,11 +22,9 @@ export const NavBarComponent = () => {
   return (
     <header>
     <Navbar maxWidth="full">
-      <NavbarBrand as={Link} to="/" className="ms-14">
-        <a href="/" className="flex items-center">
-          <img src={vbnb_logo} alt="Vbnb logo" className="w-16 mt-2.5"/>
-          <p className="italic text-xl text-main-orange pl-1 mt-10">Vacations like in home</p>
-        </a>
+      <NavbarBrand as={Link} to="/"  className="flex items-center ms-14">
+        <img src={vbnb_logo} alt="Vbnb logo" className="w-16 mt-2.5"/>
+        <p className="italic text-xl text-main-orange pl-1 mt-10">Vacations like in home</p>
       </NavbarBrand>
       <NavbarContent justify="center">
       {location.pathname.startsWith("/admin") && (
@@ -147,14 +145,14 @@ export const NavBarComponent = () => {
       {auth?.user ? (
         <div className="flex items-center gap-4">
           <Dropdown>
-            <NavbarItem className="me-14">
+            <NavbarItem className="me-14 mt-3.5">
               <DropdownTrigger>
                 <Avatar
                   isBordered
                   color="warning"
                   as="button"
                   classNames={{
-                    base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B] capitalize w-12 h-12 mt-3.5"
+                    base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B] capitalize w-12 h-12"
                   }}
                   name={auth?.user}
                 />
@@ -211,12 +209,12 @@ export const NavBarComponent = () => {
         <>
           {location.pathname === "/" && (
             <>
-              <NavbarItem>
+              <NavbarItem className="mt-3.5">
                 <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
                   Sign In
                 </Button>
               </NavbarItem>
-              <NavbarItem className="me-10">
+              <NavbarItem className="me-14 mt-3.5">
                 <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
                   Sign Up
                 </Button>
@@ -225,7 +223,7 @@ export const NavBarComponent = () => {
           )}
           {location.pathname === "/auth/signin" && (
             <>
-              <NavbarItem className="me-10">
+              <NavbarItem className="me-14 mt-3.5">
                 <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
                   Sign Up
                 </Button>
@@ -234,7 +232,7 @@ export const NavBarComponent = () => {
           )}
           {location.pathname === "/auth/signup" && (
             <>
-              <NavbarItem className="me-10">
+              <NavbarItem className="me-14 mt-3.5">
                 <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
                   Sign In
                 </Button>

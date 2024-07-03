@@ -2,12 +2,16 @@ import { FavoriteIcon, RatingStarIcon } from "../constants/Icons";
 import { useAuth } from "../context/AuthProvider"
 import { useNavigate } from "react-router-dom";
 import { ImageCarouselComponent } from "./ImageCarouselComponent";
+import { useFetch } from "../hooks/useFetch";
 
-export const ListingComponent = ({ id, title, images, description, rating, onFavoriteSelection }) => {
+
+export const ListingCardComponent = ({ id, title, images, description, rating, onFavoriteSelection }) => {
   const { auth } = useAuth()
   const navigate = useNavigate()
 
-  const handleClick = (event) => {
+  const handleFavoriteClick = (event) => {
+    event.stopPropagation()
+
     if (auth.user) {
       const listingId = event.currentTarget.value
       onFavoriteSelection(listingId)
@@ -16,12 +20,24 @@ export const ListingComponent = ({ id, title, images, description, rating, onFav
     }
   }
 
+  const handleCardClick = async () => {
+    try {
+      const response = await useFetch(`/backend/api/v1/listing/get/${id}`, "GET", null, false)
+      const listing = await response.json()
+      navigate("/listing", { state: { listing } })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
-    <div className="listings-data relative">
+    <div 
+      className="listings-data relative cursor-pointer"
+      onClick={handleCardClick}>
       <button
         value={id}
-        onClick={handleClick}
-        className="group absolute transition-transform duration-300 hover:scale-110 p-2 bg-transparent border-none cursor-pointer z-10 top-2 right-2"
+        onClick={handleFavoriteClick}
+        className="favorite-button group absolute transition-transform duration-300 hover:scale-110 p-2 bg-transparent border-none cursor-pointer z-10 top-2 right-2"
       >
         <FavoriteIcon className="w-6 h-6"/>
       </button>
@@ -42,8 +58,9 @@ export const ListingComponent = ({ id, title, images, description, rating, onFav
           </p>
         </div>
         <div className="flex items-center space-x-1 me-1">
-          <RatingStarIcon/>
-          <p className="text-[15px]">{rating !== null ? rating.toFixed(1) : 0}</p>
+        <span className="flex items-center gap-1 text-[15px]">
+          <RatingStarIcon className="w-3 h-3"/> {rating !== null ? rating.toFixed(1) : 0}
+        </span>
         </div>
       </div>
     </div>

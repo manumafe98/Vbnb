@@ -1,19 +1,14 @@
-import { SearchBarComponent } from "../components/SearchBarComponent";
-import { ListingSectionComponent } from "../components/ListingSectionComponent";
-import { useState } from "react";
-import { LayoutComponent } from "../components/LayoutComponent";
+import { LayoutComponent } from '../components/LayoutComponent'
+import { ListingTabComponent } from '../components/ListingTabComponent'
+import { useLocation } from "react-router-dom";
 
 export const ListingPage = () => {
-  const[currentListings, setCurrentListings] = useState([])
-
-  const handleListings = (listings) => {
-    setCurrentListings(listings)
-  }
+  const location = useLocation()
+  const { id } = location.state
 
   return (
     <LayoutComponent>
-      <SearchBarComponent onSearching={handleListings}/>
-      <ListingSectionComponent listings={currentListings}/>
+        <ListingTabComponent listingId={id}/>
     </LayoutComponent>
   )
 }

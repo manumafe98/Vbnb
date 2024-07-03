@@ -1,4 +1,4 @@
-import { ListingComponent } from "./ListingComponent";
+import { ListingCardComponent } from "./ListingCardComponent";
 import { useFetch } from "../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
@@ -45,10 +45,15 @@ export const ListingSectionComponent = ({ listings }) => {
   
   const addListingToFavorite = async (selectedListing) => {
     try {
-      await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${selectedListing}`, "POST", null, true)
+      const response = await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${selectedListing}`, "POST", null, true)
       handlePopUp("Added to Favorites", "View Favorites",  "success")
+
+      if (!response.ok) {
+        handlePopUp("Already added to Favorites", "View Favorites", "error")
+      }
+
     } catch (error) {
-      handlePopUp("Already added to Favorites", "View Favorites", "error")
+      console.log(error)
     }
   }
 
@@ -61,7 +66,7 @@ export const ListingSectionComponent = ({ listings }) => {
       <div className="py-3 sm:py-5 me-20 ms-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
           {currentListings.map((listing) => (
-            <ListingComponent
+            <ListingCardComponent
               key={listing.id}
               id={listing.id}
               title={listing.title}

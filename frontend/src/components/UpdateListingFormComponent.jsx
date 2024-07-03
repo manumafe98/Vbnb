@@ -5,6 +5,7 @@ import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
 import { useFetch } from "../hooks/useFetch";
 import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
 import { useState, useEffect } from "react";
+import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 
 export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   const[titlePlaceholder, setTitlePlaceholder] = useState(listingToUpdate.title)
@@ -12,10 +13,11 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   const[cityPlaceholder, setCityPlaceholder] = useState([`${listingToUpdate.city.id}`])
   const[descriptionPlaceholder, setDescriptionPlaceholder] = useState(listingToUpdate.description)
   const[newUploadedImages, setNewUploadedImages] = useState([])
-  const[updatedSucessfully, setUpdatedSucessfully] = useState(false)
   const[cities, setCities] = useState([])
   const[categories, setCategories] = useState([])
   const[characteristics, setCharacteristics] = useState([])
+  const[showPopup, setShowPopup] = useState(false)
+  const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
 
   const characteristicsArray = listingToUpdate.characteristics.map(characteristicData => (
     `${characteristicData.id}`
@@ -90,10 +92,16 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
     try {
       await useFetch(`/backend/api/v1/listing/update/${listingToUpdate.id}`, "PUT", newListingData)
-      setUpdatedSucessfully(true)
+      handlePopUp(`${titlePlaceholder} updated successfully`, "View Listings", "success")
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handlePopUp = (message, action, type) => {
+    setShowPopup(true)
+    setPopupData({ message, action, type })
+    setTimeout(() => setShowPopup(false), 7500)
   }
 
   return (
@@ -164,7 +172,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
         <Button radius="full" className="bg-[#ff6f00] text-white" onClick={updateListing}>
           Update Listing
         </Button>
-        {updatedSucessfully && <p className="text-green-600 mt-2.5">Listing updated sucessfully</p>}
+        {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
       </div>
     </section>
   )

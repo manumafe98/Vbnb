@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { ListingPage } from "./pages/ListingPage";
+import { HomePage } from "./pages/HomePage";
 import { AuthenticationPage } from "./pages/AuthenticationPage";
 import { AdminPage } from "./pages/AdminPage";
 import { AddElementPage } from "./pages/AddElementPage";
@@ -12,12 +12,15 @@ import { ListingAdministrationPage } from "./pages/ListingAdministrationPage";
 import { UpdateCharacteristicPage } from "./pages/UpdateCharacteristicPage";
 import { UpdateListingPage } from "./pages/UpdateListingPage";
 import { FavoritePage } from "./pages/FavoritePage";
+import { ListingPage } from "./pages/ListingPage";
+
 
 export const VbnbApp = () => {
 
   return (
       <Routes>
-        <Route path="/" element={<ListingPage />}></Route>
+        <Route path="/" element={<HomePage />}></Route>
+        <Route path="/listing" element={<ListingPage />}></Route>
         <Route path="/auth/signin" element={<AuthenticationPage authenticationType="Sign In" />}></Route>
         <Route path="/auth/signup" element={<AuthenticationPage authenticationType="Sign Up" />}></Route>
         <Route path="/unauthorized" element={<UnauthorizedPage />}></Route>

@@ -58,7 +58,7 @@ export const CategoryFilterComponent = ({ onCategorySelection }) => {
             <span
               key={category.name}
               data-value={category.name}
-              className="flex flex-col items-center box-border group hover:underline hover:scale-110 focus:font-bold hover:text-orange-500 cursor-pointer"
+              className="flex flex-col items-center box-border group hover:underline hover:scale-110 focus:font-bold hover:text-main-orange cursor-pointer"
               onClick={handleClick}
             >
               <img src={category.imageUrl} alt={category.name} className="inline-block align-middle h-7 w-7 transition duration-300 ease-in-out p-0.5"/>
