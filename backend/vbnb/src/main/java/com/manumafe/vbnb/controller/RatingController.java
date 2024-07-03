@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.manumafe.vbnb.dto.ListingRatingDto;
 import com.manumafe.vbnb.dto.RatingDto;
 import com.manumafe.vbnb.dto.RatingListingInformationDto;
 import com.manumafe.vbnb.service.RatingService;
@@ -48,8 +49,8 @@ public class RatingController {
     }
 
     @GetMapping("/get/{listingId}")
-    public ResponseEntity<List<RatingDto>> getRatingsByListingId(@PathVariable Long listingId) {
-        List<RatingDto> ratings = ratingService.getRatingsByListingId(listingId);
+    public ResponseEntity<List<ListingRatingDto>> getRatingsByListingId(@PathVariable Long listingId) {
+        List<ListingRatingDto> ratings = ratingService.getRatingsByListingId(listingId);
 
         return ResponseEntity.status(HttpStatus.OK).body(ratings);
     }

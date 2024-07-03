@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.manumafe.vbnb.dto.ListingRatingDto;
 import com.manumafe.vbnb.dto.RatingDto;
 import com.manumafe.vbnb.dto.RatingListingInformationDto;
 import com.manumafe.vbnb.dto.mapper.RatingDtoMapper;
@@ -88,11 +89,11 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<RatingDto> getRatingsByListingId(Long listingId) throws ResourceNotFoundException {
+    public List<ListingRatingDto> getRatingsByListingId(Long listingId) throws ResourceNotFoundException {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
-        return ratingRepository.findByListing(listing).stream().map(ratingDtoMapper::toDto).toList();
+        return ratingRepository.findByListing(listing).stream().map(ratingDtoMapper::toListingRatingDto).toList();
     }
 
     @Override

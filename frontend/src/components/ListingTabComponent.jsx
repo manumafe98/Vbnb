@@ -5,6 +5,7 @@ import { dateRangePickerClassNames } from "../constants/dateRangePickerClassName
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { useFetch } from "../hooks/useFetch";
+import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
 
 export const ListingTabComponent = () => {
   const[rating, setRating] = useState(0)
@@ -12,6 +13,7 @@ export const ListingTabComponent = () => {
   const[dateRange, setDateRange] = useState(null)
   const[checkInDate, setCheckInDate] = useState('')
   const[checkOutDate, setCheckOutDate] = useState('')
+  const[reserves, setReserves] = useState([])
   const location = useLocation()
   const navigate = useNavigate()
   const { auth } = useAuth()
@@ -19,6 +21,7 @@ export const ListingTabComponent = () => {
 
   useEffect(() => {
     getListingRating(listing.id)
+    getListingReserves(listing.id)
   }, [])
 
   useEffect(() => {
@@ -39,17 +42,24 @@ export const ListingTabComponent = () => {
     }
   }
 
-  const getListingReserves = async () => {
-    console.log("placeholder")
+  const getListingReserves = async (id) => {
+    try {
+      const response = await useFetch(`/backend/api/v1/reserve/listing/${id}`, "GET", null, false)
+      const data = await response.json()
+      setReserves(data.map((reserve) => [parseDate(reserve.checkInDate), parseDate(reserve.checkOutDate)]))
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const addListingReserve = async () => {
     if (auth.user) {
       const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0]
       const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0]
-  
+      const reserve = { checkInDate: formattedCheckInDate, checkOutDate: formattedCheckOutDate }
+
       try {
-        const reserve = { formattedCheckInDate, formattedCheckOutDate }
         const response = await useFetch(`/backend/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
   
         if (response.ok) {
@@ -127,6 +137,21 @@ export const ListingTabComponent = () => {
             <DateRangePicker
               variant="bordered"
               label="Check in - Check out"
+              isDateUnavailable={(date) =>
+                reserves.some(
+                  (interval) => date.compare(interval[0]) >= 0 && date.compare(interval[1]) <= 0
+                )
+              }
+              minValue={today(getLocalTimeZone())}
+              validate={(value) =>
+                reserves.some(
+                  (interval) =>
+                    value && value.end.compare(interval[0]) >= 0 && value.start.compare(interval[1]) <= 0
+                )
+                  ? "Selected date range may not include unavailable dates."
+                  : null
+              }
+              validationBehavior="native"
               className="my-5 w-11/12"
               visibleMonths={2}
               value={dateRange}

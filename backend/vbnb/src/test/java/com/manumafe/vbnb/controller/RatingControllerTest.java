@@ -175,6 +175,6 @@ public class RatingControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"rating\":5.0,\"comment\":\"Amazing Place!\"},{\"rating\":4.5,\"comment\":\"Pretty comfortable and spaceful\"},{\"rating\":3.2,\"comment\":\"Was ok, not 100% what expected\"}]"));
+                        "[{\"rating\":5.0,\"comment\":\"Amazing Place!\",\"user\":{\"id\":1,\"name\":\"Roberto\",\"lastName\":\"Carlos\",\"email\":\"roberto.carlos3@gmail.com\",\"role\":\"USER\"}},{\"rating\":4.5,\"comment\":\"Pretty comfortable and spaceful\",\"user\":{\"id\":2,\"name\":\"Lionel\",\"lastName\":\"Messi\",\"email\":\"lionel.messi10@gmail.com\",\"role\":\"USER\"}},{\"rating\":3.2,\"comment\":\"Was ok, not 100% what expected\",\"user\":{\"id\":3,\"name\":\"Cristiano\",\"lastName\":\"Ronaldo\",\"email\":\"cr7@gmail.com\",\"role\":\"USER\"}}]"));
     }
 }
