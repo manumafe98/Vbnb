@@ -10,14 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Reserve;
-import com.manumafe.vbnb.entity.ReserveId;
 import com.manumafe.vbnb.entity.User;
 
 import jakarta.transaction.Transactional;
 
 @Transactional
 @Repository
-public interface ReserveRepository extends JpaRepository<Reserve, ReserveId> {
+public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     List<Reserve> findByUser(User user);
 
     List<Reserve> findByListing(Listing listing);

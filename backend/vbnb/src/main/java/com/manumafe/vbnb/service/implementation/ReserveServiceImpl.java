@@ -11,7 +11,6 @@ import com.manumafe.vbnb.dto.UserReserveDto;
 import com.manumafe.vbnb.dto.mapper.ReserveDtoMapper;
 import com.manumafe.vbnb.entity.Listing;
 import com.manumafe.vbnb.entity.Reserve;
-import com.manumafe.vbnb.entity.ReserveId;
 import com.manumafe.vbnb.entity.User;
 import com.manumafe.vbnb.exceptions.ListingUnavailableForReserves;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
@@ -49,20 +48,13 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ListingUnavailableForReserves("Listing already reserved for those dates");
         }
 
-        ReserveId reserveId = new ReserveId(user.getId(), listingId);
         Reserve reserve = new Reserve();
         
-        reserve.setId(reserveId);
         reserve.setCheckInDate(reserveDto.checkInDate());
         reserve.setCheckOutDate(reserveDto.checkOutDate());
         reserve.setUser(user);
         reserve.setListing(listing);
 
-        user.getReserves().add(reserve);
-        listing.getReserves().add(reserve);
-
-        listingRepository.save(listing);
-        userRepository.save(user);
         reserveRepository.save(reserve);
 
         try {
@@ -76,32 +68,16 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     @Transactional
-    public void deleteReserve(String userEmail, Long listingId) throws ResourceNotFoundException {
-        User user = userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
-
-        ReserveId reserveId = new ReserveId(user.getId(), listingId);
-        Reserve reserve = reserveRepository.findById(reserveId)
+    public void deleteReserve(Long reserveId) throws ResourceNotFoundException {
+        reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " notfound"));
 
-        Listing listing = reserve.getListing();
-
-        listing.getReserves().remove(reserve);
-        user.getReserves().remove(reserve);
-
-        listingRepository.save(listing);
-        userRepository.save(user);
         reserveRepository.deleteById(reserveId);
     }
 
     @Override
     @Transactional
-    public ReserveDto updateReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException {
-        User user = userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
-
-        ReserveId reserveId = new ReserveId(user.getId(), listingId);
-
+    public ReserveDto updateReserve(Long reserveId, ReserveDto reserveDto) throws ResourceNotFoundException {
         Reserve reserveToUpdate = reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " not found"));
 
@@ -113,17 +89,9 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ListingUnavailableForReserves("Listing already reserved for those dates");
         }
 
-        listing.getReserves().remove(reserveToUpdate);
-        user.getReserves().remove(reserveToUpdate);
-
         reserveToUpdate.setCheckInDate(reserveDto.checkInDate());
         reserveToUpdate.setCheckOutDate(reserveDto.checkOutDate());
 
-        user.getReserves().add(reserveToUpdate);
-        listing.getReserves().add(reserveToUpdate);
-
-        listingRepository.save(listing);
-        userRepository.save(user);
         reserveRepository.save(reserveToUpdate);
 
         return reserveDto;

@@ -24,6 +24,7 @@ public class ReserveDtoMapper {
         ListingResponseDto listing = listingDtoMapper.toResponseDto(reserve.getListing());
 
         return new UserReserveDto(
+                reserve.getId(),
                 reserve.getCheckInDate(),
                 reserve.getCheckOutDate(),
                 listing);

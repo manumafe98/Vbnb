@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -114,8 +115,9 @@ public class ReserveControllerTest {
 
         saveItemsToRepositories(category, city, characteristic);
 
-        User user = createUser("Roberto", "Carlos", "roberto.carlos3@gmail.com", "1234");
-        userRepository.save(user);
+        User user1 = createUser("Cristiano", "Ronaldo", "cr7@gmail.com", "1234");
+        User user2 = createUser("Roberto", "Carlos", "roberto.carlos3@gmail.com", "1234");
+        userRepository.saveAll(List.of(user1, user2));
 
         Listing listing = new Listing();
         listing.setTitle("Snow Cabin");
@@ -147,7 +149,7 @@ public class ReserveControllerTest {
         mockMvc.perform(post("/api/v1/reserve")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reserveJson)
-                .param("userEmail", "roberto.carlos3@gmail.com")
+                .param("userEmail", "cr7@gmail.com")
                 .param("listingId", "1"))
                 .andExpectAll(
                     status().isCreated(),
@@ -158,7 +160,7 @@ public class ReserveControllerTest {
 
     @Test
     @Order(2)
-    public void testCreateReserveWithSameUserButAnotherDate() throws Exception {
+    public void testCreateReserveWithOtherUser() throws Exception {
 
         LocalDate date = LocalDate.of(2024, 9, 8);
 
@@ -176,6 +178,27 @@ public class ReserveControllerTest {
                     jsonPath("checkInDate").value("2024-09-08"),
                     jsonPath("checkOutDate").value("2024-09-15"));
     }
+    
+    @Test
+    @Order(3)
+    public void testCreateReserveWithSameUserWithAnotherDate() throws Exception {
+
+        LocalDate date = LocalDate.of(2024, 10, 8);
+
+        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
+        String reserveJson = mapToJson(reserve);
+
+        mockMvc.perform(post("/api/v1/reserve")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(reserveJson)
+                .param("userEmail", "roberto.carlos3@gmail.com")
+                .param("listingId", "1"))
+                .andExpectAll(
+                    status().isCreated(),
+                    content().contentType(MediaType.APPLICATION_JSON),
+                    jsonPath("checkInDate").value("2024-10-08"),
+                    jsonPath("checkOutDate").value("2024-10-15"));
+    }
 
     @Test
     @Order(3)
@@ -185,7 +208,7 @@ public class ReserveControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
+                        "[{\"id\":2,\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}},{\"id\":3,\"checkInDate\":\"2024-10-08\",\"checkOutDate\":\"2024-10-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
     }
 
     @Test
@@ -198,8 +221,7 @@ public class ReserveControllerTest {
         mockMvc.perform(put("/api/v1/reserve")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reserveJson)
-                .param("userEmail", "roberto.carlos3@gmail.com")
-                .param("listingId", "1"))
+                .param("reserveId", "1"))
                 .andExpectAll(
                     status().isOk(),
                     content().contentType(MediaType.APPLICATION_JSON),
@@ -209,32 +231,42 @@ public class ReserveControllerTest {
 
     @Test
     @Order(5)
-    public void testGetReservesByUser() throws Exception {
+    public void testGetReservesByUser1() throws Exception {
+        mockMvc.perform(get("/api/v1/reserve/user/cr7@gmail.com"))
+                .andDo(print())
+                .andExpectAll(
+                    status().isOk(),
+                    content().string(
+                        "[{\"id\":1,\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
+    }
+
+    @Test
+    @Order(6)
+    public void testGetReservesByUser2() throws Exception {
         mockMvc.perform(get("/api/v1/reserve/user/roberto.carlos3@gmail.com"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
+                        "[{\"id\":2,\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}},{\"id\":3,\"checkInDate\":\"2024-10-08\",\"checkOutDate\":\"2024-10-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testGetReservesByListingId() throws Exception {
         mockMvc.perform(get("/api/v1/reserve/listing/1"))
                 .andDo(print())
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\"}]"));
+                        "[{\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\"},{\"checkInDate\":\"2024-10-08\",\"checkOutDate\":\"2024-10-15\"},{\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\"}]"));
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void testdeleteReserve() throws Exception {
         mockMvc.perform(delete("/api/v1/reserve")
-                .param("userEmail", "roberto.carlos3@gmail.com")
-                .param("listingId", "1"))
+                .param("reserveId", "1"))
                 .andExpect(status().isNoContent());
     }
 }

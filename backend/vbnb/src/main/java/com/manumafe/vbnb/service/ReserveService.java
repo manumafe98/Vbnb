@@ -10,9 +10,9 @@ import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 public interface ReserveService {
     ReserveDto saveReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException, ListingUnavailableForReserves;
 
-    void deleteReserve(String userEmail, Long listingId) throws ResourceNotFoundException;
+    void deleteReserve(Long reserveId) throws ResourceNotFoundException;
 
-    ReserveDto updateReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException;
+    ReserveDto updateReserve(Long reserveId, ReserveDto reserveDto) throws ResourceNotFoundException;
 
     List<ReserveDto> findByListingId(Long listingId) throws ResourceNotFoundException;
 

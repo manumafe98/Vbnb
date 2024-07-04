@@ -1,10 +1,11 @@
 package com.manumafe.vbnb.dto;
 
 import java.util.Set;
+import java.util.List;
 
 import com.manumafe.vbnb.entity.FavoriteId;
 import com.manumafe.vbnb.entity.Image;
-import com.manumafe.vbnb.entity.ReserveId;
+import com.manumafe.vbnb.entity.Reserve;
 
 public record ListingFullDataDto(
         Long id,
@@ -14,6 +15,6 @@ public record ListingFullDataDto(
         CategoryDto category,
         Set<Image> images,
         Set<CharacteristicDto> characteristics,
-        Set<ReserveId> reserveIds,
+        List<Reserve> reserves,
         Set<FavoriteId> favoriteIds) {
 }

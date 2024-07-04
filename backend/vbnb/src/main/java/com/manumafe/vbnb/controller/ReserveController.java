@@ -37,23 +37,21 @@ public class ReserveController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reserve);
     }
 
-    @DeleteMapping
+    @DeleteMapping()
     public ResponseEntity<Void> deleteReserve(
-            @RequestParam("userEmail") String userEmail,
-            @RequestParam("listingId") Long listingId) {
+            @RequestParam("reserveId") Long reserveId) {
 
-        reserveService.deleteReserve(userEmail, listingId);
+        reserveService.deleteReserve(reserveId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping
     public ResponseEntity<ReserveDto> updateReserve(
-            @RequestParam("userEmail") String userEmail,
-            @RequestParam("listingId") Long listingId,
+            @RequestParam("reserveId") Long reserveId,
             @RequestBody ReserveDto reserveDto) {
-        
-        ReserveDto reserve = reserveService.updateReserve(userEmail, listingId, reserveDto);
+
+        ReserveDto reserve = reserveService.updateReserve(reserveId, reserveDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(reserve);
     }
