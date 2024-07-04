@@ -190,6 +190,8 @@ export const NavBarComponent = () => {
                 <DropdownItem
                   className="h-14 gap-2"
                   key="reserves"
+                  as={Link}
+                  to="/user/reserves"
                 >
                   Reserves
                 </DropdownItem>

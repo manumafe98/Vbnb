@@ -13,24 +13,25 @@ import { UpdateCharacteristicPage } from "./pages/UpdateCharacteristicPage";
 import { UpdateListingPage } from "./pages/UpdateListingPage";
 import { FavoritePage } from "./pages/FavoritePage";
 import { ListingPage } from "./pages/ListingPage";
+import { ReservePage } from "./pages/ReservePage";
 
 
 export const VbnbApp = () => {
 
   return (
       <Routes>
-        <Route path="/" element={<HomePage />}></Route>
-        <Route path="/listing" element={<ListingPage />}></Route>
-        <Route path="/auth/signin" element={<AuthenticationPage authenticationType="Sign In" />}></Route>
-        <Route path="/auth/signup" element={<AuthenticationPage authenticationType="Sign Up" />}></Route>
-        <Route path="/unauthorized" element={<UnauthorizedPage />}></Route>
+        <Route path="/" element={<HomePage/>}></Route>
+        <Route path="/listing" element={<ListingPage/>}></Route>
+        <Route path="/auth/signin" element={<AuthenticationPage authenticationType="Sign In"/>}></Route>
+        <Route path="/auth/signup" element={<AuthenticationPage authenticationType="Sign Up"/>}></Route>
+        <Route path="/unauthorized" element={<UnauthorizedPage/>}></Route>
 
-        <Route element={<RequireAuthComponent allowedRole={"ADMIN"} />}>
-          <Route path="/admin" element={<AdminPage />}></Route>
-          <Route path="/admin/add/category" element={<AddElementPage elementName="Category" />}></Route>
-          <Route path="/admin/add/characteristic" element={<AddElementPage elementName="Characteristic" />}></Route>
-          <Route path="/admin/add/city" element={<AddElementPage elementName="City" />}></Route>
-          <Route path="/admin/add/listing" element={<AddElementPage elementName="Listing" />}></Route>
+        <Route element={<RequireAuthComponent allowedRole={"ADMIN"}/>}>
+          <Route path="/admin" element={<AdminPage/>}></Route>
+          <Route path="/admin/add/category" element={<AddElementPage elementName="Category"/>}></Route>
+          <Route path="/admin/add/characteristic" element={<AddElementPage elementName="Characteristic"/>}></Route>
+          <Route path="/admin/add/city" element={<AddElementPage elementName="City"/>}></Route>
+          <Route path="/admin/add/listing" element={<AddElementPage elementName="Listing"/>}></Route>
           <Route path="/admin/administrate/users" element={<UserAdministrationPage/>}></Route>
           <Route path="/admin/administrate/listings" element={<ListingAdministrationPage/>}></Route>
           <Route path="/admin/administrate/cities" element={<ElementAdministrationPage elementName="city"/>}></Route>
@@ -40,11 +41,12 @@ export const VbnbApp = () => {
           <Route path="/admin/update/listings" element={<UpdateListingPage/>}></Route>
         </Route>
 
-        <Route element={<RequireAuthComponent allowedRole={"USER"} />}>
+        <Route element={<RequireAuthComponent allowedRole={"USER"}/>}>
           <Route path="/user/favorites" element={<FavoritePage/>}></Route>
+          <Route path="/user/reserves" element={<ReservePage/>}></Route>
         </Route>
 
-        <Route path="*" element={<MissingPage />}></Route>
+        <Route path="*" element={<MissingPage/>}></Route>
       </Routes>
   )
 }

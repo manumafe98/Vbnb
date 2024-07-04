@@ -22,6 +22,8 @@ export const PopUpNotificationComponent = ({ message, action = null, duration = 
   const handleClick = () => {
     if (action.includes("Favorites")) {
       navigate("/user/favorites")
+    } else if (action.includes("Reserves")) {
+      navigate("/user/reserves")
     } else if (action.includes("Listings")) {
       navigate("/admin/administrate/listings")
     } else if (action.includes("Categories")) {
