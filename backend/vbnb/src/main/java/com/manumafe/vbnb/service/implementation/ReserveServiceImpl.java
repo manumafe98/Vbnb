@@ -81,12 +81,12 @@ public class ReserveServiceImpl implements ReserveService {
         Reserve reserveToUpdate = reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " not found"));
 
-        Listing listing = reserveToUpdate.getListing();
+        List<Reserve> currentListingReservesWithoutUpdatedReserve = reserveToUpdate.getListing().getReserves().stream().filter(reserve -> reserve.getId() != reserveToUpdate.getId()).toList();
 
-        List<Listing> availableListings = listingRepository.findAvailableListings(reserveDto.checkInDate(), reserveDto.checkOutDate());
-
-        if (!availableListings.contains(listing)) {
-            throw new ListingUnavailableForReserves("Listing already reserved for those dates");
+        for (Reserve reserve : currentListingReservesWithoutUpdatedReserve) {
+            if (reserve.getCheckInDate().compareTo(reserveDto.checkOutDate()) <= 0 && reserve.getCheckOutDate().compareTo(reserveDto.checkInDate()) >= 0) {
+                throw new ListingUnavailableForReserves("Listing already reserved for those dates");
+            }
         }
 
         reserveToUpdate.setCheckInDate(reserveDto.checkInDate());
