@@ -9,6 +9,10 @@ export const NavBarComponent = () => {
   const navigate = useNavigate()
   const { auth } = useAuth()
 
+  const navPadding = location.pathname === "/listing" ? "pb-4" : "pb-0"
+  const navStartMargin = location.pathname === "/listing" ? "ms-[417px]" : "ms-14"
+  const navEndMargin = location.pathname === "/listing" ? "me-[417px]" : "me-14"
+
   const icons = {
     chevron: <ChevronDownIcon fill="currentColor" size={16} />
   }
@@ -21,12 +25,12 @@ export const NavBarComponent = () => {
 
   return (
     <header>
-    <Navbar maxWidth="full">
-      <NavbarBrand as={Link} to="/"  className="flex items-center ms-14">
+    <Navbar className={`${navPadding}`} maxWidth="full" isBordered={location.pathname === "/listing"}>
+      <NavbarBrand as={Link} to="/"  className={`flex items-center ${navStartMargin}`}>
         <img src={vbnb_logo} alt="Vbnb logo" className="w-16 mt-2.5"/>
         <p className="italic text-xl text-main-orange pl-1 mt-10">Vacations like in home</p>
       </NavbarBrand>
-      <NavbarContent justify="center">
+      <NavbarContent justify="center ">
       {location.pathname.startsWith("/admin") && (
         <>
           <Dropdown>
@@ -145,7 +149,7 @@ export const NavBarComponent = () => {
       {auth?.user ? (
         <div className="flex items-center gap-4">
           <Dropdown>
-            <NavbarItem className="me-14 mt-3.5">
+            <NavbarItem className={`${navEndMargin} mt-3.5`}>
               <DropdownTrigger>
                 <Avatar
                   isBordered
@@ -209,14 +213,14 @@ export const NavBarComponent = () => {
         </div>
       ) : (
         <>
-          {location.pathname === "/" && (
+          {(location.pathname === "/" || location.pathname === "/listing") && (
             <>
               <NavbarItem className="mt-3.5">
                 <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
                   Sign In
                 </Button>
               </NavbarItem>
-              <NavbarItem className="me-14 mt-3.5">
+              <NavbarItem className={`${navEndMargin} mt-3.5`}>
                 <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
                   Sign Up
                 </Button>

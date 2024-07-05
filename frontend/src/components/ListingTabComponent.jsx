@@ -1,12 +1,14 @@
-import { DateRangePicker, Button } from "@nextui-org/react";
+import { DateRangePicker, Button, Avatar } from "@nextui-org/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RatingStarIcon } from "../constants/Icons";
 import { dateRangePickerClassNames } from "../constants/dateRangePickerClassNames";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { useFetch } from "../hooks/useFetch";
 import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
 import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
+import { XMarkIcon } from "../constants/Icons";
+import { StarRatingComponent } from "./StarRatingComponent";
 
 export const ListingTabComponent = () => {
   const[rating, setRating] = useState(0)
@@ -15,16 +17,22 @@ export const ListingTabComponent = () => {
   const[checkInDate, setCheckInDate] = useState('')
   const[checkOutDate, setCheckOutDate] = useState('')
   const[reserves, setReserves] = useState([])
+  const[reviews, setReviews] = useState([])
   const location = useLocation()
   const navigate = useNavigate()
   const { auth } = useAuth()
   const { listing } = location.state
   const[showPopup, setShowPopup] = useState(false)
   const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
+  const charecteristicDialogRef = useRef(null)
+  const reviewsDialogRef = useRef(null)
+  const imagesDialogRef = useRef(null)
+  const totalCharacteristics = listing.characteristics.length
 
   useEffect(() => {
     getListingRating(listing.id)
     getListingReserves(listing.id)
+    getListingReviews(listing.id)
   }, [])
 
   useEffect(() => {
@@ -40,6 +48,16 @@ export const ListingTabComponent = () => {
       const data = await response.json()
       setRating(data.rating)
       setTimesRated(data.timesRated)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getListingReviews = async (id) => {
+    try {
+      const response = await useFetch(`/backend/api/v1/rating/get/${id}`, "GET", null, false)
+      const data = await response.json()
+      setReviews(data)
     } catch (error) {
       console.log(error)
     }
@@ -80,17 +98,121 @@ export const ListingTabComponent = () => {
     setTimeout(() => setShowPopup(false), 7500)
   }
 
+  const showAllCharacteristics = () => {
+    charecteristicDialogRef.current?.showModal()
+  }
+
+  const closeCharacteristicsDialog = () => {
+    charecteristicDialogRef.current?.close()
+  }
+
+  const showAllReviews = () => {
+    reviewsDialogRef.current?.showModal()
+  }
+
+  const closeReviewsDialog = () => {
+    reviewsDialogRef.current?.close()
+  }
+
+  const showAllImages = () => {
+    imagesDialogRef.current?.showModal()
+  }
+
+  const closeImagesDialog = () => {
+    imagesDialogRef.current?.close()
+  }
+
   return (
-    <section className="listing-section mt-5 mx-48 min-h-screen h-screen">
+    <section className="listing-section mt-5 mx-48 min-h-screen h-[130vh]">
+      <dialog
+        ref={imagesDialogRef}
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] p-5 w-fit h-fit"
+      >
+        <button
+          className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
+          onClick={closeImagesDialog}
+        >
+          <XMarkIcon/>
+        </button>
+        <div className="mt-5">
+          {listing.images.map((image, index) => (
+            <div key={index} className="flex justify-center items-center mb-2">
+              <img 
+                src={image.imageUrl} 
+                alt={`${listing.title} ${index + 2}`}
+                className="rounded-lg w-full h-full hover:opacity-90"
+              />
+            </div>
+          ))}
+        </div>
+      </dialog>
+      <dialog 
+        ref={charecteristicDialogRef}
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] p-5 w-fit h-fit"
+      >
+        <button
+          className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
+          onClick={closeCharacteristicsDialog}
+        >
+          <XMarkIcon/>
+        </button>
+        <div>
+          <span className="text-2xl font-bold">
+            What this place offers
+          </span>
+          <div className="mt-5">
+            {listing.characteristics.map((characteristic, index) => (
+              <div key={index} className="flex items-center max-h-12 h-12 gap-2 p-2 mb-5 border-b-1 border-solid border-main-gray w-11/12">
+                <img src={characteristic.imageUrl} alt={`${characteristic.name} image`} className="h-full"/>
+                <span>{characteristic.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </dialog>
+      <dialog
+        ref={reviewsDialogRef}
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] p-5 w-fit h-fit"
+      >
+        <button
+          className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
+          onClick={closeReviewsDialog}
+        >
+          <XMarkIcon/>
+        </button>
+        <div>
+          <span className="text-2xl font-bold">
+            {reviews.length} reviews
+          </span>
+          <div className="mt-5">
+            {reviews.map((review, index) => (
+              <div key={index} className="block p-3 border-b-1 border-solid border-main-gray w-11/12">
+                <div className="flex items-center gap-2">
+                  <Avatar
+                    classNames={{
+                      base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B] capitalize w-12 h-12"
+                    }}
+                    name={review.user.name}
+                  />
+                  <div className="flex flex-col gap-1">
+                    <span className="font-bold">{review.user.name} {review.user.lastName}</span>
+                    <span><StarRatingComponent rating={Math.round(review.rating)}/></span>
+                  </div>
+                </div>
+                <div className="italic">{review.comment}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </dialog>
       <div className="flex justify-center my-5">
-        <span className="text-3xl w-3/5 italic">{listing.title}</span>
+        <span className="text-3xl w-4/6 italic">{listing.title}</span>
       </div>
-      <div className="flex justify-center h-3/6">
-        <div className="grid grid-cols-4 grid-rows-2 gap-x-2 w-3/5">
+      <div className="flex justify-center h-2/6 relative z-1">
+        <div className="grid grid-cols-4 grid-rows-2 gap-x-2 w-4/6 cursor-pointer" onClick={showAllImages}>
           <div className="row-span-4 col-span-2">
             <img src={listing.images[0].imageUrl} alt={listing.title} className="rounded-lg w-full h-full hover:opacity-90"/>
           </div>
-
           {listing.images.slice(1, 5).map((image, index) => (
             <div 
               key={index} 
@@ -103,35 +225,47 @@ export const ListingTabComponent = () => {
               />
             </div>
           ))}
+          <Button 
+            color="primary" 
+            radius="medium" 
+            variant="bordered" 
+            className="absolute bottom-2 right-64 z-10 w-1/12 mt-2 font-bold bg-white"
+            onClick={showAllImages}
+          >
+            Show all photos
+          </Button>
         </div>
       </div>
-      <div className="flex justify-center mt-5 h-2/6">
-        <div className="grid grid-cols-3 grid-rows-1 gap-x-10 w-3/5">
+      <div className="flex justify-center mt-5 h-2/7">
+        <div className="grid grid-cols-3 grid-rows-1 gap-x-10 w-4/6">
           <div className="col-span-2">
             <span className="text-2xl italic">
               {listing.description}
             </span>
             <div className="flex items-center mt-3 gap-2">
               <span className="flex items-center text-[18px] font-bold">
-                <RatingStarIcon className="w-3 h-3 mr-1"/> {rating}
+                <RatingStarIcon className="w-3 h-3 mr-1"/> {rating ? rating.toFixed(1) : 0}
               </span>
               <span className="text-[14px] mx-0.5">•</span>
               <span className="text-[18px] underline font-bold">
                 {timesRated} reviews
               </span>
             </div>
-            <div className="border-y-1 border-solid border-main-gray mt-5 py-9">
+            <div className="border-y-1 border-solid border-main-gray mt-5 py-4">
               <span className="text-lg font-bold">
                 What this place offers
               </span>
               <div className="grid grid-cols-2 grid-rows-3 max-h-20 h-20 my-5 gap-2">
-                {listing.characteristics.slice(0, 6).map((characteristic, index) => (
+                {listing.characteristics.slice(0, totalCharacteristics > 6 ? 6 : totalCharacteristics).map((characteristic, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <img src={characteristic.imageUrl} alt={`${characteristic.name} image`} className="h-full"/>
                     <span>{characteristic.name}</span>
                   </div>
                 ))}
               </div>
+              <Button color="primary" radius="medium" variant="bordered" className="w-4/12 mt-2 font-bold" onClick={showAllCharacteristics}>
+                Show all {totalCharacteristics} characteristics
+              </Button>
             </div>
           </div>
           <div className="flex flex-col justify-center items-center border-1 border-solid border-main-gray rounded-xl shadow-md">
@@ -168,6 +302,35 @@ export const ListingTabComponent = () => {
           </div>
         </div>
       </div>
+      <div className="flex justify-center my-5 h-2/7">
+          <div className="w-4/6 border-t-1 border-solid border-main-gray p-2">
+            <div className="flex justify-center my-5">
+              <span className="text-2xl font-bold">Reviews</span>
+            </div>
+            <div className="grid grid-cols-2 grid-rows-2 max-h-56 h-56 gap-5">
+              {reviews.slice(0, reviews.length > 4 ? 4 : reviews.length).map((review, index) => (
+                <div key={index} className="block p-1">
+                  <div className="flex items-center gap-2">
+                    <Avatar
+                      classNames={{
+                        base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B] capitalize w-12 h-12"
+                      }}
+                      name={review.user.name}
+                    />
+                    <div className="flex flex-col gap-1">
+                      <span className="font-bold">{review.user.name} {review.user.lastName}</span>
+                      <span><StarRatingComponent rating={Math.round(review.rating)}/></span>
+                    </div>
+                  </div>
+                  <div className="italic">{review.comment}</div>
+                </div>
+              ))}
+            </div>
+            <Button color="primary" radius="medium" variant="bordered" className="w-3/12 mt-2 font-bold" onClick={showAllReviews}>
+              Show all {reviews.length} reviews
+            </Button>
+          </div>
+        </div>
       {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
     </section>
   )

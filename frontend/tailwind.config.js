@@ -13,6 +13,9 @@ module.exports = {
       colors: {
         "main-gray": "#e0e0e0",
         "main-orange": "#ff6f00",
+        primary: {
+          DEFAULT: "#ff6f00"
+        }
       }
     },
   },
