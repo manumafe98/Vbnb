@@ -1,6 +1,6 @@
 import { DateRangePicker, Button, Avatar } from "@nextui-org/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RatingStarIcon } from "../constants/Icons";
+import { FavoriteIcon, RatingStarIcon, ShareIcon } from "../constants/Icons";
 import { dateRangePickerClassNames } from "../constants/dateRangePickerClassNames";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthProvider";
@@ -9,6 +9,9 @@ import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
 import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 import { XMarkIcon } from "../constants/Icons";
 import { StarRatingComponent } from "./StarRatingComponent";
+import { CopyLinkIcon, FacebookIcon, WhatsappIcon, TelegramIcon, TwitterIcon, LinkedinIcon } from "../constants/Icons";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, LinkedinShareButton, TelegramShareButton } from "react-share";
+import { fullSizeShareButtonStyle } from "../constants/fullSizeShareButtonStyle";
 
 export const ListingTabComponent = () => {
   const[rating, setRating] = useState(0)
@@ -27,7 +30,11 @@ export const ListingTabComponent = () => {
   const charecteristicDialogRef = useRef(null)
   const reviewsDialogRef = useRef(null)
   const imagesDialogRef = useRef(null)
+  const shareListingRef = useRef(null)
   const totalCharacteristics = listing.characteristics.length
+  const url = window.location.href
+  const number = "1167114273"
+  const bodyText = `Hey, I'm contacting you to know more about the listing on Vbnb`
 
   useEffect(() => {
     getListingRating(listing.id)
@@ -92,10 +99,38 @@ export const ListingTabComponent = () => {
     }
   }
 
+  const addListingToFavorite = async () => {
+    if (auth.user) {
+      try {
+        const response = await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${listing.id}`, "POST", null, true)
+        handlePopUp("Added to Favorites", "View Favorites",  "success")
+
+        if (!response.ok) {
+          handlePopUp("Already added to Favorites", "View Favorites", "error")
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      navigate("/auth/signin")
+    }
+  }
+
   const handlePopUp = (message, action, type) => {
     setShowPopup(true)
     setPopupData({ message, action, type })
     setTimeout(() => setShowPopup(false), 7500)
+  }
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => {
+        handlePopUp("Link copied", null, "success")
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   const showAllCharacteristics = () => {
@@ -122,8 +157,83 @@ export const ListingTabComponent = () => {
     imagesDialogRef.current?.close()
   }
 
+  const showListingShareSocials = () => {
+    shareListingRef.current?.showModal()
+  }
+
+  const closeShareDialog = () => {
+    shareListingRef.current?.close()
+  }
+
   return (
-    <section className="listing-section mt-5 mx-48 min-h-screen h-[130vh]">
+    <section className="listing-section mt-5 mx-48 min-h-screen h-[130vh] relative">
+      <dialog 
+        ref={shareListingRef}
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[50vh] min-w-[30vw] p-5 w-fit h-fit"
+      >
+        <button
+          className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
+          onClick={closeShareDialog}
+        >
+          <XMarkIcon/>
+        </button>
+        <span className="text-2xl font-bold">
+          Share this place
+        </span>
+        <div className="flex items-center w-11/12 h-20 my-5 gap-3">
+          <img src={listing.images[0].imageUrl} alt="" className="h-full w-2/12 rounded-xl"/>
+          <div className="flex flex-col">
+            <span className="text-lg italic">{listing.title}</span>
+            <span className="flex items-center">
+              <RatingStarIcon className="w-3 h-3 mr-1"/> {rating ? rating.toFixed(1) : 0}
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 grid-rows-3 gap-4 mt-10">
+          <div className="flex items-center border-2 border-solid border-gray-300 rounded-xl h-12 hover:bg-gray-50">
+            <button className="flex justify-center items-center w-full h-full p-1" onClick={copyLink}>
+              <span className="flex items-center text-lg gap-3">
+                <CopyLinkIcon className="w-6 h-6"/> Copy Link
+              </span>
+            </button>
+          </div>
+          <div className="flex items-center border-2 border-solid border-gray-300 rounded-xl hover:bg-gray-50">
+            <FacebookShareButton url={url} style={fullSizeShareButtonStyle}>
+              <span className="flex items-center text-lg gap-3">
+                <FacebookIcon className="w-6 h-6"/> Facebook
+              </span>
+            </FacebookShareButton>
+          </div>
+          <div className="flex items-center border-2 border-solid border-gray-300 rounded-xl hover:bg-gray-50">
+            <TwitterShareButton url={url} style={fullSizeShareButtonStyle}>
+              <span className="flex items-center text-lg gap-3">
+                <TwitterIcon className="w-6 h-6"/> Twitter
+              </span>
+            </TwitterShareButton>
+          </div>
+          <div className="flex items-center border-2 border-solid border-gray-300 rounded-xl hover:bg-gray-50">
+            <TelegramShareButton url={url} style={fullSizeShareButtonStyle}>
+              <span className="flex items-center text-lg gap-3">
+                <TelegramIcon className="w-6 h-6"/> Telegram
+              </span>
+            </TelegramShareButton>
+          </div>
+          <div className="flex items-center border-2 border-solid border-gray-300 rounded-xl hover:bg-gray-50">
+            <LinkedinShareButton url={url} style={fullSizeShareButtonStyle}>
+              <span className="flex items-center text-lg gap-3">
+                <LinkedinIcon className="w-6 h-6"/> Linkedin
+              </span>
+            </LinkedinShareButton>
+          </div>
+          <div className="flex items-center border-2 border-solid border-gray-300 rounded-xl hover:bg-gray-50">
+            <WhatsappShareButton url={url} style={fullSizeShareButtonStyle}>
+              <span className="flex items-center text-lg gap-3">
+                <WhatsappIcon className="w-6 h-6"/> Whatsapp
+              </span>
+            </WhatsappShareButton>
+          </div>
+        </div>
+      </dialog>
       <dialog
         ref={imagesDialogRef}
         className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] p-5 w-fit h-fit"
@@ -140,7 +250,7 @@ export const ListingTabComponent = () => {
               <img 
                 src={image.imageUrl} 
                 alt={`${listing.title} ${index + 2}`}
-                className="rounded-lg w-full h-full hover:opacity-90"
+                className="rounded-lg w-full max-h-[90vh] hover:opacity-90 my-3"
               />
             </div>
           ))}
@@ -206,7 +316,17 @@ export const ListingTabComponent = () => {
         </div>
       </dialog>
       <div className="flex justify-center my-5">
-        <span className="text-3xl w-4/6 italic">{listing.title}</span>
+        <div className="flex justify-between w-4/6">
+          <span className="text-3xl italic">{listing.title}</span>
+          <div className="flex gap-5">
+            <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={showListingShareSocials}>
+              <div className="flex items-center gap-2 underline"><span><ShareIcon className="w-5 h-5"/></span>Share</div>
+            </button>
+            <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={addListingToFavorite}>
+              <div className="flex items-center gap-2 underline"><span><FavoriteIcon className="w-5 h-5"/></span>Save</div>
+            </button>
+          </div>
+        </div>
       </div>
       <div className="flex justify-center h-2/6 relative z-1">
         <div className="grid grid-cols-4 grid-rows-2 gap-x-2 w-4/6 cursor-pointer" onClick={showAllImages}>
@@ -330,6 +450,11 @@ export const ListingTabComponent = () => {
               Show all {reviews.length} reviews
             </Button>
           </div>
+        </div>
+        <div className="fixed group bottom-4 right-4">
+          <a href={`https://wa.me/${number}?text=${bodyText}`} target="_blank">
+            <WhatsappIcon className="fill-current text-[#00E676] w-14 h-14 group-hover:scale-110"/>
+          </a>
         </div>
       {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
     </section>
