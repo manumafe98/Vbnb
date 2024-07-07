@@ -77,10 +77,14 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   }
 
   const updateListing = async () => {
-    const characteristicIds = characteristicPlaceholder.map(characteristicId => parseInt(characteristicId))
+    const characteristicIds = characteristicPlaceholder.map(characteristicId => parseInt(characteristicId)).filter(id => !Number.isNaN(id))
     const images = incomingImages.map(image => image.url)
     
-    if (newUploadedImages.length == 0) {
+    console.log(characteristicIds)
+
+    if (images.length === 0 && newUploadedImages.length === 0) {
+      newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images: [], characteristicIds }
+    } else if (newUploadedImages.length === 0) {
       newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images, characteristicIds }
     } else {
       const imageUrlsArray = await uploadImagesToCloudinary(newUploadedImages)
@@ -90,12 +94,55 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
       newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images: allImages, characteristicIds }
     }
 
-    try {
-      await useFetch(`/backend/api/v1/listing/update/${listingToUpdate.id}`, "PUT", newListingData)
-      handlePopUp(`${titlePlaceholder} updated successfully`, "View Listings", "success")
-    } catch (error) {
-      console.log(error)
+    const isValid = validateForm(newListingData)
+
+    if (isValid) {
+      try {
+        const response = await useFetch(`/backend/api/v1/listing/update/${listingToUpdate.id}`, "PUT", newListingData)
+        if (response.ok) {
+          handlePopUp(`${titlePlaceholder} updated successfully`, "View Listings", "success")
+        } else {
+          handlePopUp("Listing already exists", "View Listings", "error")
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
     }
+  }
+
+  const validateForm = (body) => {
+    if (!body.title.trim()) {
+      handlePopUp("Please add a valid title", null, "error")
+      return false
+    }
+
+    if (!body.description.trim()) {
+      handlePopUp("Please add a valid description", null, "error")
+      return false
+    }
+
+    if (!body.cityId) {
+      handlePopUp("Please select a city", null, "error")
+      return false
+    }
+
+    if (!body.categoryId) {
+      handlePopUp("Please select a category", null, "error")
+      return false
+    }
+
+    if (body.images.length === 0) {
+      handlePopUp("You must add at least one image", null, "error")
+      return false
+    }
+
+    if (body.characteristicIds.length === 0) {
+      handlePopUp("You must select at least one characteristic", null, "error")
+      return false
+    }
+
+    return true
   }
 
   const handlePopUp = (message, action, type) => {
@@ -107,6 +154,9 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   return (
     <section className="flex justify-center my-auto min-h-full">
       <div className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-3">
+        <div>
+          <h1 className="text-3xl font-bold text-main-orange mb-4">Update Listing</h1>
+        </div>
         <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={true} incomingImages={incomingData}/>
         <Input 
           type="text" 

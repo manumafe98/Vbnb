@@ -39,7 +39,7 @@ export const ListingCardComponent = ({ id, title, images, description, rating, o
         onClick={handleFavoriteClick}
         className="favorite-button group absolute transition-transform duration-300 hover:scale-110 p-2 bg-transparent border-none cursor-pointer z-10 top-2 right-2"
       >
-        <FavoriteIcon className="w-6 h-6"/>
+        <FavoriteIcon className="fill-current text-main-orange w-6 h-6"/>
       </button>
       <ImageCarouselComponent>
         {[

@@ -358,7 +358,6 @@ export const FavoriteIcon = (props) => {
             id="ipTLike0"
           >
             <path
-              fill="#808080"
               stroke="#fff"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -368,7 +367,6 @@ export const FavoriteIcon = (props) => {
           </mask>
         </defs>
           <path
-            fill="#ff6f00"
             d="M0 0h48v48H0z"
             mask="url(#ipTLike0)"
           />
@@ -451,6 +449,21 @@ export const RatingStarIcon = (props) => {
   )
 }
 
+export const ReviewStarIcon = (props) => {
+  return(
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="m12 15.39l-3.76 2.27l.99-4.28l-3.32-2.88l4.38-.37L12 6.09l1.71 4.04l4.38.37l-3.32 2.88l.99 4.28M22 9.24l-7.19-.61L12 2L9.19 8.63L2 9.24l5.45 4.73L5.82 21L12 17.27L18.18 21l-1.64-7.03z"
+      />
+    </svg>
+  )
+}
+
 export const ChevronLeftIcon = (props) => {
   return(
     <svg
@@ -502,18 +515,52 @@ export const XMarkIcon = (props) => {
 
 export const ShareIcon = (props) => {
   return(
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 32 32"
       {...props}
     >
-      <path 
-        fill="none" 
-        stroke="currentColor" 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         strokeWidth="2"
         d="M5 17v8a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2v-8m-11 3V3.5M22 9l-6-6l-6 6"
+      />
+    </svg>
+  )
+}
+
+export const CheckMarkIcon = (props) => {
+  return(
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      {...props}
+    >
+      <path
+        d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2m-2 19.59l-5-5L10.59 15L14 18.41L21.41 11l1.596 1.586Z"
+      />
+      <path
+        fill="none"
+        d="m14 21.591l-5-5L10.591 15L14 18.409L21.41 11l1.595 1.585z"
+      />
+    </svg>
+  )
+}
+
+export const DialogXMarkIcon = (props) => {
+  return(
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+      {...props}
+    >
+      <path
+        fill-rule="evenodd" 
+        d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14M6.53 5.47a.75.75 0 0 0-1.06 1.06L6.94 8L5.47 9.47a.75.75 0 1 0 1.06 1.06L8 9.06l1.47 1.47a.75.75 0 1 0 1.06-1.06L9.06 8l1.47-1.47a.75.75 0 1 0-1.06-1.06L8 6.94z" 
+        clip-rule="evenodd"
       />
     </svg>
   )

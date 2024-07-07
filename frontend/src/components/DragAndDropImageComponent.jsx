@@ -89,7 +89,7 @@ export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple =
           <DownloadCloudIcon/>
         ) : (
           <>
-            Drag & Drop an image here or{" "}
+            Drag & Drop or {" "}
             <span className="select" role="button" onClick={selectFiles}>
               Browse
             </span>
