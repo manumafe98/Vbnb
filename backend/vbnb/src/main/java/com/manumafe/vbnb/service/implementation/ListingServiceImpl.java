@@ -61,6 +61,7 @@ public class ListingServiceImpl implements ListingService {
 
 		listing.setTitle(listingDto.title());
 		listing.setDescription(listingDto.description());
+		listing.setOwnerPhoneNumber(listingDto.ownerPhoneNumber());
 		listing.setCategory(category);
 		listing.setCity(city);
 
@@ -98,6 +99,7 @@ public class ListingServiceImpl implements ListingService {
 
 		listing.setTitle(listingDto.title());
 		listing.setDescription(listingDto.description());
+		listing.setOwnerPhoneNumber(listingDto.ownerPhoneNumber());
 		listing.setCategory(category);
 		listing.setCity(city);
 

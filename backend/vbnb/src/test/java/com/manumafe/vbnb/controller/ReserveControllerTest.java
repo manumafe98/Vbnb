@@ -122,6 +122,7 @@ public class ReserveControllerTest {
         Listing listing = new Listing();
         listing.setTitle("Snow Cabin");
         listing.setDescription("Warm cabin near the mountains to enjoy hiking and snowboarding");
+        listing.setOwnerPhoneNumber("+541167114273");
         listing.setCategory(category);
         listing.setCity(city);
         listing.setCharacteristics(Set.of(characteristic));
@@ -208,7 +209,8 @@ public class ReserveControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":2,\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}},{\"id\":3,\"checkInDate\":\"2024-10-08\",\"checkOutDate\":\"2024-10-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
+                        "[{\"id\":2,\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}," +
+                        "{\"id\":3,\"checkInDate\":\"2024-10-08\",\"checkOutDate\":\"2024-10-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
     }
 
     @Test
@@ -237,7 +239,7 @@ public class ReserveControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":1,\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
+                        "[{\"id\":1,\"checkInDate\":\"2024-08-01\",\"checkOutDate\":\"2024-08-08\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
     }
 
     @Test
@@ -248,7 +250,8 @@ public class ReserveControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":2,\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}},{\"id\":3,\"checkInDate\":\"2024-10-08\",\"checkOutDate\":\"2024-10-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
+                        "[{\"id\":2,\"checkInDate\":\"2024-09-08\",\"checkOutDate\":\"2024-09-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}," +
+                        "{\"id\":3,\"checkInDate\":\"2024-10-08\",\"checkOutDate\":\"2024-10-15\",\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
     }
 
     @Test

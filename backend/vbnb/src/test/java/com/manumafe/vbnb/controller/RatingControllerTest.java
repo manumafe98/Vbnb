@@ -88,6 +88,7 @@ public class RatingControllerTest {
         Listing listing = new Listing();
         listing.setTitle("House in Mar del Plata");
         listing.setDescription("Beautiful house near the beach");
+        listing.setOwnerPhoneNumber("+541167114273");
 
         listingRepository.save(listing);
 

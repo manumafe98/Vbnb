@@ -6,12 +6,16 @@ import { useFetch } from "../hooks/useFetch";
 import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
 import { useState, useEffect } from "react";
 import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import '../styles/phone-input.css'
 
 export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   const[titlePlaceholder, setTitlePlaceholder] = useState(listingToUpdate.title)
   const[categoryPlaceholder, setCategoryPlaceholder] = useState([`${listingToUpdate.category.id}`])
   const[cityPlaceholder, setCityPlaceholder] = useState([`${listingToUpdate.city.id}`])
   const[descriptionPlaceholder, setDescriptionPlaceholder] = useState(listingToUpdate.description)
+  const[ownerPhoneNumberPlaceholder, setOwnerPhoneNumberPlaceholder] = useState(listingToUpdate.ownerPhoneNumber)
   const[newUploadedImages, setNewUploadedImages] = useState([])
   const[cities, setCities] = useState([])
   const[categories, setCategories] = useState([])
@@ -83,15 +87,15 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
     console.log(characteristicIds)
 
     if (images.length === 0 && newUploadedImages.length === 0) {
-      newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images: [], characteristicIds }
+      newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, ownerPhoneNumber: ownerPhoneNumberPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images: [], characteristicIds }
     } else if (newUploadedImages.length === 0) {
-      newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images, characteristicIds }
+      newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, ownerPhoneNumber: ownerPhoneNumberPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images, characteristicIds }
     } else {
       const imageUrlsArray = await uploadImagesToCloudinary(newUploadedImages)
 
       const allImages = images.concat(imageUrlsArray)
 
-      newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images: allImages, characteristicIds }
+      newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, ownerPhoneNumber: ownerPhoneNumberPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images: allImages, characteristicIds }
     }
 
     const isValid = validateForm(newListingData)
@@ -119,6 +123,11 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
     if (!body.description.trim()) {
       handlePopUp("Please add a valid description", null, "error")
+      return false
+    }
+
+    if (!body.ownerPhoneNumber.trim()) {
+      handlePopUp("Please add a valid phone number", null, "error")
       return false
     }
 
@@ -153,7 +162,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
   return (
     <section className="flex justify-center my-auto min-h-full">
-      <div className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-3">
+      <div className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 my-5 border-1 border-solid border-main-gray rounded-xl shadow-md p-3">
         <div>
           <h1 className="text-3xl font-bold text-main-orange mb-4">Update Listing</h1>
         </div>
@@ -219,6 +228,12 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
             </SelectItem>
           ))}
         </Select>
+        <PhoneInput
+          placeholder="Enter phone number"
+          value={ownerPhoneNumberPlaceholder}
+          onChange={setOwnerPhoneNumberPlaceholder}
+          className="my-custom-phone-input"
+        />
         <Button radius="full" className="bg-[#ff6f00] text-white" onClick={updateListing}>
           Update Listing
         </Button>

@@ -6,6 +6,9 @@ import { useFetch } from "../hooks/useFetch";
 import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
 import { useState, useEffect } from "react";
 import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import '../styles/phone-input.css'
 
 export const AddElementFormComponent = ({ elementName }) => {
   const[element, setElement] = useState('')
@@ -14,12 +17,14 @@ export const AddElementFormComponent = ({ elementName }) => {
   const[categories, setCategories] = useState([])
   const[characteristics, setCharacteristics] = useState([])
   const[description, setDescription] = useState('')
+  const[ownerPhoneNumber, setOwnerPhoneNumber] = useState('')
   const[cityId, setCityId] = useState(null)
   const[categoryId, setCategoryId] = useState(null)
   const[characteristicIds, setcharacteristicIds] = useState([])
   const[currentImages, setCurrentImages] = useState([])
   const[showPopup, setShowPopup] = useState(false)
   const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
+  
 
   const url = elementName === "Listing" ? `/backend/api/v1/${elementName.toLowerCase()}/create` : `/backend/api/v1/${elementName.toLowerCase()}`
 
@@ -37,7 +42,7 @@ export const AddElementFormComponent = ({ elementName }) => {
         elementData = { name: element, imageUrl }
         break
       case "Listing":
-        elementData = { title: element, description, cityId, categoryId, images: imagesUrls, characteristicIds }
+        elementData = { title: element, description, ownerPhoneNumber, cityId, categoryId, images: imagesUrls, characteristicIds }
         break
     }
 
@@ -112,6 +117,11 @@ export const AddElementFormComponent = ({ elementName }) => {
         return false
       }
 
+      if (!body.ownerPhoneNumber.trim()) {
+        handlePopUp("Please add a valid phone number", null, "error")
+        return false
+      }
+
       if (!body.cityId) {
         handlePopUp("Please select a city", null, "error")
         return false
@@ -180,7 +190,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   return (
     <section className="flex justify-center content content-center my-auto min-h-full">
-      <div key={elementName} className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-4">
+      <div key={elementName} className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 my-5 border-1 border-solid border-main-gray rounded-xl shadow-md p-4">
         <div>
           <h1 className="text-3xl font-bold text-main-orange mb-4">Add {elementName}</h1>
         </div>
@@ -255,6 +265,12 @@ export const AddElementFormComponent = ({ elementName }) => {
                 </SelectItem>
               ))}
             </Select>
+            <PhoneInput
+              placeholder="Enter phone number"
+              value={ownerPhoneNumber}
+              onChange={setOwnerPhoneNumber}
+              className="my-custom-phone-input"
+            />
           </>
         )}
         <Button radius="full" className="bg-main-orange w-4/6 text-white" onClick={addElement}>

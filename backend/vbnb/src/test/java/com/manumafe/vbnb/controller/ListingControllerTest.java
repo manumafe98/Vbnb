@@ -118,6 +118,7 @@ public class ListingControllerTest {
         Listing listing = new Listing();
         listing.setTitle("Snow Cabin");
         listing.setDescription("Warm cabin near the mountains to enjoy hiking and snowboarding");
+        listing.setOwnerPhoneNumber("+541167114273");
         listing.setCategory(category);
         listing.setCity(city);
         listing.setCharacteristics(Set.of(characteristic));
@@ -134,6 +135,7 @@ public class ListingControllerTest {
     private ListingCreateDto createListingDto(
             String title,
             String description,
+            String ownerPhoneNumber,
             Category category,
             City city,
             Characteristic characteristic) {
@@ -141,6 +143,7 @@ public class ListingControllerTest {
         return new ListingCreateDto(
                 title,
                 description,
+                ownerPhoneNumber,
                 city.getId(),
                 category.getId(),
                 Set.of("http://image1"),
@@ -172,6 +175,7 @@ public class ListingControllerTest {
         ListingCreateDto listing = createListingDto(
                 "House in Mar del Plata",
                 "Beautiful house with wifi",
+                "+541167114273",
                 category,
                 city,
                 characteristic);
@@ -187,6 +191,7 @@ public class ListingControllerTest {
                         jsonPath("$.id").exists(),
                         jsonPath("$.title").value("House in Mar del Plata"),
                         jsonPath("$.description").value("Beautiful house with wifi"),
+                        jsonPath("$.ownerPhoneNumber").value("+541167114273"),
                         jsonPath("$.city.id").exists(),
                         jsonPath("$.city.name").value("Mar del Plata"),
                         jsonPath("$.city.country").value("Argentina"),
@@ -212,6 +217,7 @@ public class ListingControllerTest {
         ListingCreateDto listing = createListingDto(
                 "Department in Cordoba",
                 "Beautiful department in front of the beach with kitchen",
+                "+541167114273",
                 category,
                 city,
                 characteristic);
@@ -227,6 +233,7 @@ public class ListingControllerTest {
                         jsonPath("$.id").exists(),
                         jsonPath("$.title").value("Department in Cordoba"),
                         jsonPath("$.description").value("Beautiful department in front of the beach with kitchen"),
+                        jsonPath("$.ownerPhoneNumber").value("+541167114273"),
                         jsonPath("$.city.id").exists(),
                         jsonPath("$.city.name").value("Cordoba"),
                         jsonPath("$.city.country").value("Argentina"),
@@ -261,7 +268,7 @@ public class ListingControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
+                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
     }
 
     @Test
@@ -297,7 +304,7 @@ public class ListingControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
+                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
     }
 
     @Test
@@ -311,7 +318,7 @@ public class ListingControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}]"));
+                        "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}]"));
     }
 
     @Test
@@ -322,8 +329,8 @@ public class ListingControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         content().string(
-                                "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}," +
-                                "{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
+                                "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}," +
+                                "{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
     }
 
     @Test
@@ -334,7 +341,7 @@ public class ListingControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}]"));
+                        "[{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}]"));
     }
 
     @Test
@@ -345,7 +352,7 @@ public class ListingControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
+                        "[{\"id\":2,\"title\":\"Department in Cordoba\",\"description\":\"Beautiful department in front of the beach with kitchen\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":3,\"name\":\"Cordoba\",\"country\":\"Argentina\"},\"category\":{\"id\":3,\"name\":\"Departments\",\"imageUrl\":\"http://image.department.example\"},\"images\":[{\"id\":2,\"imageUrl\":\"http://image1\"}],\"characteristics\":[{\"id\":3,\"name\":\"Kitchen\",\"imageUrl\":\"http://image.kitchen.example\"}]}]"));
     }
 
     @Test

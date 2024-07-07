@@ -8,6 +8,7 @@ public record ListingResponseDto(
         Long id,
         String title,
         String description,
+        String ownerPhoneNumber,
         CityDto city,
         CategoryDto category,
         Set<Image> images,

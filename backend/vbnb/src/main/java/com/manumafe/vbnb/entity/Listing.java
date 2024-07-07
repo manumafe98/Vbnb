@@ -44,6 +44,9 @@ public class Listing {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private String ownerPhoneNumber;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "city_id")

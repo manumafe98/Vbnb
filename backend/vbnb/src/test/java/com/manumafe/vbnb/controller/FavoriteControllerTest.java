@@ -113,6 +113,7 @@ public class FavoriteControllerTest {
         Listing listing = new Listing();
         listing.setTitle("Snow Cabin");
         listing.setDescription("Warm cabin near the mountains to enjoy hiking and snowboarding");
+        listing.setOwnerPhoneNumber("+541167114273");
         listing.setCategory(category);
         listing.setCity(city);
         listing.setCharacteristics(Set.of(characteristic));
@@ -142,7 +143,7 @@ public class FavoriteControllerTest {
                 .andExpectAll(
                     status().isOk(),
                     content().string(
-                        "[{\"id\":{\"userId\":1,\"listingId\":1},\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
+                        "[{\"id\":{\"userId\":1,\"listingId\":1},\"listing\":{\"id\":1,\"title\":\"Snow Cabin\",\"description\":\"Warm cabin near the mountains to enjoy hiking and snowboarding\",\"ownerPhoneNumber\":\"+541167114273\",\"city\":{\"id\":1,\"name\":\"Ushuaia\",\"country\":\"Argentina\"},\"category\":{\"id\":1,\"name\":\"Cabins\",\"imageUrl\":\"http://image.cabin.example\"},\"images\":[],\"characteristics\":[{\"id\":1,\"name\":\"Chimney\",\"imageUrl\":\"http://image.chimney.example\"}]}}]"));
     }
 
     @Test

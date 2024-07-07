@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Avatar, Input } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Avatar, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Button } from "@nextui-org/react";
 import { DeleteIcon, EditIcon, CheckIcon } from "../constants/Icons";
 import { useFetch } from "../hooks/useFetch";
 import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
@@ -7,10 +7,13 @@ import { Link } from "react-router-dom";
 
 export const ElementTableComponent = ({ elementName }) => {
     const[elements, setElements] = useState([])
+    const[elementId, setElementId] = useState(null)
     const[tableKey, setTableKey] = useState(0)
     const[editState, setEditState] = useState({})
     const[newCity, setNewCity] = useState('')
     const[newCountry, setNewCountry] = useState('')
+    const[listings, setListings] = useState([])
+    const {isOpen, onOpen, onOpenChange} = useDisclosure()
 
     let columns = []
 
@@ -41,6 +44,20 @@ export const ElementTableComponent = ({ elementName }) => {
         .catch(error => console.log(error))
     }
 
+    const getListingsByCity = async (city) => {
+      await useFetch(`/backend/api/v1/listing/city/${city}`, "GET", null, false)
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.log(error))
+    }
+  
+    const getListingByCategory = async (category) => {
+      await useFetch(`/backend/api/v1/listing/category/${category}`, "GET", null, false)
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.log(error))
+    }
+
     const deleteElement = async (id) => {
       try {
         await useFetch(`/backend/api/v1/${elementName}/${id}`, "DELETE")
@@ -48,6 +65,29 @@ export const ElementTableComponent = ({ elementName }) => {
       } catch(error) {
         console.log(error)
       }
+    }
+
+    const handleDeleteElement = (element) => {
+      const id = element.id
+      const name = element.name
+
+      if (elementName !== "category" && elementName !== "city") {
+        deleteElement(id)
+      } else {
+        onOpen()
+        setElementId(id)
+
+        if (elementName === "city") {
+          getListingsByCity(name)
+        } else {
+          getListingByCategory(name)
+        }
+      }
+    }
+
+    const handleModalDelete = () => {
+      deleteElement(elementId)
+      onOpenChange(false)
     }
 
     const toggleEditState = (id) => {
@@ -190,7 +230,7 @@ export const ElementTableComponent = ({ elementName }) => {
               )}
               <Tooltip color="danger" content={`Delete ${elementName}`}>
                 <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                  <DeleteIcon onClick={() => deleteElement(element.id)}/>
+                  <DeleteIcon onClick={() => handleDeleteElement(element)}/>
                 </span>
               </Tooltip>
             </div>
@@ -202,6 +242,35 @@ export const ElementTableComponent = ({ elementName }) => {
 
   return (
     <div className="flex justify-center">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 capitalize">Delete {elementName}</ModalHeader>
+              <ModalBody>
+                <span className="text-lg">The following listings will be deleted as well</span>
+                <div className="mt-5">
+                  {listings.map((listing, index) => (
+                    <div key={index} className="flex items-center max-h-16 h-16 gap-2 p-2 mb-5 border-b-1 border-solid border-main-gray w-11/12">
+                      <img src={listing.images[0].imageUrl} alt={`${listing.title} image ${index + 1}`} className="h-full rounded-md"/>
+                      <span>{listing.id}</span>
+                      <span>{listing.title}</span>
+                    </div>
+                  ))}
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" variant="bordered" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={handleModalDelete}>
+                  Confirm
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
       <Table key={tableKey} aria-label={`${elementName} table`} className="w-[70%] my-5">
         <TableHeader columns={columns}>
           {(column) => (

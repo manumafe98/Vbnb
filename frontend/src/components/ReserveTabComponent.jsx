@@ -85,8 +85,9 @@ export const ReserveTabComponent = () => {
 
     try {
       await useFetch(`/backend/api/v1/reserve?reserveId=${currentReserveId}`, "PUT", reserve)
+      onOpenChange(false)
       handlePopUp("Your reservation was successfully updated", null, "success")
-      onClose()
+      getUserReserves()
     } catch (error) {
       console.log(error)
     }
