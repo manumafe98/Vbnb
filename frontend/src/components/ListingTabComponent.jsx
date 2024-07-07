@@ -1,6 +1,6 @@
-import { DateRangePicker, Button, Avatar } from "@nextui-org/react";
+import { DateRangePicker, Button, Avatar, Textarea } from "@nextui-org/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FavoriteIcon, RatingStarIcon, ShareIcon } from "../constants/Icons";
+import { FavoriteIcon, RatingStarIcon, ReviewStarIcon, ShareIcon } from "../constants/Icons";
 import { dateRangePickerClassNames } from "../constants/dateRangePickerClassNames";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthProvider";
@@ -12,6 +12,9 @@ import { StarRatingComponent } from "./StarRatingComponent";
 import { CopyLinkIcon, FacebookIcon, WhatsappIcon, TelegramIcon, TwitterIcon, LinkedinIcon } from "../constants/Icons";
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, LinkedinShareButton, TelegramShareButton } from "react-share";
 import { fullSizeShareButtonStyle } from "../constants/fullSizeShareButtonStyle";
+import { StarReviewComponent } from "./StarReviewComponent";
+import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
+import { DialogPopUpComponent } from "../components/DialogPopUpComponent";
 
 export const ListingTabComponent = () => {
   const[rating, setRating] = useState(0)
@@ -21,20 +24,25 @@ export const ListingTabComponent = () => {
   const[checkOutDate, setCheckOutDate] = useState('')
   const[reserves, setReserves] = useState([])
   const[reviews, setReviews] = useState([])
+  const[showPopup, setShowPopup] = useState(false)
+  const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
+  const[dialogPopUpData, setDialogPopupData] = useState({ text: "", success: true })
+  const[reviewRating, setReviewRating] = useState(0)
+  const[reviewComment, setReviewComment] = useState('')
+  const[showDialogNotification, setShowDialogNotification] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const { auth } = useAuth()
   const { listing } = location.state
-  const[showPopup, setShowPopup] = useState(false)
-  const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
   const charecteristicDialogRef = useRef(null)
-  const reviewsDialogRef = useRef(null)
+  const checkReviewsDialogRef = useRef(null)
   const imagesDialogRef = useRef(null)
   const shareListingRef = useRef(null)
+  const addReviewRef = useRef(null)
   const totalCharacteristics = listing.characteristics.length
   const url = window.location.href
-  const number = "1167114273"
-  const bodyText = `Hey, I'm contacting you to know more about the listing on Vbnb`
+  const number = "+541167114273"
+  const whatsappParams = `${number}?text=Hey, I'm contacting you to know more about ${listing.title} on Vbnb`
 
   useEffect(() => {
     getListingRating(listing.id)
@@ -83,16 +91,18 @@ export const ListingTabComponent = () => {
 
   const addListingReserve = async () => {
     if (auth.user) {
-      const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0]
-      const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0]
-      const reserve = { checkInDate: formattedCheckInDate, checkOutDate: formattedCheckOutDate }
-
-      try {
-        await useFetch(`/backend/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
-        handlePopUp("Listing reserved successfully", "View Reserves", "success")
-  
-      } catch (error) {
-        console.log(error)
+      if (checkInDate === "" || checkOutDate === "") {
+        handlePopUp("Please select valid dates", null, "error")
+      } else {
+        const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0]
+        const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0]
+        const reserve = { checkInDate: formattedCheckInDate, checkOutDate: formattedCheckOutDate }
+        try {
+          await useFetch(`/backend/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
+          handlePopUp("Listing reserved successfully", "View Reserves", "success")
+        } catch (error) {
+          console.log(error)
+        }
       }
     } else {
       navigate("/auth/signin")
@@ -102,7 +112,7 @@ export const ListingTabComponent = () => {
   const addListingToFavorite = async () => {
     if (auth.user) {
       try {
-        const response = await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${listing.id}`, "POST", null, true)
+        const response = await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${listing.id}`, "POST")
         handlePopUp("Added to Favorites", "View Favorites",  "success")
 
         if (!response.ok) {
@@ -117,16 +127,42 @@ export const ListingTabComponent = () => {
     }
   }
 
+  const addListingReview = async () => {
+    if (auth.user) {
+      const ratingBody = { rating: reviewRating, comment: reviewComment }
+
+      try {
+        const response = await useFetch(`/backend/api/v1/rating?listingId=${listing.id}&userEmail=${auth.user}`, "POST", ratingBody)
+        if (response.ok) {
+          handleDialogPopUp("Reviewed successfully", true)
+          getListingReviews(listing.id)
+        } else {
+          handleDialogPopUp("Review failed", false)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      navigate("/auth/signin")
+    }
+  }
+
   const handlePopUp = (message, action, type) => {
     setShowPopup(true)
     setPopupData({ message, action, type })
     setTimeout(() => setShowPopup(false), 7500)
   }
 
+  const handleDialogPopUp = (text, success) => {
+    setShowDialogNotification(true)
+    setDialogPopupData({ text, success })
+    setTimeout(() => setShowDialogNotification(false), 4000)
+  }
+
   const copyLink = () => {
     navigator.clipboard.writeText(window.location.href)
       .then(() => {
-        handlePopUp("Link copied", null, "success")
+        handleDialogPopUp("Link Copied", true)
       })
       .catch((error) => {
         console.log(error)
@@ -142,11 +178,11 @@ export const ListingTabComponent = () => {
   }
 
   const showAllReviews = () => {
-    reviewsDialogRef.current?.showModal()
+    checkReviewsDialogRef.current?.showModal()
   }
 
   const closeReviewsDialog = () => {
-    reviewsDialogRef.current?.close()
+    checkReviewsDialogRef.current?.close()
   }
 
   const showAllImages = () => {
@@ -165,8 +201,50 @@ export const ListingTabComponent = () => {
     shareListingRef.current?.close()
   }
 
+  const showAddReviewDialog = () => {
+    addReviewRef.current?.showModal()
+  }
+
+  const closeAddReviewDialog = () => {
+    addReviewRef.current?.close()
+    setReviewRating(0)
+    setReviewComment("")
+  }
+
   return (
     <section className="listing-section mt-5 mx-48 min-h-screen h-[130vh] relative">
+      <dialog
+        ref={addReviewRef}
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[50vh] min-w-[30vw] p-5 w-fit h-fit"
+      >
+        <button
+          className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
+          onClick={closeAddReviewDialog}
+        >
+          <XMarkIcon/>
+        </button>
+        <div className="flex flex-col justify-center items-center mt-5">
+          <span className="text-2xl font-bold mb-10">
+            Review this place
+          </span>
+          <StarReviewComponent rating={reviewRating} setRating={setReviewRating}/>
+          <Textarea
+            label="Review"
+            variant="bordered"
+            placeholder="Add your review comment"
+            value={reviewComment}
+            className="w-4/6 my-5"
+            classNames={inputWrapperClassNames}
+            onChange={(e) => setReviewComment(e.target.value)}
+          />
+          <Button color="primary" className="w-4/6" onClick={addListingReview}>
+            Submit Review
+          </Button>
+        </div>
+        {showDialogNotification && (
+          <DialogPopUpComponent text={dialogPopUpData.text} success={dialogPopUpData.success}/>
+        )}
+      </dialog>
       <dialog 
         ref={shareListingRef}
         className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[50vh] min-w-[30vw] p-5 w-fit h-fit"
@@ -189,7 +267,7 @@ export const ListingTabComponent = () => {
             </span>
           </div>
         </div>
-        <div className="grid grid-cols-2 grid-rows-3 gap-4 mt-10">
+        <div className="grid grid-cols-2 grid-rows-3 gap-4 mt-8">
           <div className="flex items-center border-2 border-solid border-gray-300 rounded-xl h-12 hover:bg-gray-50">
             <button className="flex justify-center items-center w-full h-full p-1" onClick={copyLink}>
               <span className="flex items-center text-lg gap-3">
@@ -233,6 +311,9 @@ export const ListingTabComponent = () => {
             </WhatsappShareButton>
           </div>
         </div>
+        {showDialogNotification && (
+          <DialogPopUpComponent text={dialogPopUpData.text} success={dialogPopUpData.success}/>
+        )}
       </dialog>
       <dialog
         ref={imagesDialogRef}
@@ -281,7 +362,7 @@ export const ListingTabComponent = () => {
         </div>
       </dialog>
       <dialog
-        ref={reviewsDialogRef}
+        ref={checkReviewsDialogRef}
         className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] p-5 w-fit h-fit"
       >
         <button
@@ -319,6 +400,9 @@ export const ListingTabComponent = () => {
         <div className="flex justify-between w-4/6">
           <span className="text-3xl italic">{listing.title}</span>
           <div className="flex gap-5">
+            <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={showAddReviewDialog}>
+              <div className="flex items-center gap-2 underline"><span><ReviewStarIcon className="w-5 h-5"/></span>Review</div>
+            </button>            
             <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={showListingShareSocials}>
               <div className="flex items-center gap-2 underline"><span><ShareIcon className="w-5 h-5"/></span>Share</div>
             </button>
@@ -452,7 +536,7 @@ export const ListingTabComponent = () => {
           </div>
         </div>
         <div className="fixed group bottom-4 right-4">
-          <a href={`https://wa.me/${number}?text=${bodyText}`} target="_blank">
+          <a href={`https://wa.me/${whatsappParams}`} target="_blank">
             <WhatsappIcon className="fill-current text-[#00E676] w-14 h-14 group-hover:scale-110"/>
           </a>
         </div>

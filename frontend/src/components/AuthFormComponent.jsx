@@ -70,9 +70,10 @@ export const AuthFormComponent = ({ authenticationType }) => {
         } else {
           if (authenticationType === "Sign Up") {
             navigate("/auth/signin")
+            handlePopUp("Successful Register", null, "success")
           } else {
-            const userRole = data.role
 
+            const userRole = data.role
             const authData = { user: email, role: userRole, accessToken: data.token}
             setAuth(authData)
 
@@ -92,6 +93,9 @@ export const AuthFormComponent = ({ authenticationType }) => {
   return (
     <section className="flex justify-center my-auto min-h-full">
       <div key={authenticationType} className="flex flex-col items-center justify-center w-1/5 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-6">
+        <div>
+          <h1 className="text-3xl font-bold text-main-orange mb-8">{authenticationType}</h1>
+        </div>
         {authenticationType === "Sign Up" && (
           <div className="flex min-w-[100%] justify-center text-type-container">
             <Input

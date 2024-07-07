@@ -77,7 +77,7 @@ export const AddElementFormComponent = ({ elementName }) => {
   }
 
   const handleCharacteristicsSelectChange = (characteristicId) => {
-    const newcharacteristicIds = characteristicId.split(",").map(value => parseInt(value))
+    const newcharacteristicIds = characteristicId.split(",").map(value => parseInt(value)).filter(id => !Number.isNaN(id))
     setcharacteristicIds(newcharacteristicIds)
   }
 
@@ -89,46 +89,46 @@ export const AddElementFormComponent = ({ elementName }) => {
         return false
       }
 
-      if (elementName!== "City" && !body.imageUrl) {
-        handlePopUp(`You Must add an image`, null, "error")
+      if (elementName !== "City" && !body.imageUrl) {
+        handlePopUp("You Must add an image", null, "error")
         return false
       }
     }
 
     if (elementName === "City" && !body.country.trim()) {
-      handlePopUp(`Please add a valid country`, null, "error")
+      handlePopUp("Please add a valid country", null, "error")
       return false
     }
 
     if (elementName === "Listing") {
 
       if (!body.title.trim()) {
-        handlePopUp(`Please add a valid title`, null, "error")
+        handlePopUp("Please add a valid title", null, "error")
         return false
       }
 
       if (!body.description.trim()) {
-        handlePopUp(`Please add a valid description`, null, "error")
+        handlePopUp("Please add a valid description", null, "error")
         return false
       }
 
       if (!body.cityId) {
-        handlePopUp(`Please select a city`, null, "error")
+        handlePopUp("Please select a city", null, "error")
         return false
       }
 
       if (!body.categoryId) {
-        handlePopUp(`Please select a category`, null, "error")
+        handlePopUp("Please select a category", null, "error")
         return false
       }
 
       if (!body.images) {
-        handlePopUp(`You must add at least one image`, null, "error")
+        handlePopUp("You must add at least one image", null, "error")
         return false
       }
 
-      if (body.characteristicIds.some(Number.isNaN) || body.characteristicIds.length === 0) {
-        handlePopUp(`You must add at least one characteristic`, null, "error")
+      if (body.characteristicIds.length === 0) {
+        handlePopUp("You must select at least one characteristic", null, "error")
         return false
       }
     }
@@ -181,6 +181,9 @@ export const AddElementFormComponent = ({ elementName }) => {
   return (
     <section className="flex justify-center content content-center my-auto min-h-full">
       <div key={elementName} className="flex flex-col items-center justify-center w-1/4 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-4">
+        <div>
+          <h1 className="text-3xl font-bold text-main-orange mb-4">Add {elementName}</h1>
+        </div>
         {elementName !== "City" && (
           <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={elementName === "Listing"}/>
         )}
