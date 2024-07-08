@@ -41,8 +41,7 @@ export const ListingTabComponent = () => {
   const addReviewRef = useRef(null)
   const totalCharacteristics = listing.characteristics.length
   const url = window.location.href
-  const number = "+541167114273"
-  const whatsappParams = `${number}?text=Hey, I'm contacting you to know more about ${listing.title} on Vbnb`
+  const whatsappParams = `${listing.ownerPhoneNumber}?text=Hey, I'm contacting you to know more about ${listing.title} on Vbnb`
 
   useEffect(() => {
     getListingRating(listing.id)
