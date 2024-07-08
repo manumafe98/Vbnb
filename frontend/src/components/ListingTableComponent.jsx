@@ -11,6 +11,7 @@ export const ListingTableComponent = () => {
     {name: "ID", uid: "id"},
     {name: "TITLE", uid: "title"},
     {name: "DESCRIPTION", uid: "description"},
+    {name: "OWNER PHONE NUMBER", uid: "ownerPhoneNumber"},
     {name: "CATEGORY", uid: "category"},
     {name: "CITY", uid: "city"},
     {name: "IMAGES", uid: "images"},
@@ -55,6 +56,12 @@ export const ListingTableComponent = () => {
           </div>
         )
       case "description":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm">{cellValue}</p>
+          </div>
+        )
+      case "ownerPhoneNumber":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm">{cellValue}</p>

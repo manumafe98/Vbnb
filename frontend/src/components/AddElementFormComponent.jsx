@@ -117,7 +117,7 @@ export const AddElementFormComponent = ({ elementName }) => {
         return false
       }
 
-      if (!body.ownerPhoneNumber.trim()) {
+      if (!body.ownerPhoneNumber) {
         handlePopUp("Please add a valid phone number", null, "error")
         return false
       }
