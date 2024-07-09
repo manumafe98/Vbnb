@@ -3,6 +3,7 @@ package com.manumafe.vbnb.service.implementation;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
+    @Value("$SPRING_MAIL_USERNAME")
+    private String fromEmail;
+
     @Override
     public CompletableFuture<Void> sendSuccessfulRegistrationEmail(RegisterRequest request) throws MessagingException {
         return CompletableFuture.runAsync(() -> {
@@ -32,7 +36,7 @@ public class EmailServiceImpl implements EmailService {
                 MimeMessage message = mailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-                helper.setFrom("manumaxerapro@gmail.com");
+                helper.setFrom(fromEmail);
                 helper.setTo(request.getEmail());
                 helper.setSubject("Successful Registration");
 
@@ -59,7 +63,7 @@ public class EmailServiceImpl implements EmailService {
                 MimeMessage message = mailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-                helper.setFrom("manumaxerapro@gmail.com");
+                helper.setFrom(fromEmail);
                 helper.setTo(reserve.getUser().getEmail());
                 helper.setSubject("Successful Reservation");
 

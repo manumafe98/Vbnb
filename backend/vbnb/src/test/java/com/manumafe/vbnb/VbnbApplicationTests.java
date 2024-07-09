@@ -9,5 +9,4 @@ class VbnbApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
