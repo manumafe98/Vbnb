@@ -63,7 +63,7 @@ export const ListingSectionComponent = ({ listings }) => {
 
   return (
     <section className="listings">
-      <div className="py-3 sm:py-5 me-20 ms-20">
+      <div className="py-3 sm:py-5 2xl:mx-20 xl:mx-20 lg:mx-20 md:mx-20 sm:mx-6 max-[639px]:mx-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
           {currentListings.map((listing) => (
             <ListingCardComponent

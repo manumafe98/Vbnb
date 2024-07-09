@@ -29,7 +29,7 @@ export const CategoryFilterComponent = ({ onCategorySelection }) => {
   }
 
   return (
-    <section className="category-filters mt-5 me-20 ms-20">
+    <section className="category-filters mt-5 2xl:mx-20 xl:mx-20 lg:mx-20 md:mx-20 sm:mx-6 max-[639px]:mx-6">
       <Carousel 
         cols={12} 
         rows={1} 

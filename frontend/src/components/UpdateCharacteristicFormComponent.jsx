@@ -88,7 +88,7 @@ export const UpdateCharacteristicFormComponent = ({ characteristicToUpdate }) =>
           value={characteristicNameplaceholder}
           onChange={(e) => setcharacteristicNameplaceholder(e.target.value)}
         />
-        <Button radius="full" className="bg-[#ff6f00] text-white" onClick={updateCharacteristic}>
+        <Button radius="full" className="bg-main-orange text-white" onClick={updateCharacteristic}>
           Update Characteristic
         </Button>
         {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}

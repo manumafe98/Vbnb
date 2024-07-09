@@ -234,7 +234,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
           onChange={setOwnerPhoneNumberPlaceholder}
           className="my-custom-phone-input"
         />
-        <Button radius="full" className="bg-[#ff6f00] text-white" onClick={updateListing}>
+        <Button radius="full" className="bg-main-orange text-white" onClick={updateListing}>
           Update Listing
         </Button>
         {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
