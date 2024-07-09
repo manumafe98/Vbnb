@@ -34,6 +34,8 @@ services:
       dockerfile: Dockerfile
     container_name: spring-boot-api-container
     environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
       SPRING_MAIL_USERNAME: manumaxerapro@gmail.com
       SPRING_MAIL_PASSWORD: ftdhtkdfxweknvox
       ADMIN_PASSWORD: admin
