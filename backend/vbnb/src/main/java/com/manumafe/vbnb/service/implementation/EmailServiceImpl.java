@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Value("${SPRING_MAIL_USERNAME}")
+    @Value("${spring.mail.username}")
     private String fromEmail;
 
     @Override
