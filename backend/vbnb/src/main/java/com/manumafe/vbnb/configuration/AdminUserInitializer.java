@@ -1,6 +1,7 @@
 package com.manumafe.vbnb.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class AdminUserInitializer {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${ADMIN_PASSWORD}")
+    private String adminPassword;
+
     @PostConstruct
     public void init() {
 
@@ -28,7 +32,7 @@ public class AdminUserInitializer {
                 .name("Admin")
                 .lastName("Admin")
                 .email("admin@gmail.com")
-                .password(passwordEncoder.encode("admin"))
+                .password(passwordEncoder.encode(adminPassword))
                 .userRole(UserRole.ADMIN)
                 .build();
 

@@ -33,6 +33,11 @@ services:
       context: ./backend/vbnb
       dockerfile: Dockerfile
     container_name: spring-boot-api-container
+    environment:
+      SPRING_MAIL_USERNAME: manumaxerapro@gmail.com
+      SPRING_MAIL_PASSWORD: ftdhtkdfxweknvox
+      ADMIN_PASSWORD: admin
+      JWT_SECRET_KEY: e856ca82e5328a718f13cdda90f45daebaf007c5a0e2987895207d9e218e476c
     ports:
       - "8080:8080"
     networks:
@@ -45,6 +50,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: react-frontend-container
+    environment:
+      CLOUDINARY_UPLOAD_PRESET: vbnb-react-upload-unsigned
+      CLOUDINARY_API_KEY: 312794646933875
     ports:
       - "5173:5173"
     networks:
