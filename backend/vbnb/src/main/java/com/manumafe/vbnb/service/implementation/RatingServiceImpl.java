@@ -32,7 +32,6 @@ public class RatingServiceImpl implements RatingService {
     private final ListingRepository listingRepository;
     private final RatingDtoMapper ratingDtoMapper;
 
-
     @Override
     @Transactional
     public RatingDto createRating(Long listingId, String userEmail, RatingDto ratingDto) throws ResourceNotFoundException {

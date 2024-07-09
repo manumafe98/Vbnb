@@ -5,7 +5,6 @@ import { NextUIProvider } from "@nextui-org/react";
 import { VbnbApp } from "./VbnbApp";
 import { AuthProvider } from "./context/AuthProvider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { FooterComponent } from "./components/FooterComponent";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>

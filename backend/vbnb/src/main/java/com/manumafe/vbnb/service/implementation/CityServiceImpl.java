@@ -52,7 +52,7 @@ public class CityServiceImpl implements CityService {
     public CityDto findCityById(Long id) throws ResourceNotFoundException {
         City city = cityRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
-        
+
         return cityDtoMapper.toDto(city);
     }
 
@@ -65,7 +65,7 @@ public class CityServiceImpl implements CityService {
     public CityDto updateCity(Long id, CityDto cityDto) throws ResourceNotFoundException {
         City city = cityRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
-        
+
         city.setName(cityDto.name());
         city.setCountry(cityDto.country());
 

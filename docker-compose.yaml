@@ -41,7 +41,7 @@ services:
   reactfrontend:
     depends_on:
       - springapi
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: react-frontend-container

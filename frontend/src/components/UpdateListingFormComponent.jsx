@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import '../styles/phone-input.css'
+import "../styles/phone-input.css";
 
 export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   const[titlePlaceholder, setTitlePlaceholder] = useState(listingToUpdate.title)
@@ -45,7 +45,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   }, [])
 
   const getCities = async () => {
-    
+
     await useFetch("/backend/api/v1/city/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCities(data))
@@ -53,7 +53,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   }
 
   const getCategories = async () => {
-    
+
     await useFetch("/backend/api/v1/category/all", "GET", null, false)
       .then(response => response.json())
       .then(data => setCategories(data))
@@ -83,8 +83,6 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
   const updateListing = async () => {
     const characteristicIds = characteristicPlaceholder.map(characteristicId => parseInt(characteristicId)).filter(id => !Number.isNaN(id))
     const images = incomingImages.map(image => image.url)
-    
-    console.log(characteristicIds)
 
     if (images.length === 0 && newUploadedImages.length === 0) {
       newListingData = { title: titlePlaceholder, description: descriptionPlaceholder, ownerPhoneNumber: ownerPhoneNumberPlaceholder, cityId: parseInt(cityPlaceholder), categoryId: parseInt(categoryPlaceholder), images: [], characteristicIds }
@@ -167,9 +165,9 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
           <h1 className="text-3xl font-bold text-main-orange mb-4">Update Listing</h1>
         </div>
         <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={true} incomingImages={incomingData}/>
-        <Input 
-          type="text" 
-          variant="bordered" 
+        <Input
+          type="text"
+          variant="bordered"
           label="Title"
           className="w-4/6 mb-2.5"
           classNames={inputWrapperClassNames}

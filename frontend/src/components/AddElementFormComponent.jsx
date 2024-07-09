@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import '../styles/phone-input.css'
+import "../styles/phone-input.css";
 
 export const AddElementFormComponent = ({ elementName }) => {
   const[element, setElement] = useState('')
@@ -24,7 +24,6 @@ export const AddElementFormComponent = ({ elementName }) => {
   const[currentImages, setCurrentImages] = useState([])
   const[showPopup, setShowPopup] = useState(false)
   const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
-  
 
   const url = elementName === "Listing" ? `/backend/api/v1/${elementName.toLowerCase()}/create` : `/backend/api/v1/${elementName.toLowerCase()}`
 
@@ -173,7 +172,7 @@ export const AddElementFormComponent = ({ elementName }) => {
       }
     }
   }
-  
+
   const handlePopUp = (message, action, type) => {
     setShowPopup(true)
     setPopupData({ message, action, type })
@@ -197,9 +196,9 @@ export const AddElementFormComponent = ({ elementName }) => {
         {elementName !== "City" && (
           <DragAndDropImageComponent onImagesLoaded={handleImagesLoaded} onImages={handleImages} multiple={elementName === "Listing"}/>
         )}
-        <Input 
-          type="text" 
-          variant="bordered" 
+        <Input
+          type="text"
+          variant="bordered"
           label={elementName == "Listing" ? "Title" : `${elementName}`}
           className="w-4/6 mb-2.5"
           classNames={inputWrapperClassNames}

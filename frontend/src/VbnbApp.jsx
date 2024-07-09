@@ -15,7 +15,6 @@ import { FavoritePage } from "./pages/FavoritePage";
 import { ListingPage } from "./pages/ListingPage";
 import { ReservePage } from "./pages/ReservePage";
 
-
 export const VbnbApp = () => {
 
   return (

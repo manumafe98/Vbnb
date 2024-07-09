@@ -1,9 +1,8 @@
 import { FavoriteIcon, RatingStarIcon } from "../constants/Icons";
-import { useAuth } from "../context/AuthProvider"
+import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { ImageCarouselComponent } from "./ImageCarouselComponent";
 import { useFetch } from "../hooks/useFetch";
-
 
 export const ListingCardComponent = ({ id, title, images, description, rating, onFavoriteSelection }) => {
   const { auth } = useAuth()
@@ -31,7 +30,7 @@ export const ListingCardComponent = ({ id, title, images, description, rating, o
   }
 
   return (
-    <div 
+    <div
       className="listings-data relative cursor-pointer"
       onClick={handleCardClick}>
       <button
@@ -54,7 +53,7 @@ export const ListingCardComponent = ({ id, title, images, description, rating, o
             {title}
           </p>
           <p className="max-w-[17rem] text-[16px] -mt-1 text-gray-500">
-            {description} 
+            {description}
           </p>
         </div>
         <div className="flex items-center space-x-1 me-1">

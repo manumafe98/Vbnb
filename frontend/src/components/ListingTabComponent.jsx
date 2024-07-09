@@ -93,8 +93,8 @@ export const ListingTabComponent = () => {
       if (checkInDate === "" || checkOutDate === "") {
         handlePopUp("Please select valid dates", null, "error")
       } else {
-        const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0]
-        const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0]
+        const formattedCheckInDate = new Date(checkInDate).toISOString().split("T")[0]
+        const formattedCheckOutDate = new Date(checkOutDate).toISOString().split("T")[0]
         const reserve = { checkInDate: formattedCheckInDate, checkOutDate: formattedCheckOutDate }
         try {
           await useFetch(`/backend/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
@@ -327,7 +327,7 @@ export const ListingTabComponent = () => {
         <div className="mt-5">
           {listing.images.map((image, index) => (
             <div key={index} className="flex justify-center items-center mb-2">
-              <img 
+              <img
                 src={image.imageUrl} 
                 alt={`${listing.title} ${index + 2}`}
                 className="rounded-lg w-full max-h-[90vh] hover:opacity-90 my-3"
@@ -336,7 +336,7 @@ export const ListingTabComponent = () => {
           ))}
         </div>
       </dialog>
-      <dialog 
+      <dialog
         ref={charecteristicDialogRef}
         className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] max-lg:min-w-[80vw] p-5 w-fit h-fit"
       >
@@ -401,7 +401,7 @@ export const ListingTabComponent = () => {
           <div className="flex gap-5 max-md:gap-2 max-sm:gap-1">
             <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={showAddReviewDialog}>
               <div className="flex items-center gap-2 underline"><span><ReviewStarIcon className="w-5 h-5 max-sm:hidden"/></span>Review</div>
-            </button>            
+            </button>
             <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={showListingShareSocials}>
               <div className="flex items-center gap-2 underline"><span><ShareIcon className="w-5 h-5 max-sm:hidden"/></span>Share</div>
             </button>
@@ -417,21 +417,21 @@ export const ListingTabComponent = () => {
             <img src={listing.images[0].imageUrl} alt={listing.title} className="rounded-lg w-full h-full hover:opacity-90"/>
           </div>
           {listing.images.slice(1, 5).map((image, index) => (
-            <div 
+            <div
               key={index} 
-              className={`rounded-lg ${index < 2 ? 'mb-1' : 'mt-1'} max-md:hidden`}
+              className={`rounded-lg ${index < 2 ? "mb-1" : "mt-1"} max-md:hidden`}
             >
-              <img 
+              <img
                 src={image.imageUrl} 
                 alt={`${listing.title} ${index + 2}`}
                 className="rounded-lg w-full h-full hover:opacity-90"
               />
             </div>
           ))}
-          <Button 
-            color="primary" 
-            radius="medium" 
-            variant="bordered" 
+          <Button
+            color="primary"
+            radius="medium"
+            variant="bordered"
             className="absolute bottom-2 right-2 z-10 w-2/12 max-md:w-4/12 max-[385px]:w-6/12 mt-2 font-bold bg-white"
             onClick={showAllImages}
           >

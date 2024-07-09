@@ -14,7 +14,7 @@ import jakarta.annotation.PostConstruct;
 @Component
 @Profile("!test")
 public class AdminUserInitializer {
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -31,7 +31,7 @@ public class AdminUserInitializer {
                 .password(passwordEncoder.encode("admin"))
                 .userRole(UserRole.ADMIN)
                 .build();
-        
+
         userRepository.save(admin);
     }
 }

@@ -54,7 +54,7 @@ export const NavBarComponent = () => {
         <img src={vbnb_logo} alt="Vbnb logo" className="w-16 mt-2.5"/>
         <p className="italic text-xl text-main-orange pl-1 mt-10 max-md:hidden">Vacations like in home</p>
       </NavbarBrand>
-      <NavbarContent justify="center ">
+      <NavbarContent justify="center">
       {isAdminPath && (
         <>
           <Dropdown>

@@ -20,7 +20,7 @@ import com.manumafe.vbnb.service.CityService;
 @RestController
 @RequestMapping("/api/v1/city")
 public class CityController {
-    
+
     @Autowired
     private CityService cityService;
 

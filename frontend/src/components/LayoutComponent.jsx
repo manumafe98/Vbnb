@@ -1,5 +1,5 @@
-import { FooterComponent } from "./FooterComponent"
-import { NavBarComponent } from "./NavBarComponent"
+import { FooterComponent } from "./FooterComponent";
+import { NavBarComponent } from "./NavBarComponent";
 
 export const LayoutComponent = ({ children }) => {
   return (

@@ -7,6 +7,7 @@ import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 
 public interface CategoryService {
+
     CategoryDto saveCategory(CategoryDto categoryDto) throws ResourceAlreadyExistentException;
 
     void deleteCategory(Long id) throws ResourceNotFoundException;

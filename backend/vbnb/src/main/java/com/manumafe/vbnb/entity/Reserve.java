@@ -37,7 +37,7 @@ public class Reserve {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "listing_id")

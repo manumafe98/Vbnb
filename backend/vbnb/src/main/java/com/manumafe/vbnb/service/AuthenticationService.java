@@ -8,7 +8,7 @@ import com.manumafe.vbnb.exceptions.UnauthorizedException;
 import com.manumafe.vbnb.exceptions.EmailAlreadyRegisteredException;
 
 public interface AuthenticationService {
-    
+
     AuthenticationResponse register(RegisterRequest request) throws EmailAlreadyRegisteredException;
 
     AuthenticationResponse authenticate(AuthenticationRequest request) throws UnauthorizedException;

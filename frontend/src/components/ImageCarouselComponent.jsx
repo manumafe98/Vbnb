@@ -1,5 +1,5 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "../constants/Icons"
-import { useState } from "react"
+import { ChevronLeftIcon, ChevronRightIcon } from "../constants/Icons";
+import { useState } from "react";
 
 export const ImageCarouselComponent = ({ children: slides }) => {
   const [curr, setCurr] = useState(0)
@@ -28,7 +28,6 @@ export const ImageCarouselComponent = ({ children: slides }) => {
           <ChevronRightIcon className="fill-current text-white h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
         </button>
       </div>
-
       <div className="absolute bottom-4 right-0 left-0">
         <div className="flex items-center justify-center gap-2">
           {slides.map((_, i) => ( <div key={i} className={`transition-all w-2 h-2 bg-white rounded-full ${curr === i ? "p-1" : "bg-opacity-50"}`}/> ))}

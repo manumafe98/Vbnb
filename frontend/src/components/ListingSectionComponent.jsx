@@ -42,7 +42,7 @@ export const ListingSectionComponent = ({ listings }) => {
     setPopupData({ message, action, type })
     setTimeout(() => setShowPopup(false), 7500)
   }
-  
+
   const addListingToFavorite = async (selectedListing) => {
     try {
       const response = await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${selectedListing}`, "POST", null, true)

@@ -79,8 +79,8 @@ export const ReserveTabComponent = () => {
   }
 
   const updateReserve = async () => {
-    const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0]
-    const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0]
+    const formattedCheckInDate = new Date(checkInDate).toISOString().split("T")[0]
+    const formattedCheckOutDate = new Date(checkOutDate).toISOString().split("T")[0]
     const reserve = { checkInDate: formattedCheckInDate, checkOutDate: formattedCheckOutDate }
 
     try {

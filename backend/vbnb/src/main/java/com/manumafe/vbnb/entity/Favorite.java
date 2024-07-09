@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "favorites")
 public class Favorite implements Serializable {
-    
+
     @EmbeddedId
     private FavoriteId id;
 
@@ -29,7 +29,7 @@ public class Favorite implements Serializable {
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
-    
+
     @JsonIgnore
     @ManyToOne
     @MapsId("listingId")

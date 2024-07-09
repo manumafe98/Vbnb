@@ -16,7 +16,7 @@ import com.manumafe.vbnb.service.AuthenticationService;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
-    
+
     @Autowired
     private AuthenticationService authenticationService;
 

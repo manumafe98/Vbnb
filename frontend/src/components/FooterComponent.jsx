@@ -1,7 +1,6 @@
 import { InstagramIcon, TwitterIcon, FacebookIcon } from "../constants/Icons";
 
 export const FooterComponent = () => {
-
   return (
     <footer className="flex justify-center w-full h-16 mt-auto">
         <div className="flex w-4/5 justify-between content-center border-t-1 border-solid border-main-gray pt-2.5">

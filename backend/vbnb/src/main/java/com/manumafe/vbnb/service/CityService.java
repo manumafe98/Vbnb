@@ -7,7 +7,7 @@ import com.manumafe.vbnb.exceptions.ResourceAlreadyExistentException;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 
 public interface CityService {
-    
+
     CityDto saveCity(CityDto cityDto) throws ResourceAlreadyExistentException;
 
     void deleteCity(Long id) throws ResourceNotFoundException;

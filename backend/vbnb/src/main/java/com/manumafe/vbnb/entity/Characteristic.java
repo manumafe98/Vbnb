@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "characteristics")
 public class Characteristic {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +31,7 @@ public class Characteristic {
 
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
-    
+
     @JsonIgnore
     @ManyToMany(mappedBy = "characteristics")
     private List<Listing> listings;

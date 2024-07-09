@@ -1,10 +1,10 @@
 .PhoneInput {
     @apply w-4/6 mb-2.5;
 }
-  
+
 .PhoneInputInput {
-    @apply h-12 px-3 py-2 border-2 border-main-gray rounded-xl 
-           focus:outline-none focus:ring-main-orange focus:border-main-orange 
+    @apply h-12 px-3 py-2 border-2 border-main-gray rounded-xl
+           focus:outline-none focus:ring-main-orange focus:border-main-orange
            hover:border-main-orange
            text-sm text-foreground-800
            placeholder:text-foreground-800 placeholder:opacity-70

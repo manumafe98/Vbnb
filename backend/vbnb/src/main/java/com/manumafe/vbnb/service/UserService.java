@@ -7,7 +7,7 @@ import com.manumafe.vbnb.entity.UserRole;
 import com.manumafe.vbnb.exceptions.ResourceNotFoundException;
 
 public interface UserService {
-    
+
     UserDto updateUserRole(Long userId, UserRole role) throws ResourceNotFoundException;
 
     List<UserDto> findAllUsers();

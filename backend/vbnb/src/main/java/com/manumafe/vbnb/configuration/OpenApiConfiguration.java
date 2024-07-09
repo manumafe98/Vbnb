@@ -14,19 +14,19 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
         description = """
             Welcome to the Vbnb API! This API provides access to Vbnb's vacation rental platform,
             allowing developers to interact with listings, reservations, user profiles, and more.
-            
+
             Whether you're building a new app or integrating with an existing system,
             our API offers the tools you need to create a seamless experience for users looking to find and reserve vacation rentals.
-            
+
             ### Key Features
             - **Listings:** Browse and manage vacation rental properties.
             - **Reserves:** Create and manage reservations for users.
             - **Favorites:** Add properties that you like to your personalized favorites list.
             - **Ratings:** Rate our properties.
-            
+
             ### Getting Started
             To start using the Vbnb API, you need to be registered and obtain a JWT (JSON Web Token) for authentication.
-            
+
             1. **Register:** If you haven't already, register ain our /register endpoint.
             2. **Obtain JWT:** After registration, obtain a JWT by authenticating with your credentials. 
             3. **Authentication:** Include the obtained JWT in the `Authorization` header of your requests with the `Bearer` scheme.
@@ -44,6 +44,4 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
     bearerFormat = "JWT",
     in = SecuritySchemeIn.HEADER
 )
-public class OpenApiConfiguration {
-    
-}
+public class OpenApiConfiguration {}

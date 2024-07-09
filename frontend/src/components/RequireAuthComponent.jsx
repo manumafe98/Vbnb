@@ -9,7 +9,7 @@ export const RequireAuthComponent = ({ allowedRole }) => {
     auth?.role === allowedRole
       ? <Outlet/>
       : auth?.user
-          ? <Navigate to="/unauthorized" state={{ from: location }} replace />
-          : <Navigate to="/auth/signin" state={{ from: location }} replace />
+          ? <Navigate to="/unauthorized" state={{ from: location }} replace/>
+          : <Navigate to="/auth/signin" state={{ from: location }} replace/>
   )
 }

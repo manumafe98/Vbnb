@@ -1,5 +1,5 @@
-import { LayoutComponent } from '../components/LayoutComponent'
-import { ListingTabComponent } from '../components/ListingTabComponent'
+import { LayoutComponent } from "../components/LayoutComponent";
+import { ListingTabComponent } from "../components/ListingTabComponent";
 import { useLocation } from "react-router-dom";
 
 export const ListingPage = () => {

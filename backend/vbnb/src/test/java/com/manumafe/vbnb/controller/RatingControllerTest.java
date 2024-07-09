@@ -72,7 +72,7 @@ public class RatingControllerTest {
                 .password(passwordEncoder.encode("1234"))
                 .userRole(UserRole.USER)
                 .build();
-                
+
         var user3 = User.builder()
                 .name("Cristiano")
                 .lastName("Ronaldo")

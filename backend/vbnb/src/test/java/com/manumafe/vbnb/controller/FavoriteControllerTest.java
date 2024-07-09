@@ -104,7 +104,7 @@ public class FavoriteControllerTest {
         Characteristic characteristic = createCharacteristic("Chimney", "http://image.chimney.example");
         Category category = createCategory("Cabins", "http://image.cabin.example");
         City city = createCity("Argentina", "Ushuaia");
-        
+
         saveItemsToRepositories(category, city, characteristic);
 
         User user = createUser("Roberto", "Carlos", "roberto.carlos3@gmail.com", "1234");

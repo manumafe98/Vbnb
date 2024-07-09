@@ -10,7 +10,7 @@ import com.manumafe.vbnb.entity.Favorite;
 
 @Component
 public class FavoriteDtoMapper {
-    
+
     @Autowired
     private ListingDtoMapper listingDtoMapper;
 

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const PopUpNotificationComponent = ({ message, action = null, duration = 7500, type = "success" }) => {
   const[isVisible, setIsVisible] = useState(false)
@@ -44,7 +44,7 @@ export const PopUpNotificationComponent = ({ message, action = null, duration = 
       className={`fixed left-1/2 transform -translate-x-1/2 bottom-20 w-3/5 max-w-md
                   ${bgColor} text-white rounded-lg shadow-lg
                   transition-all duration-300 ease-in-out
-                  ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
+                  ${isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
     >
       <div className={`flex ${justify} items-center p-4`}>
         <span>{message}</span>

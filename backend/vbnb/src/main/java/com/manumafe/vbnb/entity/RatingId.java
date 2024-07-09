@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RatingId implements Serializable {
-    
+
     private Long userId;
     private Long listingId;
 }

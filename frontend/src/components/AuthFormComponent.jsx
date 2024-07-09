@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFetch } from "../hooks/useFetch"
+import { useFetch } from "../hooks/useFetch";
 import { Input, Button } from "@nextui-org/react";
 import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +42,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
 
     return true
   }
-  
+
   const handlePopUp = (message, action, type) => {
     setShowPopup(true)
     setPopupData({ message, action, type })
@@ -92,8 +92,8 @@ export const AuthFormComponent = ({ authenticationType }) => {
 
   return (
     <section className="flex justify-center my-auto min-h-full">
-      <div 
-        key={authenticationType} 
+      <div
+        key={authenticationType}
         className="flex flex-col items-center justify-center 2xl:w-1/5 xl:w-2/7 lg:w-2/7 md:w-2/7 sm:w-2/7 h-2/4 min-h-80 mt-3 border-1 border-solid border-main-gray rounded-xl shadow-md p-6"
       >
         <div>

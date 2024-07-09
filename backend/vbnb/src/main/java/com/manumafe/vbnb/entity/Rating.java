@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "ratings")
 public class Rating {
-    
+
     @EmbeddedId
     private RatingId id;
 

@@ -49,7 +49,7 @@ public class CharacteristicServiceImpl implements CharacteristicService {
     public void deleteCharacteristic(Long id) throws ResourceNotFoundException {
         Characteristic characteristic = characteristicRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Characteristic with id: " + id + " not found"));
-        
+
         for (Listing listing : characteristic.getListings()) {
             listing.getCharacteristics().remove(characteristic);
             listingRepository.save(listing);

@@ -1,4 +1,4 @@
-import { FavoriteTabComponent } from '../components/FavoriteTabComponent'
+import { FavoriteTabComponent } from "../components/FavoriteTabComponent";
 import { LayoutComponent } from "../components/LayoutComponent";
 
 export const FavoritePage = () => {

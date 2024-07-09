@@ -20,7 +20,7 @@ import com.manumafe.vbnb.service.UserService;
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
 

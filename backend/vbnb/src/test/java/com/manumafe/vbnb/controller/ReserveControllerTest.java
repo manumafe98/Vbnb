@@ -61,7 +61,7 @@ public class ReserveControllerTest {
 
     @Autowired
     private CityRepository cityRepository;
-    
+
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -179,7 +179,7 @@ public class ReserveControllerTest {
                     jsonPath("checkInDate").value("2024-09-08"),
                     jsonPath("checkOutDate").value("2024-09-15"));
     }
-    
+
     @Test
     @Order(3)
     public void testCreateReserveWithSameUserWithAnotherDate() throws Exception {

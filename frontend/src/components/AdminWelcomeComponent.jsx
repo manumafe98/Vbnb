@@ -1,7 +1,7 @@
 export const AdminWelcomeComponent = () => {
   return (
     <div className="flex flex-col items-center justify-center my-auto min-h-full">
-      <h1 className="text-4xl text-main-orange font-bold mb-4 text-gray-800">Welcome to Admin Dashboard</h1>
+      <h1 className="text-4xl text-main-orange font-bold mb-4">Welcome to Admin Dashboard</h1>
       <p className="text-xl text-gray-600 mb-8">Use the navigation bar to access various admin functions.</p>
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-2xl text-main-orange font-semibold mb-4">Quick Overview</h2>

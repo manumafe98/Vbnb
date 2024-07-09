@@ -20,7 +20,7 @@ import com.manumafe.vbnb.service.FavoriteService;
 @RestController
 @RequestMapping("/api/v1/favorite")
 public class FavoriteController {
-    
+
     @Autowired
     private FavoriteService favoriteService;
 

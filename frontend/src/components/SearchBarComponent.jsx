@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { LocationIcon } from "../constants/Icons";
 import { CategoryFilterComponent } from "./CategoryFilterComponent";
-import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { autocompleteInputWrapperClassNames } from "../constants/autocompleteInputWrapperClassNames";
 
 export const SearchBarComponent = ({ onSearching }) => {
@@ -60,8 +59,8 @@ export const SearchBarComponent = ({ onSearching }) => {
   }
 
   const getListingsByAvailability = async () => {
-    const formattedCheckInDate = new Date(checkIn).toISOString().split('T')[0]
-    const formattedCheckOutDate = new Date(checkOut).toISOString().split('T')[0]
+    const formattedCheckInDate = new Date(checkIn).toISOString().split("T")[0]
+    const formattedCheckOutDate = new Date(checkOut).toISOString().split("T")[0]
     const url = `/backend/api/v1/listing/available?checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
     await useFetch(url, "GET", null, false)
@@ -80,8 +79,8 @@ export const SearchBarComponent = ({ onSearching }) => {
   }
 
   const getListingsByAvailabilityAndCityName = async () => {
-    const formattedCheckInDate = new Date(checkIn).toISOString().split('T')[0]
-    const formattedCheckOutDate = new Date(checkOut).toISOString().split('T')[0]
+    const formattedCheckInDate = new Date(checkIn).toISOString().split("T")[0]
+    const formattedCheckOutDate = new Date(checkOut).toISOString().split("T")[0]
     const url = `/backend/api/v1/listing/available/by-city?cityName=${selectedCity}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
     await useFetch(url, "GET", null, false)
@@ -91,8 +90,8 @@ export const SearchBarComponent = ({ onSearching }) => {
   }
 
   const getListingsByAvailabilityAndCategoryName = async (category) => {
-    const formattedCheckInDate = new Date(checkIn).toISOString().split('T')[0]
-    const formattedCheckOutDate = new Date(checkOut).toISOString().split('T')[0]
+    const formattedCheckInDate = new Date(checkIn).toISOString().split("T")[0]
+    const formattedCheckOutDate = new Date(checkOut).toISOString().split("T")[0]
     const url = `/backend/api/v1/listing/available/by-category?categoryName=${category}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
     await useFetch(url, "GET", null, false)
@@ -102,8 +101,8 @@ export const SearchBarComponent = ({ onSearching }) => {
   }
 
   const getListingsByAvailabilityAndCategoryAndCityNames = async (category) => {
-    const formattedCheckInDate = new Date(checkIn).toISOString().split('T')[0]
-    const formattedCheckOutDate = new Date(checkOut).toISOString().split('T')[0]
+    const formattedCheckInDate = new Date(checkIn).toISOString().split("T")[0]
+    const formattedCheckOutDate = new Date(checkOut).toISOString().split("T")[0]
     const url = `/backend/api/v1/listing/available/by-category-city?categoryName=${category}&cityName=${selectedCity}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
     await useFetch(url, "GET", null, false)
@@ -185,7 +184,7 @@ export const SearchBarComponent = ({ onSearching }) => {
     return(
       <>
       <section className="max-sm:border-y max-sm:bg-[#F9F9F9] max-sm:my-5 flex justify-center border-b border-solid border-main-gray p-5">
-          <div className="grid grid-cols-custom items-center border-1 border-solid border-main-gray shadow-md rounded-full m-1.5 p-1 2xl:w-[45%] xl:w-[50%] lg:w-[60%] md:w-[75%] max-sm:w-full max-sm:flex max-sm:flex-col max-sm:border-0 max-sm:shadow-none max-sm:items-stretch">
+          <div className="grid grid-cols-[1fr_1fr_0.65fr] items-center border-1 border-solid border-main-gray shadow-md rounded-full m-1.5 p-1 2xl:w-[45%] xl:w-[50%] lg:w-[60%] md:w-[75%] max-sm:w-full max-sm:flex max-sm:flex-col max-sm:border-0 max-sm:shadow-none max-sm:items-stretch">
             <Autocomplete
               defaultItems={cities}
               radius={radius}

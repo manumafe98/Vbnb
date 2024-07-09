@@ -49,7 +49,7 @@ public class ReserveServiceImpl implements ReserveService {
         }
 
         Reserve reserve = new Reserve();
-        
+
         reserve.setCheckInDate(reserveDto.checkInDate());
         reserve.setCheckOutDate(reserveDto.checkOutDate());
         reserve.setUser(user);

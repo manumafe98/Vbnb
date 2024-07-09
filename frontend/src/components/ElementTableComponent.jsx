@@ -50,7 +50,7 @@ export const ElementTableComponent = ({ elementName }) => {
         .then(data => setListings(data))
         .catch(error => console.log(error))
     }
-  
+
     const getListingByCategory = async (category) => {
       await useFetch(`/backend/api/v1/listing/category/${category}`, "GET", null, false)
         .then(response => response.json())

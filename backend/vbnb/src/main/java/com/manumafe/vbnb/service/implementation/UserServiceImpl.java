@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    
+
     private final UserRepository userRepository;
     private final UserDtoMapper userDtoMapper;
 
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUserRole(Long userId, UserRole role) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
-        
+
         user.setUserRole(role);
 
         userRepository.save(user);

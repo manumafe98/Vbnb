@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react"
-import { useAuth } from "../context/AuthProvider"
-import { useFetch } from "../hooks/useFetch"
-import { PopUpNotificationComponent } from "./PopUpNotificationComponent"
-import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthProvider";
+import { useFetch } from "../hooks/useFetch";
+import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
+import { useNavigate } from "react-router-dom";
 
 export const FavoriteTabComponent = () => {
   const[favorites, setFavorites] = useState([])
