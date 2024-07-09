@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Value("$SPRING_MAIL_USERNAME")
+    @Value("${SPRING_MAIL_USERNAME}")
     private String fromEmail;
 
     @Override
