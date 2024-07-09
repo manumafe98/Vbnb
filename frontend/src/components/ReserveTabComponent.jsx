@@ -125,7 +125,7 @@ export const ReserveTabComponent = () => {
   }
 
   return (
-    <>
+    <div className="w-full max-w-4xl md:w-[85%] sm:w-[95%] max-[639px]:w-[90%] mx-auto my-5 max-md:my-10">
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -169,45 +169,43 @@ export const ReserveTabComponent = () => {
           )}
         </ModalContent>
       </Modal>
-      <div className="w-full max-w-4xl mx-auto my-5">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Reserves</h1>
-        </div>
-        <ul className="space-y-4">
-          {reserves.map((reserve) => (
-            <li key={reserve.id} className="flex border rounded-lg p-4 shadow-sm">
-              <div
-                data-value={reserve.listing.id}
-                className="flex-shrink-0 w-32 h-32 mr-4 cursor-pointer"
-                onClick={handleCardClick}
-              >
-                <img
-                  className="w-full h-full object-cover rounded"
-                  src={reserve.listing.images[0].imageUrl}
-                  alt={reserve.listing.title}
-                />
-              </div>
-              <div className="flex-grow">
-                <h2 className="text-lg font-semibold mb-2">{reserve.listing.title}</h2>
-                <p className="text-gray-600 mb-2">{reserve.listing.description}</p>
-                <div className="flex gap-3">
-                  <p className="text-gray-600 font-bold mb-2">Check in: <span className="font-normal">{reserve.checkInDate}</span></p>
-                  <p className="text-gray-600 font-bold mb-2">Check out: <span className="font-normal">{reserve.checkOutDate}</span></p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="space-x-2">
-                    <button value={reserve.id} className="text-blue-500" onClick={deleteReserve}>Delete</button>
-                  </div>
-                  <div className="space-x-2">
-                    <button data-reserve={JSON.stringify(reserve)} className="text-blue-500" onClick={handleOpen}>Update</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-        {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
+      <div className="flex justify-between max-lg:justify-center items-center mb-5">
+        <h1 className="text-2xl max-lg:text-3xl font-bold text-main-orange">Reserves</h1>
       </div>
-    </>
+      <ul className="space-y-4">
+        {reserves.map((reserve) => (
+          <li key={reserve.id} className="flex border rounded-lg p-4 shadow-sm">
+            <div
+              data-value={reserve.listing.id}
+              className="flex-shrink-0 w-32 h-32 max-md:w-36 max-md:h-44 mr-4 cursor-pointer"
+              onClick={handleCardClick}
+            >
+              <img
+                className="w-full h-full object-cover rounded"
+                src={reserve.listing.images[0].imageUrl}
+                alt={reserve.listing.title}
+              />
+            </div>
+            <div className="flex-grow">
+              <h2 className="text-lg font-semibold mb-2">{reserve.listing.title}</h2>
+              <p className="text-gray-600 mb-2">{reserve.listing.description}</p>
+              <div className="flex gap-3">
+                <p className="text-gray-600 font-bold mb-2">Check in: <span className="font-normal">{reserve.checkInDate}</span></p>
+                <p className="text-gray-600 font-bold mb-2">Check out: <span className="font-normal">{reserve.checkOutDate}</span></p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="space-x-2">
+                  <button value={reserve.id} className="text-blue-500" onClick={deleteReserve}>Delete</button>
+                </div>
+                <div className="space-x-2">
+                  <button data-reserve={JSON.stringify(reserve)} className="text-blue-500" onClick={handleOpen}>Update</button>
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+      {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
+    </div>
   )
 }

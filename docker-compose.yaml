@@ -38,6 +38,18 @@ services:
     networks:
       - app_network
 
+  reactfrontend:
+    depends_on:
+      - springapi
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: react-frontend-container
+    ports:
+      - "5173:5173"
+    networks:
+      - app_network
+
 networks:
   app_network:
     name: app_network

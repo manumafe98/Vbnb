@@ -211,10 +211,10 @@ export const ListingTabComponent = () => {
   }
 
   return (
-    <section className="listing-section mt-5 mx-48 min-h-screen h-[130vh] relative">
+    <section className="listing-section mt-5 mx-36 max-2xl:mx-20 max-xl:mx-2 max-lg:mx-0 min-h-screen h-[130vh] max-xl:h-[140vh] max-lg:h-[180vh] max-[639px]:h-[185vh] max-[560px]:h-[200vh] relative">
       <dialog
         ref={addReviewRef}
-        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[50vh] min-w-[30vw] p-5 w-fit h-fit"
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[50vh] min-w-[30vw] max-lg:min-w-[80vw] p-5 w-fit h-fit"
       >
         <button
           className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
@@ -246,7 +246,7 @@ export const ListingTabComponent = () => {
       </dialog>
       <dialog 
         ref={shareListingRef}
-        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[50vh] min-w-[30vw] p-5 w-fit h-fit"
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[50vh] min-w-[30vw] max-lg:min-w-[80vw] p-5 w-fit h-fit"
       >
         <button
           className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
@@ -338,7 +338,7 @@ export const ListingTabComponent = () => {
       </dialog>
       <dialog 
         ref={charecteristicDialogRef}
-        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] p-5 w-fit h-fit"
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] max-lg:min-w-[80vw] p-5 w-fit h-fit"
       >
         <button
           className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
@@ -362,7 +362,7 @@ export const ListingTabComponent = () => {
       </dialog>
       <dialog
         ref={checkReviewsDialogRef}
-        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] p-5 w-fit h-fit"
+        className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[90vh] min-w-[40vw] max-lg:min-w-[80vw] p-5 w-fit h-fit"
       >
         <button
           className="flex items-center justify-center w-6 h-6 hover:bg-zinc-100 rounded-full hover:shadow mb-5"
@@ -396,30 +396,30 @@ export const ListingTabComponent = () => {
         </div>
       </dialog>
       <div className="flex justify-center my-5">
-        <div className="flex justify-between w-4/6">
+        <div className="flex justify-between w-4/6 max-2xl:w-9/12 max-xl:w-11/12  max-[550px]:items-center max-[550px]:flex-col max-[550px]:justify-center">
           <span className="text-3xl italic">{listing.title}</span>
-          <div className="flex gap-5">
+          <div className="flex gap-5 max-md:gap-2 max-sm:gap-1">
             <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={showAddReviewDialog}>
-              <div className="flex items-center gap-2 underline"><span><ReviewStarIcon className="w-5 h-5"/></span>Review</div>
+              <div className="flex items-center gap-2 underline"><span><ReviewStarIcon className="w-5 h-5 max-sm:hidden"/></span>Review</div>
             </button>            
             <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={showListingShareSocials}>
-              <div className="flex items-center gap-2 underline"><span><ShareIcon className="w-5 h-5"/></span>Share</div>
+              <div className="flex items-center gap-2 underline"><span><ShareIcon className="w-5 h-5 max-sm:hidden"/></span>Share</div>
             </button>
             <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={addListingToFavorite}>
-              <div className="flex items-center gap-2 underline"><span><FavoriteIcon className="w-5 h-5"/></span>Save</div>
+              <div className="flex items-center gap-2 underline"><span><FavoriteIcon className="w-5 h-5 max-sm:hidden"/></span>Save</div>
             </button>
           </div>
         </div>
       </div>
-      <div className="flex justify-center h-2/6 relative z-1">
-        <div className="grid grid-cols-4 grid-rows-2 gap-x-2 w-4/6 cursor-pointer" onClick={showAllImages}>
+      <div className="flex justify-center h-2/6 z-1">
+        <div className="grid grid-cols-4 grid-rows-2 max-md:grid-cols-1 max-md:grid-rows-1 gap-x-2 w-4/6 max-2xl:w-9/12 max-xl:w-11/12 cursor-pointer relative" onClick={showAllImages}>
           <div className="row-span-4 col-span-2">
             <img src={listing.images[0].imageUrl} alt={listing.title} className="rounded-lg w-full h-full hover:opacity-90"/>
           </div>
           {listing.images.slice(1, 5).map((image, index) => (
             <div 
               key={index} 
-              className={`rounded-lg ${index < 2 ? 'mb-1' : 'mt-1'}`}
+              className={`rounded-lg ${index < 2 ? 'mb-1' : 'mt-1'} max-md:hidden`}
             >
               <img 
                 src={image.imageUrl} 
@@ -432,46 +432,52 @@ export const ListingTabComponent = () => {
             color="primary" 
             radius="medium" 
             variant="bordered" 
-            className="absolute bottom-2 right-64 z-10 w-1/12 mt-2 font-bold bg-white"
+            className="absolute bottom-2 right-2 z-10 w-2/12 max-md:w-4/12 max-[385px]:w-6/12 mt-2 font-bold bg-white"
             onClick={showAllImages}
           >
             Show all photos
           </Button>
         </div>
       </div>
-      <div className="flex justify-center mt-5 h-2/7">
-        <div className="grid grid-cols-3 grid-rows-1 gap-x-10 w-4/6">
+      <div className="flex justify-center mt-5">
+        <div className="grid grid-cols-3 grid-rows-1 gap-x-10 max-lg:grid-cols-1 max-lg:grid-rows-2 max-lg:gap-x-0 w-4/6 max-2xl:w-9/12 max-xl:w-11/12">
           <div className="col-span-2">
-            <span className="text-2xl italic">
-              {listing.description}
-            </span>
-            <div className="flex items-center mt-3 gap-2">
-              <span className="flex items-center text-[18px] font-bold">
-                <RatingStarIcon className="w-3 h-3 mr-1"/> {rating ? rating.toFixed(1) : 0}
+            <div className="max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:items-center">
+              <span className="text-2xl italic max-sm:text-center">
+                {listing.description}
               </span>
-              <span className="text-[14px] mx-0.5">•</span>
-              <span className="text-[18px] underline font-bold">
-                {timesRated} reviews
-              </span>
+              <div className="flex items-center mt-3 gap-2">
+                <span className="flex items-center text-[18px] font-bold">
+                  <RatingStarIcon className="w-3 h-3 mr-1"/> {rating ? rating.toFixed(1) : 0}
+                </span>
+                <span className="text-[14px] mx-0.5">•</span>
+                <span className="text-[18px] underline font-bold">
+                  {timesRated} reviews
+                </span>
+              </div>
             </div>
-            <div className="border-y-1 border-solid border-main-gray mt-5 py-4">
+            <div className="border-y-1 border-solid border-main-gray mt-5 py-4 max-lg:flex max-lg:flex-col max-lg:items-center">
               <span className="text-lg font-bold">
                 What this place offers
               </span>
-              <div className="grid grid-cols-2 grid-rows-3 max-h-20 h-20 my-5 gap-2">
+              <div className="grid grid-cols-2 grid-rows-3 max-h-20 h-20 max-lg:h-full max-lg:w-full my-5 gap-2">
                 {listing.characteristics.slice(0, totalCharacteristics > 6 ? 6 : totalCharacteristics).map((characteristic, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <img src={characteristic.imageUrl} alt={`${characteristic.name} image`} className="h-full"/>
-                    <span>{characteristic.name}</span>
+                  <div key={index} className="flex items-center max-lg:justify-center">
+                    <div className="flex items-center gap-2 w-full max-w-[120px]">
+                      <div className="w-6 flex-shrink-0">
+                        <img src={characteristic.imageUrl} alt={`${characteristic.name} image`} className="h-full w-full object-contain"/>
+                      </div>
+                      <span className="truncate">{characteristic.name}</span>
+                    </div>
                   </div>
                 ))}
               </div>
-              <Button color="primary" radius="medium" variant="bordered" className="w-4/12 mt-2 font-bold" onClick={showAllCharacteristics}>
+              <Button color="primary" radius="medium" variant="bordered" className="w-4/12 mt-2 font-bold max-xl:w-5/12 max-[465px]:w-6/12 max-[385px]:w-8/12" onClick={showAllCharacteristics}>
                 Show all {totalCharacteristics} characteristics
               </Button>
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center border-1 border-solid border-main-gray rounded-xl shadow-md">
+          <div className="flex flex-col justify-center items-center border-1 border-solid border-main-gray rounded-xl shadow-md max-lg:mt-5">
             <span className="text-lg font-bold mb-5">
               Make your reservation today!
             </span>
@@ -505,18 +511,19 @@ export const ListingTabComponent = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center my-5 h-2/7">
-          <div className="w-4/6 border-t-1 border-solid border-main-gray p-2">
-            <div className="flex justify-center my-5">
-              <span className="text-2xl font-bold">Reviews</span>
-            </div>
-            <div className="grid grid-cols-2 grid-rows-2 max-h-56 h-56 gap-5">
-              {reviews.slice(0, reviews.length > 4 ? 4 : reviews.length).map((review, index) => (
-                <div key={index} className="block p-1">
-                  <div className="flex items-center gap-2">
+      <div className="flex justify-center my-5">
+        <div className="w-4/6 max-2xl:w-9/12 max-xl:w-11/12 border-t-1 border-solid border-main-gray p-2">
+          <div className="flex justify-center my-5">
+            <span className="text-2xl font-bold">Reviews</span>
+          </div>
+          <div className="grid items-center grid-cols-2 grid-rows-2 max-[500px]:grid-cols-1 max-[500px]:grid-rows-2 max-h-56 h-56 gap-5">
+            {reviews.slice(0, reviews.length > 4 ? 4 : reviews.length).map((review, index) => (
+              <div key={index} className="flex flex-col items-center max-[500px]:items-start">
+                <div className="flex items-center gap-2 max-[500px]:w-full max-[500px]:justify-center">
+                  <div className="flex items-center gap-2 max-[500px]:w-full max-[500px]:max-w-[240px]">
                     <Avatar
                       classNames={{
-                        base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B] capitalize w-12 h-12"
+                        base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B] capitalize w-12 h-12 flex-shrink-0"
                       }}
                       name={review.user.name}
                     />
@@ -525,20 +532,23 @@ export const ListingTabComponent = () => {
                       <span><StarRatingComponent rating={Math.round(review.rating)}/></span>
                     </div>
                   </div>
-                  <div className="italic">{review.comment}</div>
                 </div>
-              ))}
-            </div>
-            <Button color="primary" radius="medium" variant="bordered" className="w-3/12 mt-2 font-bold" onClick={showAllReviews}>
+                <div className="italic text-center max-[500px]:text-left max-[500px]:w-full max-[500px]:max-w-[240px] max-[500px]:mx-auto">{review.comment}</div>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-center">
+            <Button color="primary" radius="medium" variant="bordered" className="w-3/12 mt-2 max-sm:w-4/12 max-[465px]:w-5/12 max-[385px]:w-7/12 font-bold" onClick={showAllReviews}>
               Show all {reviews.length} reviews
             </Button>
           </div>
         </div>
-        <div className="fixed group bottom-4 right-4">
-          <a href={`https://wa.me/${whatsappParams}`} target="_blank">
-            <WhatsappIcon className="fill-current text-[#00E676] w-14 h-14 group-hover:scale-110"/>
-          </a>
-        </div>
+      </div>
+      <div className="fixed group bottom-4 right-4 max-lg:bottom-16 max-lg:right-1 z-40">
+        <a href={`https://wa.me/${whatsappParams}`} target="_blank">
+          <WhatsappIcon className="fill-current text-[#00E676] w-14 h-14 group-hover:scale-110"/>
+        </a>
+      </div>
       {showPopup && <PopUpNotificationComponent message={popupData.message} action={popupData.action} type={popupData.type}/>}
     </section>
   )

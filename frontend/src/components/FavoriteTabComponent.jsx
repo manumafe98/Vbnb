@@ -2,11 +2,13 @@ import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthProvider"
 import { useFetch } from "../hooks/useFetch"
 import { PopUpNotificationComponent } from "./PopUpNotificationComponent"
+import { useNavigate } from "react-router-dom"
 
 export const FavoriteTabComponent = () => {
   const[favorites, setFavorites] = useState([])
   const[showPopup, setShowPopup] = useState(false)
   const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
+  const navigate = useNavigate()
   const { auth } = useAuth()
 
   useEffect(() => {
@@ -40,15 +42,31 @@ export const FavoriteTabComponent = () => {
     }
   }
 
+  const handleCardClick = async (event) => {
+    const id = event.currentTarget.dataset.value
+
+    try {
+      const response = await useFetch(`/backend/api/v1/listing/get/${id}`, "GET", null, false)
+      const listing = await response.json()
+      navigate("/listing", { state: { listing } })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
-    <div className="w-full max-w-4xl mx-auto my-5">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Favorites</h1>
+    <div className="w-full max-w-4xl md:w-[85%] sm:w-[95%] max-[639px]:w-[90%] mx-auto my-5 max-md:my-10">
+      <div className="flex justify-between max-lg:justify-center items-center mb-5">
+        <h1 className="text-2xl max-lg:text-3xl font-bold text-main-orange">Favorites</h1>
       </div>
       <ul className="space-y-4">
         {favorites.map((favorite) => (
           <li key={favorite.id.listingId} className="flex border rounded-lg p-4 shadow-sm">
-            <div className="flex-shrink-0 w-32 h-32 mr-4">
+            <div
+              data-value={favorite.listing.id}
+              className="flex-shrink-0 w-32 h-32 mr-4 cursor-pointer"
+              onClick={handleCardClick}
+            >
               <img
                 className="w-full h-full object-cover rounded"
                 src={favorite.listing.images[0].imageUrl}

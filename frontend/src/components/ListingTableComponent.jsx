@@ -120,7 +120,7 @@ export const ListingTableComponent = () => {
 
   return (
     <div className="flex justify-center">
-      <Table aria-label="Listing table" className="w-[70%] my-5">
+      <Table aria-label="Listing table" className="w-[80%] my-5">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>

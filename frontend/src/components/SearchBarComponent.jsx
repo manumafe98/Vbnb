@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { LocationIcon } from "../constants/Icons";
 import { CategoryFilterComponent } from "./CategoryFilterComponent";
+import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
+import { autocompleteInputWrapperClassNames } from "../constants/autocompleteInputWrapperClassNames";
 
 export const SearchBarComponent = ({ onSearching }) => {
   const[cities, setCities] = useState([])
@@ -13,6 +15,8 @@ export const SearchBarComponent = ({ onSearching }) => {
   const[selectedCategory, setSelectedCategory] = useState('')
   const[checkIn, setCheckIn] = useState(null)
   const[checkOut, setCheckOut] = useState(null)
+  const[radius, setRadius] = useState("full")
+  const[variant, setVariant] = useState("flat")
 
   useEffect(() => {
     onSearching(listings)
@@ -160,17 +164,37 @@ export const SearchBarComponent = ({ onSearching }) => {
     return array
   }
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 639) {
+        setRadius("md")
+        setVariant("bordered")
+      } else {
+        setRadius("full")
+        setVariant("flat")
+      }
+    }
+
+    handleResize()
+
+    window.addEventListener("resize", handleResize)
+
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
     return(
       <>
-      <section className="flex justify-center border-b-1 border-solid border-main-gray p-5">
-          <div className="grid items-center w-[45%] m-1.5 p-1 border-1 border-solid border-main-gray shadow-md search-bar">
+      <section className="max-sm:border-y max-sm:bg-[#F9F9F9] max-sm:my-5 flex justify-center border-b border-solid border-main-gray p-5">
+          <div className="grid grid-cols-custom items-center border-1 border-solid border-main-gray shadow-md rounded-full m-1.5 p-1 2xl:w-[45%] xl:w-[50%] lg:w-[60%] md:w-[75%] max-sm:w-full max-sm:flex max-sm:flex-col max-sm:border-0 max-sm:shadow-none max-sm:items-stretch">
             <Autocomplete
               defaultItems={cities}
-              radius="full"
+              radius={radius}
+              variant={variant}
               label="Where"
               placeholder="Search destinations"
               labelPlacement="inside"
-              className="max-w-xs"
+              className="sm:w-full max-sm:mb-2"
+              inputProps={autocompleteInputWrapperClassNames}
               onSelectionChange={(e) => e ? setSelectedCity(cities[e - 1].name) : setSelectedCity(null)}
             >
               {(city) => (
@@ -185,8 +209,8 @@ export const SearchBarComponent = ({ onSearching }) => {
                 </AutocompleteItem>
               )}
             </Autocomplete>
-            <CheckInOutComponent onDate={handleDates}/>
-            <Button radius="full" className="h-14 bg-main-orange text-white" onClick={handleSearch}>
+            <CheckInOutComponent onDate={handleDates} radius={radius} variant={variant}/>
+            <Button radius={radius} className="h-14 bg-main-orange text-white" onClick={handleSearch}>
                 <SearchIcon/> Search
             </Button>
           </div>

@@ -1,17 +1,21 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button,  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
-import { ChevronDownIcon } from "../constants/Icons";
+import { ChevronDownIcon, MobileMenuIcon } from "../constants/Icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import { useEffect, useState } from "react";
+import { MobileMenuComponent } from "./MobileMenuComponent";
 import vbnb_logo from "../static/media/vbnb_logo.png";
 
 export const NavBarComponent = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { auth } = useAuth()
+  const[isMenuOpen, setIsMenuOpen] = useState(false)
+  const[isMobile, setIsMobile] = useState(false)
 
   const navPadding = location.pathname === "/listing" ? "pb-4" : "pb-0"
-  const navStartMargin = location.pathname === "/listing" ? "ms-[417px]" : "ms-14"
-  const navEndMargin = location.pathname === "/listing" ? "me-[417px]" : "me-14"
+  const navStartMargin = location.pathname === "/listing" ? "2xl:ms-[390px] xl:ms-[225px] lg:ms-10 ms-4 max-[639px]:ms-2" : "2xl:ms-14 xl:ms-14 lg:ms-14 md:ms-14"
+  const navEndMargin = location.pathname === "/listing" ? "2xl:me-[390px] xl:me-[225px] lg:me-10 me-4 max-[639px]:me-2" : "2xl:me-14 xl:me-14 lg:me-14 md:me-14"
 
   const icons = {
     chevron: <ChevronDownIcon fill="currentColor" size={16} />
@@ -23,15 +27,35 @@ export const NavBarComponent = () => {
     window.location.reload()
   }
 
+  useEffect(() => {
+    const checkWidth = () => {
+      setIsMobile(window.innerWidth <= 550)
+    }
+
+    checkWidth()
+    window.addEventListener("resize", checkWidth)
+    return () => window.removeEventListener("resize", checkWidth)
+  }, [])
+
+  const showMobileMenu = isMobile && !auth?.user
+  const isAdmin = auth?.role === "ADMIN"
+  const isUser = auth?.role === "USER"
+  const isRootPath = location.pathname === "/"
+  const isAdminPath = location.pathname.startsWith("/admin")
+  const isListingPath = location.pathname === "/listing"
+  const isSignInPath = location.pathname === "/auth/signin"
+  const isSignUpPath = location.pathname === "/auth/signup"
+  const correctPaths = isRootPath || isListingPath
+
   return (
     <header>
     <Navbar className={`${navPadding}`} maxWidth="full" isBordered={location.pathname === "/listing"}>
       <NavbarBrand as={Link} to="/"  className={`flex items-center ${navStartMargin}`}>
         <img src={vbnb_logo} alt="Vbnb logo" className="w-16 mt-2.5"/>
-        <p className="italic text-xl text-main-orange pl-1 mt-10">Vacations like in home</p>
+        <p className="italic text-xl text-main-orange pl-1 mt-10 max-md:hidden">Vacations like in home</p>
       </NavbarBrand>
       <NavbarContent justify="center ">
-      {location.pathname.startsWith("/admin") && (
+      {isAdminPath && (
         <>
           <Dropdown>
             <NavbarItem>
@@ -170,7 +194,7 @@ export const NavBarComponent = () => {
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{auth?.user}</p>
               </DropdownItem>
-              {auth?.role === "ADMIN" && (
+              {isAdmin && (
                 <DropdownItem
                   className="h-12 gap-2"
                   key="admin_panel"
@@ -180,7 +204,7 @@ export const NavBarComponent = () => {
                   Admin Panel
                 </DropdownItem>
               )}
-              {auth?.role === "USER" && (
+              {isUser && (
                 <DropdownItem
                   className="h-12 gap-2"
                   key="favorites"
@@ -190,7 +214,7 @@ export const NavBarComponent = () => {
                   Favorites
                 </DropdownItem>
               )}
-              {auth?.role === "USER" && (
+              {isUser && (
                 <DropdownItem
                   className="h-14 gap-2"
                   key="reserves"
@@ -213,42 +237,55 @@ export const NavBarComponent = () => {
         </div>
       ) : (
         <>
-          {(location.pathname === "/" || location.pathname === "/listing") && (
+          {correctPaths && !showMobileMenu && (
             <>
               <NavbarItem className="mt-3.5">
-                <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
+                <Button as={Link} to="/auth/signin" variant="flat" radius="full" className="bg-main-orange text-white">
                   Sign In
                 </Button>
               </NavbarItem>
               <NavbarItem className={`${navEndMargin} mt-3.5`}>
-                <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
+                <Button as={Link} to="/auth/signup" variant="flat" radius="full" className="bg-main-orange text-white">
                   Sign Up
                 </Button>
               </NavbarItem>
             </>
           )}
-          {location.pathname === "/auth/signin" && (
+          {isSignInPath && !showMobileMenu && (
             <>
-              <NavbarItem className="me-14 mt-3.5">
-                <Button as={Link} to="/auth/signup" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
+              <NavbarItem className={`${navEndMargin} mt-3.5`}>
+                <Button as={Link} to="/auth/signup" variant="flat" radius="full" className="bg-main-orange text-white">
                   Sign Up
                 </Button>
               </NavbarItem>
             </>
           )}
-          {location.pathname === "/auth/signup" && (
+          {isSignUpPath && !showMobileMenu && (
             <>
-              <NavbarItem className="me-14 mt-3.5">
-                <Button as={Link} to="/auth/signin" color="primary" variant="flat" radius="full" className="bg-[#ff6f00] text-white">
+              <NavbarItem className={`${navEndMargin} mt-3.5`}>
+                <Button as={Link} to="/auth/signin" variant="flat" radius="full" className="bg-main-orange text-white">
                   Sign In
                 </Button>
               </NavbarItem>
             </>
+          )}
+          {showMobileMenu && (
+            <NavbarItem className="mt-3.5">
+              <Button
+                onClick={() => setIsMenuOpen(true)}
+                className="bg-transparent"
+              >
+                <MobileMenuIcon className="fill-current text-main-orange w-8 h-8"/>
+              </Button>
+            </NavbarItem>
           )}
         </>
       )}
       </NavbarContent>
     </Navbar>
+    {showMobileMenu && (
+      <MobileMenuComponent isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)}/>
+    )}
     </header>
   )
 }

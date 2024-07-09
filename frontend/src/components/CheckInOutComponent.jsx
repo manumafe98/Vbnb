@@ -1,8 +1,9 @@
 import { DateRangePicker } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { XMarkIcon } from "../constants/Icons";
+import { dateRangePickerClassNames } from "../constants/dateRangePickerClassNames";
 
-export const CheckInOutComponent = ({ onDate }) => {
+export const CheckInOutComponent = ({ onDate, radius, variant }) => {
   const[dateRange, setDateRange] = useState(null)
   const[checkInDate, setCheckInDate] = useState('')
   const[checkOutDate, setCheckOutDate] = useState('')
@@ -23,15 +24,17 @@ export const CheckInOutComponent = ({ onDate }) => {
 
   return (
     <DateRangePicker
-      radius="full"
+      radius={radius}
+      variant={variant}
       label="Check in - Check out"
-      className="max-w-xs"
+      className="sm:w-full max-sm:mb-2"
       visibleMonths={2}
       value={dateRange}
       onChange={setDateRange}
+      classNames={dateRangePickerClassNames}
       startContent={
         <button
-          className="group absolute right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="group absolute right-10 sm:right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           onClick={() => setDateRange(null)}
         >
           <XMarkIcon/>
