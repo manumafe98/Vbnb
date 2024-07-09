@@ -1,10 +1,12 @@
 FROM openjdk:17-oracle
 
-ARG JAR_FILE=targetgit sta/*.jar
+ARG JAR_FILE=target/*.jar
 
-COPY ./jar/vbnb-0.0.1-SNAPSHOT.jar app.jar
+COPY ${JAR_FILE} app.jar
 
 COPY src/main/resources /app/resources
+
+ENV CLASSPATH=/app/resources
 
 EXPOSE 8080
 

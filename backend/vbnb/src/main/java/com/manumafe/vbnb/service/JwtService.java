@@ -22,7 +22,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     @Value("${jwt.secret.key}")
-    private static String secretKey;
+    private String secretKey;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
