@@ -170,6 +170,16 @@ The application handles the following exceptions:
     docker-compose up --build
     ```
 
+## Web Setup
+
+1. Log in as admin with the credentials added to the `.env` file
+
+2. Then we recommend to use the images on [assets](./assets/) or similars to setup the categories, characteristics and listings
+
+   > Note: ensure characteristics and categories are png icons, you can obtain them from [Iconify](https://icon-sets.iconify.design/)
+
+3. Ensure to add the `All` category as it acts as a **filter cleaner**
+
 Note: The Docker Compose file uses the environment variables defined in the `.env` file. Ensure all required variables are properly set before running the containers.
 
 For more detailed information on setting up and using these services, please refer to their official documentation:
