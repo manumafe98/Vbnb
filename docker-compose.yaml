@@ -6,8 +6,8 @@ services:
     image: postgres:latest
     container_name: postgres
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: vbnb
     ports:
       - "5432:5432"
@@ -18,8 +18,8 @@ services:
     image: postgres:latest
     container_name: postgres-test
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: vbnb-test
     ports:
       - "5433:5432"
@@ -34,12 +34,12 @@ services:
       dockerfile: Dockerfile
     container_name: spring-boot-api-container
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      SPRING_MAIL_USERNAME: manumaxerapro@gmail.com
-      SPRING_MAIL_PASSWORD: ftdhtkdfxweknvox
-      ADMIN_PASSWORD: admin
-      JWT_SECRET_KEY: e856ca82e5328a718f13cdda90f45daebaf007c5a0e2987895207d9e218e476c
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - "8080:8080"
     networks:
@@ -53,8 +53,8 @@ services:
       dockerfile: Dockerfile
     container_name: react-frontend-container
     environment:
-      CLOUDINARY_UPLOAD_PRESET: vbnb-react-upload-unsigned
-      CLOUDINARY_API_KEY: 312794646933875
+      CLOUDINARY_UPLOAD_PRESET: ${CLOUDINARY_UPLOAD_PRESET}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
     ports:
       - "5173:5173"
     networks:

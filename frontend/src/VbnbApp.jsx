@@ -14,6 +14,7 @@ import { UpdateListingPage } from "./pages/UpdateListingPage";
 import { FavoritePage } from "./pages/FavoritePage";
 import { ListingPage } from "./pages/ListingPage";
 import { ReservePage } from "./pages/ReservePage";
+import { UnavailablePage } from "./pages/UnavailablePage";
 
 export const VbnbApp = () => {
 
@@ -24,6 +25,7 @@ export const VbnbApp = () => {
         <Route path="/auth/signin" element={<AuthenticationPage authenticationType="Sign In"/>}></Route>
         <Route path="/auth/signup" element={<AuthenticationPage authenticationType="Sign Up"/>}></Route>
         <Route path="/unauthorized" element={<UnauthorizedPage/>}></Route>
+        <Route path="/unavailable" element={<UnavailablePage/>}></Route>
 
         <Route element={<RequireAuthComponent allowedRole={"ADMIN"}/>}>
           <Route path="/admin" element={<AdminPage/>}></Route>
