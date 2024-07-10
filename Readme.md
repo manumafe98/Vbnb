@@ -153,7 +153,7 @@ The application handles the following exceptions:
 5. Update the `.env` file with the obtained credentials and keys.
 
 6. Generate the JAR file:
-   - Navigate to the backend project directory.
+   - Navigate to the `backend/vbnb` project directory.
    - Run the following Maven command to generate the JAR file:
 
      ```bash
@@ -167,7 +167,7 @@ The application handles the following exceptions:
 7. Build and run the Docker containers:
 
     ```bash
-    docker-compose up --build
+    docker compose --env-file .env up -d
     ```
 
 ## Web Setup
