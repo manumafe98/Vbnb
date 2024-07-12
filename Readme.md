@@ -161,7 +161,7 @@ The application handles the following exceptions:
      ```
 
    - The JAR file is going to be generated on `/backend/vbnb/target` with the name `vbnb-0.0.1-SNAPSHOT.jar`
-   - Create a `/jar` directory on `/backend]/vbnb`
+   - Create a `/jar` directory on `/backend/vbnb`
    - Move the generated JAR file to the `/jar` folder.
 
 7. Build and run the Docker containers:
