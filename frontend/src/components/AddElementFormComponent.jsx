@@ -1,14 +1,14 @@
-import { DragAndDropImageComponent } from "./DragAndDropImageComponent";
-import { Input, Button, Textarea, Select, SelectItem } from "@nextui-org/react";
-import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
-import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
-import { useFetch } from "../hooks/useFetch";
-import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
-import { useState, useEffect } from "react";
-import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
+import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
+import { selectTriggerClassNames } from "../constants/selectTriggerClassNames";
+import { uploadImagesToCloudinary } from "../hooks/uploadImagesToCloudinary";
+import { useFetch } from "../hooks/useFetch";
 import "../styles/phone-input.css";
+import { DragAndDropImageComponent } from "./DragAndDropImageComponent";
+import { PopUpNotificationComponent } from "./PopUpNotificationComponent";
 
 export const AddElementFormComponent = ({ elementName }) => {
   const[element, setElement] = useState('')

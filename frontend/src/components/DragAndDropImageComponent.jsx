@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from "react";
-import "../styles/DragAndDropImageComponent.css";
+import { useEffect, useRef, useState } from "react";
 import { DownloadCloudIcon } from "../constants/Icons";
+import "../styles/DragAndDropImageComponent.css";
 
 export const DragAndDropImageComponent = ({ onImagesLoaded, onImages, multiple = false, incomingImages = [] }) => {
   const[images, setImages] = useState(incomingImages)
