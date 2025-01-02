@@ -15,7 +15,8 @@ export const useFetch = async (url, method, bodyData = null, requiresAuthenticat
             "Access-Control-Allow-Origin": import.meta.env.BACKEND_URL,
             "Authorization": `Bearer ${accessToken}`
         } : {
-            "Content-type": "application/json"
+            "Content-type": "application/json",
+            "Access-Control-Allow-Origin": import.meta.env.BACKEND_URL
         },
         body: method == "GET" || method == "DELETE" ? null : JSON.stringify(bodyData)
     }
