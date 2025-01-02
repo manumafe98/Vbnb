@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/backend": {
-        target: "http://springapi:8080",
+        target: "https://vbnb-backend-latest.onrender.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/backend/, "")
       }
