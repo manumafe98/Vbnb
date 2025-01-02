@@ -1,9 +1,0 @@
-[[redirects]]
-  from = "/auth/signin"
-  to = "https://vbnb-backend-latest.onrender.com/api/v1/auth/authenticate"
-  status = 200
-
-[[redirects]]
-  from = "/auth/signup"
-  to = "https://vbnb-backend-latest.onrender.com/api/v1/auth/register"
-  status = 200
