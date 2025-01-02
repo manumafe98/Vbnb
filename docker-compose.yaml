@@ -1,34 +1,34 @@
-version: '3.8'
+version: "3.8"
 
 services:
 
-  pgsql:
-    image: postgres:latest
-    container_name: postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: vbnb
-    ports:
-      - "5432:5432"
-    networks:
-      - app_network
+  # pgsql:
+  #   image: postgres:latest
+  #   container_name: postgres
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     POSTGRES_DB: vbnb
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - app_network
 
-  pgsql-test:
-    image: postgres:latest
-    container_name: postgres-test
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: vbnb-test
-    ports:
-      - "5433:5432"
-    networks:
-      - app_network
+  # pgsql-test:
+  #   image: postgres:latest
+  #   container_name: postgres-test
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     POSTGRES_DB: vbnb-test
+  #   ports:
+  #     - "5433:5432"
+  #   networks:
+  #     - app_network
 
   springapi:
-    depends_on:
-      - pgsql
+    # depends_on:
+    #   - pgsql
     build:
       context: ./backend/vbnb
       dockerfile: Dockerfile
@@ -36,6 +36,8 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOSTNAME: ${POSTGRES_HOSTNAME}
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME}
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
       SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
