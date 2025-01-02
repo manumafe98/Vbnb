@@ -25,7 +25,7 @@ export const AddElementFormComponent = ({ elementName }) => {
   const[showPopup, setShowPopup] = useState(false)
   const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
 
-  const url = elementName === "Listing" ? `/backend/api/v1/${elementName.toLowerCase()}/create` : `/backend/api/v1/${elementName.toLowerCase()}`
+  const url = elementName === "Listing" ? `${import.meta.env.BACKEND_URL}/api/v1/${elementName.toLowerCase()}/create` : `${import.meta.env.BACKEND_URL}/api/v1/${elementName.toLowerCase()}`
 
   const setElementData = (imageUrl = null, imagesUrls = null) => {
     let elementData = {}
@@ -58,7 +58,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   const getCities = async () => {
 
-    await useFetch("/backend/api/v1/city/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/city/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setCities(data))
       .catch(error => console.log(error))
@@ -66,7 +66,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   const getCategories = async () => {
 
-    await useFetch("/backend/api/v1/category/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/category/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setCategories(data))
       .catch(error => console.log(error))
@@ -74,7 +74,7 @@ export const AddElementFormComponent = ({ elementName }) => {
 
   const getCharacteristics = async () => {
 
-    await useFetch("/backend/api/v1/characteristic/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/characteristic/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setCharacteristics(data))
       .catch(error => console.log(error))

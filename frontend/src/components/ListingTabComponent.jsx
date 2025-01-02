@@ -58,7 +58,7 @@ export const ListingTabComponent = () => {
 
   const getListingRating = async (id) => {
     try {
-      const response = await useFetch(`/backend/api/v1/rating/info/${id}`, "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/rating/info/${id}`, "GET", null, false)
       const data = await response.json()
       setRating(data.rating)
       setTimesRated(data.timesRated)
@@ -69,7 +69,7 @@ export const ListingTabComponent = () => {
 
   const getListingReviews = async (id) => {
     try {
-      const response = await useFetch(`/backend/api/v1/rating/get/${id}`, "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/rating/get/${id}`, "GET", null, false)
       const data = await response.json()
       setReviews(data)
     } catch (error) {
@@ -79,7 +79,7 @@ export const ListingTabComponent = () => {
 
   const getListingReserves = async (id) => {
     try {
-      const response = await useFetch(`/backend/api/v1/reserve/listing/${id}`, "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/reserve/listing/${id}`, "GET", null, false)
       const data = await response.json()
       setReserves(data.map((reserve) => [parseDate(reserve.checkInDate), parseDate(reserve.checkOutDate)]))
 
@@ -97,7 +97,7 @@ export const ListingTabComponent = () => {
         const formattedCheckOutDate = new Date(checkOutDate).toISOString().split("T")[0]
         const reserve = { checkInDate: formattedCheckInDate, checkOutDate: formattedCheckOutDate }
         try {
-          await useFetch(`/backend/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
+          await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/reserve?userEmail=${auth.user}&listingId=${listing.id}`, "POST", reserve)
           handlePopUp("Listing reserved successfully", "View Reserves", "success")
         } catch (error) {
           console.log(error)
@@ -111,7 +111,7 @@ export const ListingTabComponent = () => {
   const addListingToFavorite = async () => {
     if (auth.user) {
       try {
-        const response = await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${listing.id}`, "POST")
+        const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/favorite?userEmail=${auth.user}&listingId=${listing.id}`, "POST")
         handlePopUp("Added to Favorites", "View Favorites",  "success")
 
         if (!response.ok) {
@@ -131,7 +131,7 @@ export const ListingTabComponent = () => {
       const ratingBody = { rating: reviewRating, comment: reviewComment }
 
       try {
-        const response = await useFetch(`/backend/api/v1/rating?listingId=${listing.id}&userEmail=${auth.user}`, "POST", ratingBody)
+        const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/rating?listingId=${listing.id}&userEmail=${auth.user}`, "POST", ratingBody)
         if (response.ok) {
           handleDialogPopUp("Reviewed successfully", true)
           getListingReviews(listing.id)

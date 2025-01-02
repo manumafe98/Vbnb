@@ -25,7 +25,7 @@ export const UserTableComponent = () => {
   }, [])
 
   const getUsers = async () => {
-    await useFetch("/backend/api/v1/user/all", "GET")
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/user/all`, "GET")
       .then(response => response.json())
       .then(data => setUsers(data))
       .catch(error => console.log(error))
@@ -33,7 +33,7 @@ export const UserTableComponent = () => {
 
   const deleteUser = async (id) => {
     try {
-      await useFetch(`/backend/api/v1/user/delete/${id}`, "DELETE")
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/user/delete/${id}`, "DELETE")
       setUsers(users.filter(user => user.id !== id))
       getUsers()
     } catch(error) {
@@ -55,7 +55,7 @@ export const UserTableComponent = () => {
   const updateUser = async (id, user) => {
 
     try {
-      await useFetch(`/backend/api/v1/user/update/${id}?userRole=${user.role}`, "PUT", user)
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/user/update/${id}?userRole=${user.role}`, "PUT", user)
       setEditState(false)
       getUsers()
 

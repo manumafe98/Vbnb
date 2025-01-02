@@ -17,7 +17,7 @@ export const FavoriteTabComponent = () => {
 
   const getUserFavorites = async () => {
     try {
-      const response = await useFetch(`/backend/api/v1/favorite/${auth.user}`, "GET")
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/favorite/${auth.user}`, "GET")
       const data = await response.json()
       setFavorites(data);
     } catch (error) {
@@ -34,7 +34,7 @@ export const FavoriteTabComponent = () => {
   const deleteFavorite = async (event) => {
     const listingId = event.target.value
     try {
-      await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${listingId}`, "DELETE")
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/favorite?userEmail=${auth.user}&listingId=${listingId}`, "DELETE")
       getUserFavorites()
       handlePopUp("You removed the listing from favorites", null, "error")
     } catch (error) {
@@ -46,7 +46,7 @@ export const FavoriteTabComponent = () => {
     const id = event.currentTarget.dataset.value
 
     try {
-      const response = await useFetch(`/backend/api/v1/listing/get/${id}`, "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/get/${id}`, "GET", null, false)
       const listing = await response.json()
       navigate("/listing", { state: { listing } })
     } catch (error) {

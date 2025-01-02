@@ -60,7 +60,7 @@ export const CategoryFilterComponent = ({ onCategorySelection }) => {
   }, [selectedCategory])
 
   const getCategories = async () => {
-    await useFetch("/backend/api/v1/category/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/category/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setCategories(data))
       .catch(error => console.log(error))

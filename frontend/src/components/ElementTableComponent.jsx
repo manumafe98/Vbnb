@@ -38,21 +38,21 @@ export const ElementTableComponent = ({ elementName }) => {
     }, [elementName])
 
     const getElements = async () => {
-      await useFetch(`/backend/api/v1/${elementName}/all`, "GET", null, false)
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/${elementName}/all`, "GET", null, false)
         .then(response => response.json())
         .then(data => setElements(data))
         .catch(error => console.log(error))
     }
 
     const getListingsByCity = async (city) => {
-      await useFetch(`/backend/api/v1/listing/city/${city}`, "GET", null, false)
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/city/${city}`, "GET", null, false)
         .then(response => response.json())
         .then(data => setListings(data))
         .catch(error => console.log(error))
     }
 
     const getListingByCategory = async (category) => {
-      await useFetch(`/backend/api/v1/listing/category/${category}`, "GET", null, false)
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/category/${category}`, "GET", null, false)
         .then(response => response.json())
         .then(data => setListings(data))
         .catch(error => console.log(error))
@@ -60,7 +60,7 @@ export const ElementTableComponent = ({ elementName }) => {
 
     const deleteElement = async (id) => {
       try {
-        await useFetch(`/backend/api/v1/${elementName}/${id}`, "DELETE")
+        await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/${elementName}/${id}`, "DELETE")
         getElements()
       } catch(error) {
         console.log(error)
@@ -122,7 +122,7 @@ export const ElementTableComponent = ({ elementName }) => {
       })
 
       try {
-        await useFetch(`/backend/api/v1/city/${id}`, "PUT", city)
+        await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/city/${id}`, "PUT", city)
         setEditState(false)
         getElements()
       } catch (error) {

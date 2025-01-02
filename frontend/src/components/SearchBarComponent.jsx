@@ -28,7 +28,7 @@ export const SearchBarComponent = ({ onSearching }) => {
 
   const getListings = async () => {
     try {
-      const response = await useFetch("/backend/api/v1/listing/all", "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/all`, "GET", null, false)
       const data = await response.json()
       const newData = shuffle(data)
       setListings(newData)
@@ -38,21 +38,21 @@ export const SearchBarComponent = ({ onSearching }) => {
   }
 
   const getCities = async () => {
-    await useFetch("/backend/api/v1/city/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/city/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setCities(data))
       .catch(error => console.log(error))
   }
 
   const getListingsByCity = async () => {
-    await useFetch(`/backend/api/v1/listing/city/${selectedCity}`, "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/city/${selectedCity}`, "GET", null, false)
       .then(response => response.json())
       .then(data => setListings(data))
       .catch(error => console.log(error))
   }
 
   const getListingByCategory = async (category) => {
-    await useFetch(`/backend/api/v1/listing/category/${category}`, "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/category/${category}`, "GET", null, false)
       .then(response => response.json())
       .then(data => setListings(data))
       .catch(error => console.log(error))
@@ -61,7 +61,7 @@ export const SearchBarComponent = ({ onSearching }) => {
   const getListingsByAvailability = async () => {
     const formattedCheckInDate = new Date(checkIn).toISOString().split("T")[0]
     const formattedCheckOutDate = new Date(checkOut).toISOString().split("T")[0]
-    const url = `/backend/api/v1/listing/available?checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
+    const url = `${import.meta.env.BACKEND_URL}/api/v1/listing/available?checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
     await useFetch(url, "GET", null, false)
       .then(response => response.json())
@@ -70,7 +70,7 @@ export const SearchBarComponent = ({ onSearching }) => {
   }
 
   const getListingsByCityAndCategoryNames = async (category) => {
-    const url = `/backend/api/v1/listing/by-city-category?cityName=${selectedCity}&categoryName=${category}`
+    const url = `${import.meta.env.BACKEND_URL}/api/v1/listing/by-city-category?cityName=${selectedCity}&categoryName=${category}`
 
     await useFetch(url, "GET", null, false)
       .then(response => response.json())
@@ -81,7 +81,7 @@ export const SearchBarComponent = ({ onSearching }) => {
   const getListingsByAvailabilityAndCityName = async () => {
     const formattedCheckInDate = new Date(checkIn).toISOString().split("T")[0]
     const formattedCheckOutDate = new Date(checkOut).toISOString().split("T")[0]
-    const url = `/backend/api/v1/listing/available/by-city?cityName=${selectedCity}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
+    const url = `${import.meta.env.BACKEND_URL}/api/v1/listing/available/by-city?cityName=${selectedCity}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
     await useFetch(url, "GET", null, false)
       .then(response => response.json())
@@ -92,7 +92,7 @@ export const SearchBarComponent = ({ onSearching }) => {
   const getListingsByAvailabilityAndCategoryName = async (category) => {
     const formattedCheckInDate = new Date(checkIn).toISOString().split("T")[0]
     const formattedCheckOutDate = new Date(checkOut).toISOString().split("T")[0]
-    const url = `/backend/api/v1/listing/available/by-category?categoryName=${category}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
+    const url = `${import.meta.env.BACKEND_URL}/api/v1/listing/available/by-category?categoryName=${category}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
     await useFetch(url, "GET", null, false)
       .then(response => response.json())
@@ -103,7 +103,7 @@ export const SearchBarComponent = ({ onSearching }) => {
   const getListingsByAvailabilityAndCategoryAndCityNames = async (category) => {
     const formattedCheckInDate = new Date(checkIn).toISOString().split("T")[0]
     const formattedCheckOutDate = new Date(checkOut).toISOString().split("T")[0]
-    const url = `/backend/api/v1/listing/available/by-category-city?categoryName=${category}&cityName=${selectedCity}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
+    const url = `${import.meta.env.BACKEND_URL}/api/v1/listing/available/by-category-city?categoryName=${category}&cityName=${selectedCity}&checkInDate=${formattedCheckInDate}&checkOutDate=${formattedCheckOutDate}`
 
     await useFetch(url, "GET", null, false)
       .then(response => response.json())

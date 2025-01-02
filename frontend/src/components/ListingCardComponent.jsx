@@ -21,7 +21,7 @@ export const ListingCardComponent = ({ id, title, images, description, rating, o
 
   const handleCardClick = async () => {
     try {
-      const response = await useFetch(`/backend/api/v1/listing/get/${id}`, "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/get/${id}`, "GET", null, false)
       const listing = await response.json()
       navigate("/listing", { state: { listing } })
     } catch (error) {

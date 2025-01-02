@@ -28,7 +28,7 @@ export const ListingSectionComponent = ({ listings }) => {
 
   const getListingRating = async (id) => {
     try {
-      const response = await useFetch(`/backend/api/v1/rating/info/${id}`, "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/rating/info/${id}`, "GET", null, false)
       const data = await response.json()
 
       return data
@@ -45,7 +45,7 @@ export const ListingSectionComponent = ({ listings }) => {
 
   const addListingToFavorite = async (selectedListing) => {
     try {
-      const response = await useFetch(`/backend/api/v1/favorite?userEmail=${auth.user}&listingId=${selectedListing}`, "POST", null, true)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/favorite?userEmail=${auth.user}&listingId=${selectedListing}`, "POST", null, true)
       handlePopUp("Added to Favorites", "View Favorites",  "success")
 
       if (!response.ok) {

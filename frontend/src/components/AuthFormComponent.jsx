@@ -22,7 +22,7 @@ export const AuthFormComponent = ({ authenticationType }) => {
 
   const validEmailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
 
-  const authUrl = authenticationType === "Sign Up" ? "/backend/api/v1/auth/register" : "/backend/api/v1/auth/authenticate"
+  const authUrl = authenticationType === "Sign Up" ? `${import.meta.env.BACKEND_URL}/api/v1/auth/register` : `${import.meta.env.BACKEND_URL}/api/v1/auth/authenticate`
   const userData = authenticationType === "Sign Up" ? { name, lastName, email, password } : { email, password }
 
   const checkValidRegistration = () => {

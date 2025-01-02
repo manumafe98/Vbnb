@@ -39,7 +39,7 @@ export const UpdateCharacteristicFormComponent = ({ characteristicToUpdate }) =>
 
     if (isValid) {
       try {
-        const response = await useFetch(`/backend/api/v1/characteristic/${characteristicToUpdate.id}`, "PUT", newCharacteristicData)
+        const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/characteristic/${characteristicToUpdate.id}`, "PUT", newCharacteristicData)
 
         if (response.ok) {
           handlePopUp(`${characteristicNameplaceholder} updated successfully`, "View Characteristics", "success")

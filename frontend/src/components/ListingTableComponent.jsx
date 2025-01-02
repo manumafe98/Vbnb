@@ -24,7 +24,7 @@ export const ListingTableComponent = () => {
   }, [])
 
   const getListings = async () => {
-    await useFetch("/backend/api/v1/listing/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setListings(data))
       .catch(error => console.log(error))
@@ -32,7 +32,7 @@ export const ListingTableComponent = () => {
 
   const deleteListing = async (id) => {
     try {
-      await useFetch(`/backend/api/v1/listing/delete/${id}`, "DELETE")
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/delete/${id}`, "DELETE")
       getListings()
     } catch(error) {
       console.log(error)

@@ -41,7 +41,7 @@ export const ReserveTabComponent = () => {
 
   const getUserReserves = async () => {
     try {
-      const response = await useFetch(`/backend/api/v1/reserve/current/${auth.user}`, "GET")
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/reserve/current/${auth.user}`, "GET")
       const data = await response.json()
       setReserves(data);
     } catch (error) {
@@ -51,7 +51,7 @@ export const ReserveTabComponent = () => {
 
   const getListingReserves = async (id) => {
     try {
-      const response = await useFetch(`/backend/api/v1/reserve/listing/${id}`, "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/reserve/listing/${id}`, "GET", null, false)
       const data = await response.json()
       setListingReserves(
         data
@@ -70,7 +70,7 @@ export const ReserveTabComponent = () => {
     const reserveId = event.target.value
 
     try {
-      await useFetch(`/backend/api/v1/reserve?reserveId=${reserveId}`, "DELETE")
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/reserve?reserveId=${reserveId}`, "DELETE")
       getUserReserves()
       handlePopUp("Your reservation has been deleted", null, "error")
     } catch (error) {
@@ -84,7 +84,7 @@ export const ReserveTabComponent = () => {
     const reserve = { checkInDate: formattedCheckInDate, checkOutDate: formattedCheckOutDate }
 
     try {
-      await useFetch(`/backend/api/v1/reserve?reserveId=${currentReserveId}`, "PUT", reserve)
+      await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/reserve?reserveId=${currentReserveId}`, "PUT", reserve)
       onOpenChange(false)
       handlePopUp("Your reservation was successfully updated", null, "success")
       getUserReserves()
@@ -116,7 +116,7 @@ export const ReserveTabComponent = () => {
     const id = event.currentTarget.dataset.value
 
     try {
-      const response = await useFetch(`/backend/api/v1/listing/get/${id}`, "GET", null, false)
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/get/${id}`, "GET", null, false)
       const listing = await response.json()
       navigate("/listing", { state: { listing } })
     } catch (error) {

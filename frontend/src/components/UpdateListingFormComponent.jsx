@@ -46,7 +46,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
   const getCities = async () => {
 
-    await useFetch("/backend/api/v1/city/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/city/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setCities(data))
       .catch(error => console.log(error))
@@ -54,7 +54,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
   const getCategories = async () => {
 
-    await useFetch("/backend/api/v1/category/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/category/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setCategories(data))
       .catch(error => console.log(error))
@@ -62,7 +62,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
   const getCharacteristics = async () => {
 
-    await useFetch("/backend/api/v1/characteristic/all", "GET", null, false)
+    await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/characteristic/all`, "GET", null, false)
       .then(response => response.json())
       .then(data => setCharacteristics(data))
       .catch(error => console.log(error))
@@ -100,7 +100,7 @@ export const UpdateListingFormComponent = ({ listingToUpdate }) => {
 
     if (isValid) {
       try {
-        const response = await useFetch(`/backend/api/v1/listing/update/${listingToUpdate.id}`, "PUT", newListingData)
+        const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/update/${listingToUpdate.id}`, "PUT", newListingData)
         if (response.ok) {
           handlePopUp(`${titlePlaceholder} updated successfully`, "View Listings", "success")
         } else {

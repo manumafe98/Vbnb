@@ -55,6 +55,7 @@ services:
       dockerfile: Dockerfile
     container_name: react-frontend-container
     environment:
+      BACKEND_URL: ${BACKEND_URL}
       CLOUDINARY_UPLOAD_PRESET: ${CLOUDINARY_UPLOAD_PRESET}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
     ports:
