@@ -22,6 +22,9 @@ public class AdminUserInitializer {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${ADMIN_EMAIL}")
+    private String adminEmail;
+
     @Value("${ADMIN_PASSWORD}")
     private String adminPassword;
 
