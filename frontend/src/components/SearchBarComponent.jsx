@@ -151,17 +151,13 @@ export const SearchBarComponent = ({ onSearching }) => {
   }
 
   const shuffle = (array) => {
-    let currentIndex = array.length;
-    while (currentIndex != 0) {
-  
-      let randomIndex = Math.floor(Math.random() * currentIndex)
-      currentIndex--
-  
-      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]
-    }
 
-    return array
+    for (let index = array.length - 1; index > 0; index--) {
+      const randomIndex = Math.floor(Math.random() * (index + 1))
+      [array[index], array[randomIndex]] = [array[randomIndex], array[index]]
   }
+  return array
+}
 
   useEffect(() => {
     const handleResize = () => {
