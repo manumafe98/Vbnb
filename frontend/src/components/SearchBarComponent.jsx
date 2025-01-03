@@ -17,16 +17,6 @@ export const SearchBarComponent = ({ onSearching }) => {
   const[radius, setRadius] = useState("full")
   const[variant, setVariant] = useState("flat")
 
-  const shuffle = (array) => {
-    const copiedArray = [...array]
-    for (let index = copiedArray.length - 1; index > 0; index--) {
-      const randomIndex = Math.floor(Math.random() * (index + 1))
-      console.log('Swapping:', copiedArray[index], copiedArray[randomIndex])
-      [copiedArray[index], copiedArray[randomIndex]] = [copiedArray[randomIndex], copiedArray[index]]
-    }
-    return copiedArray
-  }
-
   useEffect(() => {
     onSearching(listings)
   }, [listings])
@@ -40,10 +30,7 @@ export const SearchBarComponent = ({ onSearching }) => {
     try {
       const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/all`, "GET", null, false)
       const data = await response.json()
-      console.log(data)
-      const newData = shuffle(data)
-      console.log(newData)
-      setListings(newData)
+      setListings(data)
     } catch (error) {
       console.log(error)
     }
