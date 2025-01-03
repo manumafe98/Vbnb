@@ -18,14 +18,13 @@ export const SearchBarComponent = ({ onSearching }) => {
   const[variant, setVariant] = useState("flat")
 
   const shuffle = (array) => {
-    let randomIndex = 0;
-
-    for (let index = array.length - 1; index > 0; index--) {
-      randomIndex = Math.floor(Math.random() * (index + 1))
-      [array[index], array[randomIndex]] = [array[randomIndex], array[index]]
+    const copiedArray = [...array]
+    for (let index = copiedArray.length - 1; index > 0; index--) {
+      const randomIndex = Math.floor(Math.random() * (index + 1))
+      console.log('Swapping:', copiedArray[index], copiedArray[randomIndex])
+      [copiedArray[index], copiedArray[randomIndex]] = [copiedArray[randomIndex], copiedArray[index]]
     }
-
-    return array
+    return copiedArray
   }
 
   useEffect(() => {
