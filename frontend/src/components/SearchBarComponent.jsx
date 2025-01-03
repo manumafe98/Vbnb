@@ -18,9 +18,10 @@ export const SearchBarComponent = ({ onSearching }) => {
   const[variant, setVariant] = useState("flat")
 
   const shuffle = (array) => {
+    let randomIndex = 0;
 
     for (let index = array.length - 1; index > 0; index--) {
-      const randomIndex = Math.floor(Math.random() * (index + 1))
+      randomIndex = Math.floor(Math.random() * (index + 1))
       [array[index], array[randomIndex]] = [array[randomIndex], array[index]]
     }
 
