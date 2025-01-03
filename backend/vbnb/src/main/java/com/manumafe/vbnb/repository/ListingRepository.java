@@ -13,9 +13,6 @@ import com.manumafe.vbnb.entity.Category;
 import com.manumafe.vbnb.entity.City;
 import com.manumafe.vbnb.entity.Listing;
 
-import jakarta.transaction.Transactional;
-
-@Transactional
 @Repository
 public interface ListingRepository extends JpaRepository<Listing, Long> {
     Optional<Listing> findByTitle(String title);

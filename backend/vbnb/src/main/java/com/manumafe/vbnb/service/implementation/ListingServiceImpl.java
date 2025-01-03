@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.manumafe.vbnb.dto.ListingCreateDto;
 import com.manumafe.vbnb.dto.ListingFullDataDto;
@@ -26,10 +28,10 @@ import com.manumafe.vbnb.repository.ImageRepository;
 import com.manumafe.vbnb.repository.ListingRepository;
 import com.manumafe.vbnb.service.ListingService;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ListingServiceImpl implements ListingService {
 
@@ -41,7 +43,7 @@ public class ListingServiceImpl implements ListingService {
 	private final ListingDtoMapper listingDtoMapper;
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public ListingResponseDto saveListing(ListingCreateDto listingDto) throws ResourceAlreadyExistentException, ResourceNotFoundException {
 		Optional<Listing> optionalListing = listingRepository.findByTitle(listingDto.title());
 
@@ -76,7 +78,8 @@ public class ListingServiceImpl implements ListingService {
 	}
 
 	@Override
-	public void deleteListing(Long id) throws ResourceNotFoundException{
+	@Transactional(readOnly = false)
+	public void deleteListing(Long id) throws ResourceNotFoundException {
 		listingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + id + " not found"));
 
@@ -84,7 +87,7 @@ public class ListingServiceImpl implements ListingService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public ListingResponseDto updateListing(Long id, ListingCreateDto listingDto) throws ResourceNotFoundException {
 		Listing listing = listingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + id + " not found"));
@@ -120,7 +123,7 @@ public class ListingServiceImpl implements ListingService {
 	}
 
 	@Override
-	public ListingResponseDto findListingById(Long id) throws ResourceNotFoundException{
+	public ListingResponseDto findListingById(Long id) throws ResourceNotFoundException {
 		Listing listing = listingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + id + " not found"));
 
@@ -154,7 +157,7 @@ public class ListingServiceImpl implements ListingService {
 	}
 
 	@Override
-	public List<ListingResponseDto> findListingByCityNameAndCategoryName(String cityName, String categoryName) throws ResourceNotFoundException{
+	public List<ListingResponseDto> findListingByCityNameAndCategoryName(String cityName, String categoryName) throws ResourceNotFoundException {
 		City city = cityRepository.findByName(cityName)
 				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " not found"));
 
@@ -165,7 +168,7 @@ public class ListingServiceImpl implements ListingService {
 	}
 
 	@Override
-	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String cityName) throws ResourceNotFoundException{
+	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String cityName) throws ResourceNotFoundException {
 		City city = cityRepository.findByName(cityName)
 				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " not found"));
 
@@ -173,7 +176,7 @@ public class ListingServiceImpl implements ListingService {
 	}
 
 	@Override
-	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCategoryName(LocalDate checkInDate, LocalDate checkOutDate, String categoryName) throws ResourceNotFoundException{
+	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCategoryName(LocalDate checkInDate, LocalDate checkOutDate, String categoryName) throws ResourceNotFoundException {
 		Category category = categoryRepository.findByName(categoryName)
 				.orElseThrow(() -> new ResourceNotFoundException("Category with name: " + categoryName + " not found"));
 
@@ -181,7 +184,7 @@ public class ListingServiceImpl implements ListingService {
 	}
 
 	@Override
-	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCategoryNameAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String categoryName, String cityName) throws ResourceNotFoundException{
+	public List<ListingResponseDto> findAvailableListingsByRangeDatesAndCategoryNameAndCityName(LocalDate checkInDate, LocalDate checkOutDate, String categoryName, String cityName) throws ResourceNotFoundException {
 		City city = cityRepository.findByName(cityName)
 				.orElseThrow(() -> new ResourceNotFoundException("City with name: " + cityName + " not found"));
 

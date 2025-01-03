@@ -10,14 +10,11 @@ import org.springframework.stereotype.Repository;
 import com.manumafe.vbnb.entity.Image;
 import com.manumafe.vbnb.entity.Listing;
 
-import jakarta.transaction.Transactional;
-
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
     List<Image> findByListing(Listing listing);
 
     @Modifying
-    @Transactional
     @Query("DELETE FROM Image i WHERE i.listing = :listing")
     void deleteAllByListing(Listing listing);
 }

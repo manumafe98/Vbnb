@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.manumafe.vbnb.dto.CityDto;
 import com.manumafe.vbnb.dto.mapper.CityDtoMapper;
@@ -16,6 +17,7 @@ import com.manumafe.vbnb.service.CityService;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CityServiceImpl implements CityService {
 
@@ -49,6 +51,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CityDto findCityById(Long id) throws ResourceNotFoundException {
         City city = cityRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
@@ -57,6 +60,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CityDto> findAllCities() {
         return cityRepository.findAll().stream().map(cityDtoMapper::toDto).toList();
     }

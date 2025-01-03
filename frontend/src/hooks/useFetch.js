@@ -1,4 +1,4 @@
-export const useFetch = async (url, method, bodyData = null, requiresAuthentication = true) => {
+export const useFetch = async (url, method, bodyData, requiresAuthentication = true) => {
     let accessToken = ""
 
     if (!url) return

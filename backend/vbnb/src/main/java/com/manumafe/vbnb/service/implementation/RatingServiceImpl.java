@@ -24,6 +24,7 @@ import com.manumafe.vbnb.service.RatingService;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RatingServiceImpl implements RatingService {
 
@@ -33,7 +34,6 @@ public class RatingServiceImpl implements RatingService {
     private final RatingDtoMapper ratingDtoMapper;
 
     @Override
-    @Transactional
     public RatingDto createRating(Long listingId, String userEmail, RatingDto ratingDto) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
@@ -65,7 +65,6 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    @Transactional
     public RatingDto updateRating(Long listingId, String userEmail, RatingDto ratingDto) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
@@ -88,6 +87,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ListingRatingDto> getRatingsByListingId(Long listingId) throws ResourceNotFoundException {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
@@ -96,6 +96,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RatingListingInformationDto getListingRatingInformation(Long listingId) throws ResourceNotFoundException {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));

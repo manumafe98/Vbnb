@@ -19,6 +19,7 @@ import com.manumafe.vbnb.service.CharacteristicService;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CharacteristicServiceImpl implements CharacteristicService {
 
@@ -45,7 +46,6 @@ public class CharacteristicServiceImpl implements CharacteristicService {
     }
 
     @Override
-    @Transactional
     public void deleteCharacteristic(Long id) throws ResourceNotFoundException {
         Characteristic characteristic = characteristicRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Characteristic with id: " + id + " not found"));
@@ -59,7 +59,6 @@ public class CharacteristicServiceImpl implements CharacteristicService {
     }
 
     @Override
-    @Transactional
     public CharacteristicDto updateCharacteristic(Long id, CharacteristicDto characteristicDto)
             throws ResourceNotFoundException {
 
@@ -75,6 +74,7 @@ public class CharacteristicServiceImpl implements CharacteristicService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CharacteristicDto> findAllCharacteristics() {
         return characteristicRepository.findAll().stream().map(characteristicDtoMapper::toDto).toList();
     }

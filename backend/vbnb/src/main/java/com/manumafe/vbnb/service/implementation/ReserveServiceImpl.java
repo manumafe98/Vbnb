@@ -24,6 +24,7 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ReserveServiceImpl implements ReserveService {
 
@@ -34,7 +35,6 @@ public class ReserveServiceImpl implements ReserveService {
     private final EmailService emailService;
 
     @Override
-    @Transactional
     public ReserveDto saveReserve(String userEmail, Long listingId, ReserveDto reserveDto) throws ResourceNotFoundException, ListingUnavailableForReserves {
         User user = userRepository.findByEmail(userEmail)
             .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
@@ -67,7 +67,6 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    @Transactional
     public void deleteReserve(Long reserveId) throws ResourceNotFoundException {
         reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " notfound"));
@@ -76,7 +75,6 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    @Transactional
     public ReserveDto updateReserve(Long reserveId, ReserveDto reserveDto) throws ResourceNotFoundException {
         Reserve reserveToUpdate = reserveRepository.findById(reserveId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserve with id: " + reserveId + " not found"));
@@ -98,6 +96,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserReserveDto> findReservesByUserEmail(String userEmail) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
@@ -106,6 +105,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserReserveDto> findCurrentReservesByUserEmail(String userEmail) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + " not found"));
@@ -114,6 +114,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReserveDto> findByListingId(Long listingId) throws ResourceNotFoundException {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));

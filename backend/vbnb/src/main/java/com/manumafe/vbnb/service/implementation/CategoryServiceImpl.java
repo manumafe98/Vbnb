@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.manumafe.vbnb.dto.CategoryDto;
 import com.manumafe.vbnb.dto.mapper.CategoryDtoMapper;
@@ -16,6 +17,7 @@ import com.manumafe.vbnb.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
@@ -47,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CategoryDto> findAllCategories() {
         return categoryRepository.findAll().stream().map(categoryDtoMapper::toDto).toList();
     }

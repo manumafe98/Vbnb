@@ -7,9 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.manumafe.vbnb.entity.Characteristic;
 
-import jakarta.transaction.Transactional;
-
-@Transactional
 @Repository
 public interface CharacteristicRepository extends JpaRepository<Characteristic, Long> {
     Optional<Characteristic> findByName(String name);

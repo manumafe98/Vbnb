@@ -23,6 +23,7 @@ import com.manumafe.vbnb.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FavoriteServiceImpl implements FavoriteService {
 
@@ -32,7 +33,6 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteDtoMapper favoriteDtoMapper;
 
     @Override
-    @Transactional
     public FavoriteDto saveFavorite(String userEmail, Long listingId) throws ResourceNotFoundException, ResourceAlreadyExistentException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + "not found"));
@@ -64,7 +64,6 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    @Transactional
     public void deleteFavorite(String userEmail, Long listingId) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + "not found"));
@@ -84,6 +83,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserFavoriteDto> findFavoritesByUserEmail(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email: " + userEmail + "not found"));

@@ -7,9 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.manumafe.vbnb.entity.Category;
 
-import jakarta.transaction.Transactional;
-
-@Transactional
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByName(String name);

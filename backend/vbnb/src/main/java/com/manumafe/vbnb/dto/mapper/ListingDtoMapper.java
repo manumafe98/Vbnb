@@ -1,5 +1,6 @@
 package com.manumafe.vbnb.dto.mapper;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class ListingDtoMapper {
                 listing.getOwnerPhoneNumber(),
                 city,
                 category,
-                listing.getImages(),
+                listing.getImages() != null ? new HashSet<>(listing.getImages()) : Set.of(),
                 characteristicDtos);
     }
 
