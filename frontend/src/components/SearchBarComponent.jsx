@@ -17,6 +17,16 @@ export const SearchBarComponent = ({ onSearching }) => {
   const[radius, setRadius] = useState("full")
   const[variant, setVariant] = useState("flat")
 
+  const shuffle = (array) => {
+
+    for (let index = array.length - 1; index > 0; index--) {
+      const randomIndex = Math.floor(Math.random() * (index + 1))
+      [array[index], array[randomIndex]] = [array[randomIndex], array[index]]
+    }
+
+    return array
+  }
+
   useEffect(() => {
     onSearching(listings)
   }, [listings])
@@ -30,7 +40,9 @@ export const SearchBarComponent = ({ onSearching }) => {
     try {
       const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/all`, "GET", null, false)
       const data = await response.json()
+      console.log(data)
       const newData = shuffle(data)
+      console.log(newData)
       setListings(newData)
     } catch (error) {
       console.log(error)
@@ -149,15 +161,6 @@ export const SearchBarComponent = ({ onSearching }) => {
       getListings()
     }
   }
-
-  const shuffle = (array) => {
-
-    for (let index = array.length - 1; index > 0; index--) {
-      const randomIndex = Math.floor(Math.random() * (index + 1))
-      [array[index], array[randomIndex]] = [array[randomIndex], array[index]]
-  }
-  return array
-}
 
   useEffect(() => {
     const handleResize = () => {
