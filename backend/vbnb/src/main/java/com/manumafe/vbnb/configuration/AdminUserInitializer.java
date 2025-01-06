@@ -1,5 +1,7 @@
 package com.manumafe.vbnb.configuration;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -30,15 +32,18 @@ public class AdminUserInitializer {
 
     @PostConstruct
     public void init() {
+        Optional<User> adminUser = userRepository.findByEmail(adminEmail);
 
-        var admin = User.builder()
+        if (!adminUser.isPresent()) {
+            var admin = User.builder()
                 .name("Admin")
                 .lastName("Admin")
-                .email("admin@gmail.com")
+                .email(adminEmail)
                 .password(passwordEncoder.encode(adminPassword))
                 .userRole(UserRole.ADMIN)
                 .build();
 
         userRepository.save(admin);
+        }
     }
 }
