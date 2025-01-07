@@ -53,7 +53,7 @@ export const ListingCardComponent = ({ id, title, images, description, rating, o
             {title}
           </p>
           <p className="max-w-[17rem] text-[16px] -mt-1 text-gray-500">
-            {description}
+            {description.length > 69 ? description.slice(0, 66) + "..." : description}
           </p>
         </div>
         <div className="flex items-center space-x-1 me-1">

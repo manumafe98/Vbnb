@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
 
   # pgsql:
@@ -8,7 +6,7 @@ services:
   #   environment:
   #     POSTGRES_USER: ${POSTGRES_USER}
   #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #     POSTGRES_DB: vbnb
+  #     POSTGRES_DB: ${POSTGRES_DBNAME}
   #   ports:
   #     - "5432:5432"
   #   networks:
@@ -20,7 +18,7 @@ services:
   #   environment:
   #     POSTGRES_USER: ${POSTGRES_USER}
   #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #     POSTGRES_DB: vbnb-test
+  #     POSTGRES_DB: ${POSTGRES_TEST_DBNAME}
   #   ports:
   #     - "5433:5432"
   #   networks:
