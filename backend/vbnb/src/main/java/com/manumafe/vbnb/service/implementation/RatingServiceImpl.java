@@ -49,10 +49,10 @@ public class RatingServiceImpl implements RatingService {
 
         Rating rating = new Rating();
         RatingId ratingId = new RatingId(user.getId(), listingId);
-        
+
         rating.setId(ratingId);
-        rating.setRating(ratingDto.rating());
-        rating.setComment(ratingDto.comment());
+        rating.setRating(ratingDto.getRating());
+        rating.setComment(ratingDto.getComment());
         rating.setListing(listing);
         rating.setUser(user);
 
@@ -76,8 +76,8 @@ public class RatingServiceImpl implements RatingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rating of userId: " + user.getId() + " and listingId: " + listingId + " not found"));
 
         listing.getRating().remove(rating);
-        rating.setRating(ratingDto.rating());
-        rating.setComment(ratingDto.comment());
+        rating.setRating(ratingDto.getRating());
+        rating.setComment(ratingDto.getComment());
         listing.getRating().add(rating);
 
         listingRepository.save(listing);
@@ -105,6 +105,9 @@ public class RatingServiceImpl implements RatingService {
 
         Double average = ratings.stream().mapToDouble(Rating::getRating).average().orElse(0.0);
 
-        return new RatingListingInformationDto(average, ratings.size());
+        return RatingListingInformationDto.builder()
+                .rating(average)
+                .timesRated(ratings.size())
+                .build();
     }
 }

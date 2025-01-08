@@ -127,7 +127,10 @@ public class ListingControllerTest {
 
         LocalDate date = LocalDate.of(2024, 07, 01);
 
-        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
+        ReserveDto reserve = ReserveDto.builder()
+                                .checkInDate(date)
+                                .checkOutDate(date.plusDays(7))
+                                .build();
 
         reserveService.saveReserve(user.getEmail(), listing.getId(), reserve);
     }
@@ -140,14 +143,15 @@ public class ListingControllerTest {
             City city,
             Characteristic characteristic) {
 
-        return new ListingCreateDto(
-                title,
-                description,
-                ownerPhoneNumber,
-                city.getId(),
-                category.getId(),
-                Set.of("http://image1"),
-                Set.of(characteristic.getId()));
+        return ListingCreateDto.builder()
+                .title(title)
+                .description(description)
+                .ownerPhoneNumber(ownerPhoneNumber)
+                .cityId(city.getId())
+                .categoryId(category.getId())
+                .images(Set.of("http://image1"))
+                .characteristicIds(Set.of(characteristic.getId()))
+                .build();
     }
 
     private String getListingJson(ListingCreateDto listing) throws JsonProcessingException {

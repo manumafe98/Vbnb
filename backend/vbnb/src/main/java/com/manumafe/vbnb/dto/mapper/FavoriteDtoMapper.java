@@ -15,15 +15,17 @@ public class FavoriteDtoMapper {
     private ListingDtoMapper listingDtoMapper;
 
     public FavoriteDto toDto(Favorite favorite) {
-        return new FavoriteDto(
-                favorite.getId());
+        return FavoriteDto.builder()
+                .id(favorite.getId())
+                .build();
     }
 
     public UserFavoriteDto toUserFavoriteDto(Favorite favorite) {
         ListingResponseDto listing = listingDtoMapper.toResponseDto(favorite.getListing());
 
-        return new UserFavoriteDto(
-                favorite.getId(),
-                listing);
+        return UserFavoriteDto.builder()
+                .id(favorite.getId())
+                .listing(listing)
+                .build();
     }
 }

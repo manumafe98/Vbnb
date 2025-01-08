@@ -9,9 +9,10 @@ import com.manumafe.vbnb.entity.Characteristic;
 public class CharacteristicDtoMapper {
 
     public CharacteristicDto toDto(Characteristic characteristic) {
-        return new CharacteristicDto(
-                characteristic.getId(),
-                characteristic.getName(),
-                characteristic.getImageUrl());
+        return CharacteristicDto.builder()
+                .id(characteristic.getId())
+                .name(characteristic.getName())
+                .imageUrl(characteristic.getImageUrl())
+                .build();
     }
 }

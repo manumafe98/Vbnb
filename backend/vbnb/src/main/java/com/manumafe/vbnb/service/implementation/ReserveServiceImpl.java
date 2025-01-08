@@ -42,7 +42,7 @@ public class ReserveServiceImpl implements ReserveService {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + listingId + " not found"));
 
-        List<Listing> availableListings = listingRepository.findAvailableListings(reserveDto.checkInDate(), reserveDto.checkOutDate());
+        List<Listing> availableListings = listingRepository.findAvailableListings(reserveDto.getCheckInDate(), reserveDto.getCheckOutDate());
 
         if (!availableListings.contains(listing)) {
             throw new ListingUnavailableForReserves("Listing already reserved for those dates");
@@ -50,8 +50,8 @@ public class ReserveServiceImpl implements ReserveService {
 
         Reserve reserve = new Reserve();
 
-        reserve.setCheckInDate(reserveDto.checkInDate());
-        reserve.setCheckOutDate(reserveDto.checkOutDate());
+        reserve.setCheckInDate(reserveDto.getCheckInDate());
+        reserve.setCheckOutDate(reserveDto.getCheckOutDate());
         reserve.setUser(user);
         reserve.setListing(listing);
 
@@ -82,13 +82,13 @@ public class ReserveServiceImpl implements ReserveService {
         List<Reserve> currentListingReservesWithoutUpdatedReserve = reserveToUpdate.getListing().getReserves().stream().filter(reserve -> reserve.getId() != reserveToUpdate.getId()).toList();
 
         for (Reserve reserve : currentListingReservesWithoutUpdatedReserve) {
-            if (reserve.getCheckInDate().compareTo(reserveDto.checkOutDate()) <= 0 && reserve.getCheckOutDate().compareTo(reserveDto.checkInDate()) >= 0) {
+            if (reserve.getCheckInDate().compareTo(reserveDto.getCheckOutDate()) <= 0 && reserve.getCheckOutDate().compareTo(reserveDto.getCheckInDate()) >= 0) {
                 throw new ListingUnavailableForReserves("Listing already reserved for those dates");
             }
         }
 
-        reserveToUpdate.setCheckInDate(reserveDto.checkInDate());
-        reserveToUpdate.setCheckOutDate(reserveDto.checkOutDate());
+        reserveToUpdate.setCheckInDate(reserveDto.getCheckInDate());
+        reserveToUpdate.setCheckOutDate(reserveDto.getCheckOutDate());
 
         reserveRepository.save(reserveToUpdate);
 

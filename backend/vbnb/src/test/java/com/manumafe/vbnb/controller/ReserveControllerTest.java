@@ -144,7 +144,10 @@ public class ReserveControllerTest {
 
         LocalDate date = LocalDate.of(2024, 6, 8);
 
-        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
+        ReserveDto reserve = ReserveDto.builder()
+                                .checkInDate(date)
+                                .checkOutDate(date.plusDays(7))
+                                .build();
         String reserveJson = mapToJson(reserve);
 
         mockMvc.perform(post("/api/v1/reserve")
@@ -165,7 +168,10 @@ public class ReserveControllerTest {
 
         LocalDate date = LocalDate.of(2024, 9, 8);
 
-        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
+        ReserveDto reserve = ReserveDto.builder()
+                                .checkInDate(date)
+                                .checkOutDate(date.plusDays(7))
+                                .build();
         String reserveJson = mapToJson(reserve);
 
         mockMvc.perform(post("/api/v1/reserve")
@@ -186,7 +192,10 @@ public class ReserveControllerTest {
 
         LocalDate date = LocalDate.of(2024, 10, 8);
 
-        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
+        ReserveDto reserve = ReserveDto.builder()
+                                .checkInDate(date)
+                                .checkOutDate(date.plusDays(7))
+                                .build();
         String reserveJson = mapToJson(reserve);
 
         mockMvc.perform(post("/api/v1/reserve")
@@ -217,7 +226,10 @@ public class ReserveControllerTest {
     @Order(4)
     public void testUpdateReserve() throws Exception {
         LocalDate date = LocalDate.of(2024, 8, 1);
-        ReserveDto reserve = new ReserveDto(date, date.plusDays(7));
+        ReserveDto reserve = ReserveDto.builder()
+                                .checkInDate(date)
+                                .checkOutDate(date.plusDays(7))
+                                .build();
         String reserveJson = mapToJson(reserve);
 
         mockMvc.perform(put("/api/v1/reserve")

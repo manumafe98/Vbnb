@@ -15,17 +15,19 @@ public class RatingDtoMapper {
     private UserDtoMapper userDtoMapper;
 
     public RatingDto toDto(Rating rating) {
-        return new RatingDto(
-                rating.getRating(),
-                rating.getComment());
+        return RatingDto.builder()
+                .rating(rating.getRating())
+                .comment(rating.getComment())
+                .build();
     }
 
     public ListingRatingDto toListingRatingDto(Rating rating) {
         UserDto user = userDtoMapper.toDto(rating.getUser());
 
-        return new ListingRatingDto(
-                rating.getRating(),
-                rating.getComment(),
-                user);
+        return ListingRatingDto.builder()
+                .rating(rating.getRating())
+                .comment(rating.getComment())
+                .user(user)
+                .build();
     }
 }

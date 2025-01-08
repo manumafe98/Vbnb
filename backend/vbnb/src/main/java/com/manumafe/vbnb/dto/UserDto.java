@@ -2,10 +2,15 @@ package com.manumafe.vbnb.dto;
 
 import com.manumafe.vbnb.entity.UserRole;
 
-public record UserDto(
-        Long id,
-        String name,
-        String lastName,
-        String email,
-        UserRole role) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class UserDto {
+    private Long id;
+    private String name;
+    private String lastName;
+    private String email;
+    private UserRole role;
 }

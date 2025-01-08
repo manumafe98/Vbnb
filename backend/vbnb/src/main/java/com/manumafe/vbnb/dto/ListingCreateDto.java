@@ -2,12 +2,17 @@ package com.manumafe.vbnb.dto;
 
 import java.util.Set;
 
-public record ListingCreateDto(
-        String title,
-        String description,
-        String ownerPhoneNumber,
-        Long cityId,
-        Long categoryId,
-        Set<String> images,
-        Set<Long> characteristicIds) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class ListingCreateDto {
+    private String title;
+    private String description;
+    private String ownerPhoneNumber;
+    private Long cityId;
+    private Long categoryId;
+    private Set<String> images;
+    private Set<Long> characteristicIds;
 }

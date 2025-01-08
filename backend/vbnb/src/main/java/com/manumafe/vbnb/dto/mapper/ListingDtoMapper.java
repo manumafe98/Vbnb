@@ -37,15 +37,16 @@ public class ListingDtoMapper {
         Set<CharacteristicDto> characteristicDtos = listing.getCharacteristics().stream()
                 .map(characteristicDtoMapper::toDto).collect(Collectors.toSet());
 
-        return new ListingResponseDto(
-                listing.getId(),
-                listing.getTitle(),
-                listing.getDescription(),
-                listing.getOwnerPhoneNumber(),
-                city,
-                category,
-                listing.getImages() != null ? new HashSet<>(listing.getImages()) : Set.of(),
-                characteristicDtos);
+        return ListingResponseDto.builder()
+                .id(listing.getId())
+                .title(listing.getTitle())
+                .description(listing.getDescription())
+                .ownerPhoneNumber(listing.getOwnerPhoneNumber())
+                .city(city)
+                .category(category)
+                .images(new HashSet<>(listing.getImages()))
+                .characteristics(characteristicDtos)
+                .build();
     }
 
     public ListingFullDataDto toFullDataDto(Listing listing) {
@@ -59,16 +60,17 @@ public class ListingDtoMapper {
 
         Set<FavoriteId> favoriteIds = listing.getFavorites().stream().map(Favorite::getId).collect(Collectors.toSet());
 
-        return new ListingFullDataDto(
-                listing.getId(),
-                listing.getTitle(),
-                listing.getDescription(),
-                listing.getOwnerPhoneNumber(),
-                city,
-                category,
-                listing.getImages(),
-                characteristicDtos,
-                listing.getReserves(),
-                favoriteIds);
+        return ListingFullDataDto.builder()
+                .id(listing.getId())
+                .title(listing.getTitle())
+                .description(listing.getDescription())
+                .ownerPhoneNumber(listing.getOwnerPhoneNumber())
+                .city(city)
+                .category(category)
+                .images(listing.getImages())
+                .characteristics(characteristicDtos)
+                .reserves(listing.getReserves())
+                .favoriteIds(favoriteIds)
+                .build();
     }
 }

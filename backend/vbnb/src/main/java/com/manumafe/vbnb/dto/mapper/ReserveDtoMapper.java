@@ -15,18 +15,20 @@ public class ReserveDtoMapper {
     private ListingDtoMapper listingDtoMapper;
 
     public ReserveDto toDto(Reserve reserve) {
-        return new ReserveDto(
-                reserve.getCheckInDate(),
-                reserve.getCheckOutDate());
+        return ReserveDto.builder()
+                .checkInDate(reserve.getCheckInDate())
+                .checkOutDate(reserve.getCheckOutDate())
+                .build();
     }
 
     public UserReserveDto toUserReserveDto(Reserve reserve) {
         ListingResponseDto listing = listingDtoMapper.toResponseDto(reserve.getListing());
 
-        return new UserReserveDto(
-                reserve.getId(),
-                reserve.getCheckInDate(),
-                reserve.getCheckOutDate(),
-                listing);
+        return UserReserveDto.builder()
+                .id(reserve.getId())
+                .checkInDate(reserve.getCheckInDate())
+                .checkOutDate(reserve.getCheckInDate())
+                .listing(listing)
+                .build();
     }
 }

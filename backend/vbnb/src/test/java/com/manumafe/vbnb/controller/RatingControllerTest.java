@@ -123,7 +123,10 @@ public class RatingControllerTest {
     public void testCreateRating() throws Exception {
         setUp();
 
-        RatingDto rating = new RatingDto(4.0, "Nice house near to the beach");
+        RatingDto rating = RatingDto.builder()
+                                .rating(4.0)
+                                .comment("Nice house near to the beach")
+                                .build();
 
         String ratingJson = getRatingJson(rating);
 
@@ -153,7 +156,10 @@ public class RatingControllerTest {
     @Test
     @Order(3)
     public void testUpdateRating() throws Exception {
-        RatingDto rating = new RatingDto(3.2, "Was ok, not 100% what expected");
+        RatingDto rating = RatingDto.builder()
+                                .rating(3.2)
+                                .comment("Was ok, not 100% what expected")
+                                .build();
         String ratingJson = getRatingJson(rating);
 
         mockMvc.perform(put("/api/v1/rating")

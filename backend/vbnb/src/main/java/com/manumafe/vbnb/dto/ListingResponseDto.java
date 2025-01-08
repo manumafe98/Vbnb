@@ -4,13 +4,18 @@ import java.util.Set;
 
 import com.manumafe.vbnb.entity.Image;
 
-public record ListingResponseDto(
-        Long id,
-        String title,
-        String description,
-        String ownerPhoneNumber,
-        CityDto city,
-        CategoryDto category,
-        Set<Image> images,
-        Set<CharacteristicDto> characteristics) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class ListingResponseDto {
+    private Long id;
+    private String title;
+    private String description;
+    private String ownerPhoneNumber;
+    private CityDto city;
+    private CategoryDto category;
+    private Set<Image> images;
+    private Set<CharacteristicDto> characteristics;
 }

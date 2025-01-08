@@ -27,16 +27,16 @@ public class CityServiceImpl implements CityService {
     @Override
     public CityDto saveCity(CityDto cityDto) throws ResourceAlreadyExistentException {
 
-        Optional<City> optionalCategory = cityRepository.findByName(cityDto.name());
+        Optional<City> optionalCategory = cityRepository.findByName(cityDto.getName());
 
         if (optionalCategory.isPresent()) {
-            throw new ResourceAlreadyExistentException("City with name: " + cityDto.name() + " already exists");
+            throw new ResourceAlreadyExistentException("City with name: " + cityDto.getName() + " already exists");
         }
 
         City city = new City();
 
-        city.setName(cityDto.name());
-        city.setCountry(cityDto.country());
+        city.setName(cityDto.getName());
+        city.setCountry(cityDto.getCountry());
 
         cityRepository.save(city);
 
@@ -70,8 +70,8 @@ public class CityServiceImpl implements CityService {
         City city = cityRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("City with id: " + id + " not found"));
 
-        city.setName(cityDto.name());
-        city.setCountry(cityDto.country());
+        city.setName(cityDto.getName());
+        city.setCountry(cityDto.getCountry());
 
         cityRepository.save(city);
 

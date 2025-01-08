@@ -2,7 +2,12 @@ package com.manumafe.vbnb.dto;
 
 import java.time.LocalDate;
 
-public record ReserveDto(
-        LocalDate checkInDate,
-        LocalDate checkOutDate) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class ReserveDto {
+    LocalDate checkInDate;
+    LocalDate checkOutDate;
 }

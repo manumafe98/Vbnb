@@ -26,15 +26,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto saveCategory(CategoryDto categoryDto) throws ResourceAlreadyExistentException {
-        Optional<Category> optionalCategory = categoryRepository.findByName(categoryDto.name());
+        Optional<Category> optionalCategory = categoryRepository.findByName(categoryDto.getName());
 
         if (optionalCategory.isPresent()) {
-            throw new ResourceAlreadyExistentException("Category with name: " + categoryDto.name() + " already exists");
+            throw new ResourceAlreadyExistentException("Category with name: " + categoryDto.getName() + " already exists");
         }
 
         Category category = new Category();
-        category.setName(categoryDto.name());
-        category.setImageUrl(categoryDto.imageUrl());
+        category.setName(categoryDto.getName());
+        category.setImageUrl(categoryDto.getImageUrl());
 
         categoryRepository.save(category);
 

@@ -1,7 +1,12 @@
 package com.manumafe.vbnb.dto;
 
-public record CityDto(
-        Long id,
-        String name,
-        String country) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class CityDto {
+    private Long id;
+    private String name;
+    private String country;
 }

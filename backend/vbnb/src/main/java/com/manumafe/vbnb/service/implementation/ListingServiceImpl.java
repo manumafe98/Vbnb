@@ -45,32 +45,32 @@ public class ListingServiceImpl implements ListingService {
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public ListingResponseDto saveListing(ListingCreateDto listingDto) throws ResourceAlreadyExistentException, ResourceNotFoundException {
-		Optional<Listing> optionalListing = listingRepository.findByTitle(listingDto.title());
+		Optional<Listing> optionalListing = listingRepository.findByTitle(listingDto.getTitle());
 
 		if (optionalListing.isPresent()) {
-			throw new ResourceAlreadyExistentException("Listing with name: " + listingDto.title() + " already exists");
+			throw new ResourceAlreadyExistentException("Listing with name: " + listingDto.getTitle() + " already exists");
 		}
 
-		City city = cityRepository.findById(listingDto.cityId())
+		City city = cityRepository.findById(listingDto.getCityId())
 				.orElseThrow(
-						() -> new ResourceNotFoundException("City with id: " + listingDto.cityId() + " not found"));
+						() -> new ResourceNotFoundException("City with id: " + listingDto.getCityId() + " not found"));
 
-		Category category = categoryRepository.findById(listingDto.categoryId())
+		Category category = categoryRepository.findById(listingDto.getCategoryId())
 				.orElseThrow(() -> new ResourceNotFoundException(
-						"Category with id: " + listingDto.categoryId() + " not found"));
+						"Category with id: " + listingDto.getCategoryId() + " not found"));
 
 		Listing listing = new Listing();
 
-		listing.setTitle(listingDto.title());
-		listing.setDescription(listingDto.description());
-		listing.setOwnerPhoneNumber(listingDto.ownerPhoneNumber());
+		listing.setTitle(listingDto.getTitle());
+		listing.setDescription(listingDto.getDescription());
+		listing.setOwnerPhoneNumber(listingDto.getOwnerPhoneNumber());
 		listing.setCategory(category);
 		listing.setCity(city);
 
-		Set<Characteristic> characteristics = getCharacteristics(listingDto.characteristicIds(), listing);
+		Set<Characteristic> characteristics = getCharacteristics(listingDto.getCharacteristicIds(), listing);
 		listing.setCharacteristics(characteristics);
 
-		Set<Image> images = getImages(listingDto.images(), listing);
+		Set<Image> images = getImages(listingDto.getImages(), listing);
 		listing.setImages(images);
 
 		listingRepository.save(listing);
@@ -92,29 +92,29 @@ public class ListingServiceImpl implements ListingService {
 		Listing listing = listingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Listing with id: " + id + " not found"));
 
-		City city = cityRepository.findById(listingDto.cityId())
+		City city = cityRepository.findById(listingDto.getCityId())
 				.orElseThrow(
-						() -> new ResourceNotFoundException("City with id: " + listingDto.cityId() + " not found"));
+						() -> new ResourceNotFoundException("City with id: " + listingDto.getCityId() + " not found"));
 
-		Category category = categoryRepository.findById(listingDto.categoryId())
+		Category category = categoryRepository.findById(listingDto.getCategoryId())
 				.orElseThrow(() -> new ResourceNotFoundException(
-						"Category with id: " + listingDto.categoryId() + " not found"));
+						"Category with id: " + listingDto.getCategoryId() + " not found"));
 
-		listing.setTitle(listingDto.title());
-		listing.setDescription(listingDto.description());
-		listing.setOwnerPhoneNumber(listingDto.ownerPhoneNumber());
+		listing.setTitle(listingDto.getTitle());
+		listing.setDescription(listingDto.getDescription());
+		listing.setOwnerPhoneNumber(listingDto.getOwnerPhoneNumber());
 		listing.setCategory(category);
 		listing.setCity(city);
 
 		listing.getCharacteristics().clear();
 
-		Set<Characteristic> characteristics = getCharacteristics(listingDto.characteristicIds(), listing);
+		Set<Characteristic> characteristics = getCharacteristics(listingDto.getCharacteristicIds(), listing);
 		listing.setCharacteristics(characteristics);
 
 		imageRepository.deleteAllByListing(listing);
 		listing.getImages().clear();
 
-		Set<Image> images = getImages(listingDto.images(), listing);
+		Set<Image> images = getImages(listingDto.getImages(), listing);
 		listing.getImages().addAll(images);
 
 		listingRepository.save(listing);

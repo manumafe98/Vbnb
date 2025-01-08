@@ -1,6 +1,11 @@
 package com.manumafe.vbnb.dto;
 
-public record RatingListingInformationDto(
-        Double rating,
-        Integer timesRated) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class RatingListingInformationDto {
+    private Double rating;
+    private Integer timesRated;
 }

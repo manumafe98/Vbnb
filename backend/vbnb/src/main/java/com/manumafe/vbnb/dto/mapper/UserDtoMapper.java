@@ -9,11 +9,12 @@ import com.manumafe.vbnb.entity.User;
 public class UserDtoMapper {
 
     public UserDto toDto(User user) {
-        return new UserDto(
-                user.getId(),
-                user.getName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getUserRole());
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .role(user.getUserRole())
+                .build();
     }
 }

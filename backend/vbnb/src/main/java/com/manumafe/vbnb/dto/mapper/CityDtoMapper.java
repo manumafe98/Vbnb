@@ -9,9 +9,10 @@ import com.manumafe.vbnb.entity.City;
 public class CityDtoMapper {
 
     public CityDto toDto(City city) {
-        return new CityDto(
-                city.getId(),
-                city.getName(),
-                city.getCountry());
+        return CityDto.builder()
+                .id(city.getId())
+                .name(city.getName())
+                .country(city.getCountry())
+                .build();
     }
 }

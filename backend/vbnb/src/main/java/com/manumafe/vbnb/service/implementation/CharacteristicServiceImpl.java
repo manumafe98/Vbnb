@@ -29,16 +29,16 @@ public class CharacteristicServiceImpl implements CharacteristicService {
 
     @Override
     public CharacteristicDto saveCharacteristic(CharacteristicDto characteristicDto) throws ResourceAlreadyExistentException {
-        Optional<Characteristic> optionalCategory = characteristicRepository.findByName(characteristicDto.name());
+        Optional<Characteristic> optionalCategory = characteristicRepository.findByName(characteristicDto.getName());
 
         if (optionalCategory.isPresent()) {
-            throw new ResourceAlreadyExistentException("Characteristic with name: " + characteristicDto.name() + " already exists");
+            throw new ResourceAlreadyExistentException("Characteristic with name: " + characteristicDto.getName() + " already exists");
         }
 
         Characteristic characteristic = new Characteristic();
 
-        characteristic.setName(characteristicDto.name());
-        characteristic.setImageUrl(characteristicDto.imageUrl());
+        characteristic.setName(characteristicDto.getName());
+        characteristic.setImageUrl(characteristicDto.getImageUrl());
 
         characteristicRepository.save(characteristic);
 
@@ -65,8 +65,8 @@ public class CharacteristicServiceImpl implements CharacteristicService {
         Characteristic characteristicToUpdate = characteristicRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Characteristic with id: " + id + " not found"));
 
-        characteristicToUpdate.setImageUrl(characteristicDto.imageUrl());
-        characteristicToUpdate.setName(characteristicDto.name());
+        characteristicToUpdate.setImageUrl(characteristicDto.getImageUrl());
+        characteristicToUpdate.setName(characteristicDto.getName());
 
         characteristicRepository.save(characteristicToUpdate);
 

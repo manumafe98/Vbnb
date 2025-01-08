@@ -9,9 +9,10 @@ import com.manumafe.vbnb.entity.Category;
 public class CategoryDtoMapper {
 
     public CategoryDto toDto(Category category) {
-        return new CategoryDto(
-                category.getId(),
-                category.getName(),
-                category.getImageUrl());
+        return CategoryDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .imageUrl(category.getImageUrl())
+                .build();
     }
 }
