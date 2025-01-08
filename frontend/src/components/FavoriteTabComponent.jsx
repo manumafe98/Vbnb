@@ -48,7 +48,7 @@ export const FavoriteTabComponent = () => {
     try {
       const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/get/${id}`, "GET", null, false)
       const listing = await response.json()
-      navigate("/listing", { state: { listing } })
+      navigate(`/listing/${listing.id}`, { state: { listing } })
     } catch (error) {
       console.log(error)
     }

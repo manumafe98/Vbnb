@@ -1,5 +1,5 @@
 import { DateRangePicker, Button, Avatar, Textarea } from "@nextui-org/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FavoriteIcon, RatingStarIcon, ReviewStarIcon, ShareIcon } from "../constants/Icons";
 import { dateRangePickerClassNames } from "../constants/dateRangePickerClassNames";
 import { useState, useEffect, useRef } from "react";
@@ -16,7 +16,7 @@ import { StarReviewComponent } from "./StarReviewComponent";
 import { inputWrapperClassNames } from "../constants/inputWrapperClassNames";
 import { DialogPopUpComponent } from "../components/DialogPopUpComponent";
 
-export const ListingTabComponent = () => {
+export const ListingTabComponent = ({ listing }) => {
   const[rating, setRating] = useState(0)
   const[timesRated, setTimesRated] = useState(0)
   const[dateRange, setDateRange] = useState(null)
@@ -30,10 +30,8 @@ export const ListingTabComponent = () => {
   const[reviewRating, setReviewRating] = useState(0)
   const[reviewComment, setReviewComment] = useState('')
   const[showDialogNotification, setShowDialogNotification] = useState(false)
-  const location = useLocation()
   const navigate = useNavigate()
   const { auth } = useAuth()
-  const { listing } = location.state
   const charecteristicDialogRef = useRef(null)
   const checkReviewsDialogRef = useRef(null)
   const imagesDialogRef = useRef(null)

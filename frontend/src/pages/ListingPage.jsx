@@ -1,14 +1,38 @@
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { LayoutComponent } from "../components/LayoutComponent";
 import { ListingTabComponent } from "../components/ListingTabComponent";
-import { useLocation } from "react-router-dom";
+import { useFetch } from "../hooks/useFetch";
 
 export const ListingPage = () => {
   const location = useLocation()
-  const { id } = location.state
+  const { id } = useParams()
+  const[listing, setListing] = useState(location.state?.listing || null)
+
+    useEffect(() => {
+      const fetchListing = async () => {
+        if (!listing) {
+          try {
+            console.log(listing)
+            const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/get/${id}`, "GET", null, false)
+            const data = await response.json()
+            setListing(data)
+            console.log(listing)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      }
+      fetchListing()
+    }, [listing, id])
+
+    if (!listing) {
+      return <></>
+  }
 
   return (
     <LayoutComponent>
-        <ListingTabComponent listingId={id}/>
+        <ListingTabComponent listing={listing}/>
     </LayoutComponent>
   )
 }

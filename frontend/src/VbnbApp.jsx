@@ -21,7 +21,7 @@ export const VbnbApp = () => {
   return (
       <Routes>
         <Route path="/" element={<HomePage/>}></Route>
-        <Route path="/listing" element={<ListingPage/>}></Route>
+        <Route path="/listing/:id" element={<ListingPage/>}></Route>
         <Route path="/auth/signin" element={<AuthenticationPage authenticationType="Sign In"/>}></Route>
         <Route path="/auth/signup" element={<AuthenticationPage authenticationType="Sign Up"/>}></Route>
         <Route path="/unauthorized" element={<UnauthorizedPage/>}></Route>
