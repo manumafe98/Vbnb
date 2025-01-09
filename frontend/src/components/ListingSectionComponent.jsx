@@ -14,6 +14,18 @@ export const ListingSectionComponent = ({ listings }) => {
   const { auth } = useAuth()
 
   useEffect(() => {
+    if (window.innerWidth < 1280) {
+      setListingsPerPage(8)
+    } else if (window.innerWidth < 1023) {
+      setListingsPerPage(6)
+    } else if (window.innerWidth < 768) {
+      setListingsPerPage(4)
+    } else if (window.innerWidth < 640) {
+      setListingsPerPage(2)
+    }
+  }, [])
+
+  useEffect(() => {
     fetchRatings()
   }, [listings])
 
