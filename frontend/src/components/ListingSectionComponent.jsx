@@ -11,19 +11,35 @@ export const ListingSectionComponent = ({ listings }) => {
   const[popupData, setPopupData] = useState({ message: "", action: "", type: "" })
   const[currentPage, setCurrentPage] = useState(1)
   const[listingsPerPage, setListingsPerPage] = useState(12)
+  const[currentListings, setCurrentListings] = useState([])
   const { auth } = useAuth()
 
-  useEffect(() => {
-    if (window.innerWidth < 1280) {
-      setListingsPerPage(8)
-    } else if (window.innerWidth < 1023) {
-      setListingsPerPage(6)
+  const updateListingsPerPage = () => {
+    if (window.innerWidth < 640) {
+      setListingsPerPage(2)
     } else if (window.innerWidth < 768) {
       setListingsPerPage(4)
-    } else if (window.innerWidth < 640) {
-      setListingsPerPage(2)
+    } else if (window.innerWidth < 1023) {
+      setListingsPerPage(6)
+    } else if (window.innerWidth < 1280) {
+      setListingsPerPage(8)
+    } else {
+      setListingsPerPage(12)
     }
+  }
+
+  useEffect(() => {
+    updateListingsPerPage()
+    const handleResize = () => updateListingsPerPage()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
   }, [])
+
+  useEffect(() => {
+    const lastPostIndex = currentPage * listingsPerPage
+    const firstPostIndex = lastPostIndex - listingsPerPage
+    setCurrentListings(listings.slice(firstPostIndex, lastPostIndex))
+  }, [currentPage, listingsPerPage, listings])
 
   useEffect(() => {
     fetchRatings()
@@ -68,10 +84,6 @@ export const ListingSectionComponent = ({ listings }) => {
       console.log(error)
     }
   }
-
-  const lastPostIndex = currentPage * listingsPerPage
-  const firstPostIndex = lastPostIndex - listingsPerPage
-  const currentListings = listings.slice(firstPostIndex, lastPostIndex)
 
   return (
     <section className="listings">
