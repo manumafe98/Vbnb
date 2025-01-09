@@ -209,7 +209,7 @@ export const ListingTabComponent = ({ listing }) => {
   }
 
   return (
-    <section className="listing-section mt-5 mx-36 max-2xl:mx-20 max-xl:mx-2 max-lg:mx-0 min-h-screen h-[130vh] max-xl:h-[140vh] max-lg:h-[180vh] max-[639px]:h-[185vh] max-[560px]:h-[200vh] relative">
+    <section className="listing-section mt-5 mx-36 max-2xl:mx-20 max-xl:mx-2 max-lg:mx-0 min-h-screen relative">
       <dialog
         ref={addReviewRef}
         className="fixed inset-0 m-auto backdrop:bg-black/65 rounded-xl min-h-[50vh] min-w-[30vw] max-lg:min-w-[80vw] p-5 w-fit h-fit"
@@ -394,7 +394,7 @@ export const ListingTabComponent = ({ listing }) => {
         </div>
       </dialog>
       <div className="flex justify-center my-5">
-        <div className="flex justify-between w-4/6 max-2xl:w-9/12 max-xl:w-11/12  max-[550px]:items-center max-[550px]:flex-col max-[550px]:justify-center">
+        <div className="flex justify-between w-4/6 max-2xl:w-9/12 max-xl:w-11/12 max-[550px]:items-center max-[550px]:flex-col max-[550px]:justify-center">
           <span className="text-3xl italic">{listing.title}</span>
           <div className="flex gap-5 max-md:gap-2 max-sm:gap-1">
             <button className="hover:bg-zinc-100 hover:shadow rounded-md p-1" onClick={showAddReviewDialog}>

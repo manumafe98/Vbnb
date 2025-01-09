@@ -13,11 +13,9 @@ export const ListingPage = () => {
       const fetchListing = async () => {
         if (!listing) {
           try {
-            console.log(listing)
             const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/get/${id}`, "GET", null, false)
             const data = await response.json()
             setListing(data)
-            console.log(listing)
           } catch (error) {
             console.log(error)
           }
