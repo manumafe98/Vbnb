@@ -43,6 +43,7 @@ export const ListingSectionComponent = ({ listings }) => {
 
   useEffect(() => {
     fetchRatings()
+    setCurrentPage(1)
   }, [listings])
 
   const fetchRatings = async () => {
