@@ -7,6 +7,22 @@ export const CheckInOutComponent = ({ onDate, radius, variant }) => {
   const[dateRange, setDateRange] = useState(null)
   const[checkInDate, setCheckInDate] = useState('')
   const[checkOutDate, setCheckOutDate] = useState('')
+  const[calendarMonths, setCalendarMonths] = useState(2)
+
+  const updateCalendarMonths = () => {
+    if (window.innerWidth < 540) {
+      setCalendarMonths(1)
+    } else {
+      setCalendarMonths(2)
+    }
+  }
+
+  useEffect(() => {
+    updateCalendarMonths()
+    const handleResize = () => updateCalendarMonths()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   useEffect(() => {
     if (dateRange) {
@@ -28,7 +44,7 @@ export const CheckInOutComponent = ({ onDate, radius, variant }) => {
       variant={variant}
       label="Check in - Check out"
       className="sm:w-full max-sm:mb-2"
-      visibleMonths={2}
+      visibleMonths={calendarMonths}
       value={dateRange}
       onChange={setDateRange}
       classNames={dateRangePickerClassNames}

@@ -1,22 +1,35 @@
 import { Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
-import { AuthenticationPage } from "./pages/AuthenticationPage";
-import { AdminPage } from "./pages/AdminPage";
-import { AddElementPage } from "./pages/AddElementPage";
-import { MissingPage } from "./pages/MissingPage";
-import { UnauthorizedPage } from "./pages/UnauthorizedPage";
 import { RequireAuthComponent } from "./components/RequireAuthComponent";
-import { UserAdministrationPage } from "./pages/UserAdministrationPage";
+import { useFetch } from "./hooks/useFetch";
+import { AddElementPage } from "./pages/AddElementPage";
+import { AdminPage } from "./pages/AdminPage";
+import { AuthenticationPage } from "./pages/AuthenticationPage";
 import { ElementAdministrationPage } from "./pages/ElementAdministrationPage";
+import { FavoritePage } from "./pages/FavoritePage";
+import { HomePage } from "./pages/HomePage";
 import { ListingAdministrationPage } from "./pages/ListingAdministrationPage";
+import { ListingPage } from "./pages/ListingPage";
+import { MissingPage } from "./pages/MissingPage";
+import { ReservePage } from "./pages/ReservePage";
+import { UnauthorizedPage } from "./pages/UnauthorizedPage";
+import { UnavailablePage } from "./pages/UnavailablePage";
 import { UpdateCharacteristicPage } from "./pages/UpdateCharacteristicPage";
 import { UpdateListingPage } from "./pages/UpdateListingPage";
-import { FavoritePage } from "./pages/FavoritePage";
-import { ListingPage } from "./pages/ListingPage";
-import { ReservePage } from "./pages/ReservePage";
-import { UnavailablePage } from "./pages/UnavailablePage";
+import { UserAdministrationPage } from "./pages/UserAdministrationPage";
 
 export const VbnbApp = () => {
+  const interval = 600000
+
+  const reloadBackend = async () => {
+    try {
+      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/all`, "GET", null, false)
+      console.log(`Backend reloaded at ${new Date().toISOString()}: Status Code ${response.status}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  setInterval(reloadBackend, interval)
 
   return (
       <Routes>
