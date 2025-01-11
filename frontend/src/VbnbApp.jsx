@@ -18,19 +18,6 @@ import { UpdateListingPage } from "./pages/UpdateListingPage";
 import { UserAdministrationPage } from "./pages/UserAdministrationPage";
 
 export const VbnbApp = () => {
-  const interval = 600000
-
-  const reloadBackend = async () => {
-    try {
-      const response = await useFetch(`${import.meta.env.BACKEND_URL}/api/v1/listing/all`, "GET", null, false)
-      console.log(`Backend reloaded at ${new Date().toISOString()}: Status Code ${response.status}`)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  setInterval(reloadBackend, interval)
-
   return (
       <Routes>
         <Route path="/" element={<HomePage/>}></Route>

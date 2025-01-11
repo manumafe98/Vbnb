@@ -30,7 +30,7 @@ export const ListingPage = () => {
 
   return (
     <LayoutComponent>
-        <ListingTabComponent listing={listing}/>
+      <ListingTabComponent listing={listing}/>
     </LayoutComponent>
   )
 }
